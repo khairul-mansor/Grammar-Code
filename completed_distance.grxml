@@ -1,0 +1,471 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<grammar xml:lang="ms-MY" version="1.0" root="Distance" xmlns="http://www.w3.org/2001/06/grammar">
+
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+<rule id="Distance" scope="public">
+	<ruleref uri="functions.grxml#functions"/>
+	<ruleref uri="meaning.grxml#meaning"/>
+	<one-of>
+		<item><ruleref uri="#DistanceAbs"/><tag><![CDATA[if(typeof(DistanceAbs.DISTANCE)!='undefined' && typeof(DistanceAbs.DISTANCE.DISTANCE_ABS)!='undefined')DISTANCE={'DISTANCE_ABS':DistanceAbs.DISTANCE.DISTANCE_ABS}]]></tag></item>
+		<item><ruleref uri="#DistanceMod"/><tag><![CDATA[if(typeof(DistanceMod.DISTANCE)!='undefined' && typeof(DistanceMod.DISTANCE.DISTANCE_REL)!='undefined')DISTANCE={'DISTANCE_REL':DistanceMod.DISTANCE.DISTANCE_REL}]]></tag></item>
+    <item><ruleref uri="#DistanceRel"/><tag><![CDATA[if(typeof(DistanceRel.DISTANCE)!='undefined' && typeof(DistanceRel.DISTANCE.DISTANCE_REL)!='undefined')DISTANCE={'DISTANCE_REL':DistanceRel.DISTANCE.DISTANCE_REL}]]></tag></item>
+  </one-of>
+  <tag><![CDATA[if(typeof(DISTANCE)!='undefined'){DISTANCE=meaning.distanceMeaning(DISTANCE);DISTANCE_slots=DISTANCE; DISTANCE=functions.js2json(DISTANCE);}]]></tag>
+</rule>                
+
+<rule id="DistanceAbs" scope="public">
+    <tag><![CDATA[M="?"]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="functions.grxml#functions"/>
+            <ruleref uri="meaning.grxml#meaning"/>
+            <tag><![CDATA[UNIT='?'; NUMBER=0; MOD = "?"; ]]></tag>
+            <item repeat="0-1">
+                <ruleref uri="#fuzzy"/>
+                <tag><![CDATA[MOD = "fuzzy";]]></tag>
+            </item>
+            <one-of>
+               <item><ruleref uri="#DistanceMetric"/><tag><![CDATA[UNIT=DistanceMetric.UNIT;NUMBER=DistanceMetric.DIST;]]></tag></item>
+               <item><ruleref uri="#DistanceImperial"/><tag><![CDATA[UNIT=DistanceImperial.UNIT;NUMBER=DistanceImperial.DIST;]]></tag></item>
+            </one-of>
+            <tag><![CDATA[
+                  if(typeof(NUMBER)!='undefined' && typeof(UNIT)!='undefined' && UNIT!='?'){
+                       if(NUMBER != -1){
+                             var numStr = String(NUMBER);
+                             if(numStr.indexOf('\.')>0 || numStr.indexOf('\/')>0){ NUMBER={'DOUBLE':NUMBER}; }
+                             else{ NUMBER={'CARDINAL_NUMBER':NUMBER}; }   
+                          } 
+                       DISTANCE={'DISTANCE_ABS':{'UNIT':UNIT,'NUMBER':NUMBER}};
+                       if(typeof(MOD)!='undefined' && MOD=='fuzzy')DISTANCE.DISTANCE_ABS.MODIFIER=MOD;
+                  } ]]>
+            </tag>
+        </item>
+    </one-of>
+</rule>
+
+
+<rule id="DistanceMod"  scope="public">
+  <item>
+    	<tag><![CDATA[D="?";C=1;MOD="?"]]></tag>
+           <one-of>
+              <item>
+                 <ruleref uri="#DistanceAbs"/>
+                 <tag><![CDATA[ if(typeof(DistanceAbs.DISTANCE)!='undefined' && typeof(DistanceAbs.DISTANCE.DISTANCE_ABS)!='undefined')D=DistanceAbs.DISTANCE.DISTANCE_ABS; ]]></tag>
+                 <item>
+                   <one-of>
+                        <item> banyak <tag><![CDATA[C=1;MOD="INC";]]></tag></item>
+                        <item> lebih <tag><![CDATA[C=1;MOD="INC";]]></tag></item>
+                        <item> lebih panjang <tag><![CDATA[C=1;MOD="INC"]]></tag></item>
+                        <item> lebih jauh <tag><![CDATA[C=1;MOD="INC"]]></tag></item>
+                        <item> kurang <tag><![CDATA[C=-1;MOD="INC"]]></tag></item>
+                        <item> lebih pendek <tag><![CDATA[C=-1;MOD="INC"]]></tag></item>
+                        <item> lebih dekat <tag><![CDATA[C=-1;MOD="INC"]]></tag></item>
+                   </one-of>
+                 </item>
+              </item>
+              <item>
+	              <one-of>
+	                <item>
+	                  <one-of>
+		                  <item> banyak <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+		                  <item> lebih <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+		                  <item> lebih panjang <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+                      <item> lebih jauh <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+		                  <item> sedikit banyak <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+		                  <item> kurang <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+		                  <item> sedikit kurang <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+		                  <item> lebih pendek <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+                      <item> lebih dekat <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+	                  </one-of>
+	                daripada
+	                </item>
+                  <item>
+                    <one-of>
+                      <item> sekurang-kurangnya <tag><![CDATA[C=1;MOD="LE"]]></tag></item>
+                      <item> minimum <tag><![CDATA[C=1;MOD="GE"]]></tag></item>
+                      <item> minima <tag><![CDATA[C=1;MOD="GE"]]></tag></item>
+                      <item> maksimum <tag><![CDATA[C=1;MOD="LE"]]></tag></item>
+                      <item> maksima <tag><![CDATA[C=1;MOD="LE"]]></tag></item>
+                      <item> paling banyak <tag><![CDATA[C=1;MOD="LE"]]></tag></item>
+                      <item> dalam lingkungan <tag><![CDATA[C=1;MOD="LE"]]></tag></item>
+                    </one-of>
+                  </item>
+                </one-of>
+	              <ruleref uri="#DistanceAbs"/>
+	              <tag><![CDATA[ if(typeof(DistanceAbs.DISTANCE)!='undefined' && typeof(DistanceAbs.DISTANCE.DISTANCE_ABS)!='undefined')D=DistanceAbs.DISTANCE.DISTANCE_ABS; ]]></tag>
+              </item>
+      <item> <!-- two more hours -->
+        <one-of>
+           <item>
+             <ruleref uri="#Number"/>
+             <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+             <tag><![CDATA[if(NUMBER != -1){
+                             var numStr = String(NUMBER);
+                             if(numStr.indexOf('\.')>0 || numStr.indexOf('\/')>0){ NUMBER={'DOUBLE':NUMBER}; }
+                             else{ NUMBER={'CARDINAL_NUMBER':NUMBER}; }   
+                          } ]]></tag>
+           </item>
+           <item>satu<tag><![CDATA[NUMBER = {'CARDINAL_NUMBER':1};]]></tag></item>
+           <item> <item repeat="0-1"> satu </item> pasang <tag><![CDATA[NUMBER = {'CARDINAL_NUMBER':2};]]></tag></item>
+           <item> beberapa <tag><![CDATA[NUMBER = {'CARDINAL_NUMBER':3};]]></tag></item>
+        </one-of>
+        <one-of>
+           <item> banyak <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+           <item> lebih <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+           <item> lebih jauh <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+           <item> lebih panjang <tag><![CDATA[C=1;MOD="GT"]]></tag></item>
+           <item> kurang <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+           <item> lebih pendek <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+           <item> lebih dekat <tag><![CDATA[C=1;MOD="LT"]]></tag></item>
+        </one-of>
+        <one-of>
+          <item> <one-of> <item> meter </item> <item> m </item> </one-of> <tag><![CDATA[D={'UNIT':'m','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> kilometer </item> <item> km </item> </one-of> <tag><![CDATA[D={'UNIT':'km','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> sentimeter </item> <item> cm </item> </one-of> <tag><![CDATA[D={'UNIT':'cm','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> milimeter </item> <item> mm </item> </one-of> <tag><![CDATA[D={'UNIT':'mm','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> batu </item> <item> mi </item> </one-of> <tag><![CDATA[D={'UNIT':'mi','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> ela </item> <item> yd </item> </one-of> <tag><![CDATA[D={'UNIT':'yd','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> kaki </item> <item> ft </item> </one-of> <tag><![CDATA[D={'UNIT':'ft','NUMBER':NUMBER};]]></tag></item>
+          <item> <one-of> <item> inci </item> <item> in </item> </one-of> <tag><![CDATA[D={'UNIT':'in','NUMBER':NUMBER};]]></tag></item>
+        </one-of>  
+      </item>
+    </one-of>
+	<tag><![CDATA[
+            if(typeof(D)!='undefined'){
+                if(C<0){
+                     if(typeof(D.NUMBER)!='undefined'){
+                       if(typeof(D.NUMBER.CARDINAL_NUMBER)!='undefined'){ D.NUMBER.CARDINAL_NUMBER=parseInt(D.NUMBER.CARDINAL_NUMBER)*-1; }
+                       else if(typeof(D.NUMBER.DOUBLE)!='undefined'){ D.NUMBER.DOUBLE=Number(D.NUMBER.DOUBLE)*-1; }
+                     }
+                }
+                DISTANCE={'DISTANCE_REL':{'DISTANCE_ABS':D}};
+                if(typeof(MOD)!='undefined')DISTANCE.DISTANCE_REL.MODIFIER=MOD;
+            }  
+	]]></tag>
+  </item>
+</rule>
+
+<rule id="DistanceRel">
+   <tag><![CDATA[MOD="?"]]></tag>
+   <one-of>
+      <item> jauh <tag><![CDATA[MOD="FAR"]]></tag> </item>
+      <item> dekat <tag><![CDATA[MOD="CLOSE"]]></tag> </item>
+      <item> lebih jauh <tag><![CDATA[MOD="GT"]]></tag> </item>
+      <item> lebih dekat <tag><![CDATA[MOD="LT"]]></tag> </item>
+   </one-of>
+   <tag><![CDATA[DISTANCE={'DISTANCE_REL':{'MODIFIER':MOD}}]]></tag>
+</rule>
+
+<rule id="fuzzy">
+    <one-of>
+        <item>sekitar</item>
+        <item>yang hampir</item>
+        <item>kira-kira</item>
+    </one-of>
+</rule>
+
+<rule id="Number">
+  <one-of>
+   <item>
+      <ruleref uri="cardinal_number.grxml#Number_external"/>
+      <tag><![CDATA[MEANING = parseInt(Number_external.C_NUMBER);]]></tag>
+   </item>
+   <item>
+      <ruleref uri="double.grxml#Double"/>
+      <tag><![CDATA[MEANING = Double.DOUBLE; if(typeof(MEANING)!='string'){ MEANING=Number(MEANING); }]]></tag>
+   </item>
+  </one-of>
+</rule>
+
+
+<rule id="DistanceMetric" scope="public">
+  <tag><![CDATA[KM=0;M=0;CM=0;MM=0;UNIT="?";DIST=0]]></tag>
+  <one-of>
+    <item><ruleref uri="#kilometers"/><tag><![CDATA[DIST=kilometers.D;UNIT='km']]></tag></item>
+    <item><ruleref uri="#meters"/><tag><![CDATA[DIST=meters.D;UNIT='m']]></tag></item>
+    <item><ruleref uri="#centimeters"/><tag><![CDATA[DIST=centimeters.D;UNIT='cm']]></tag></item>
+    <item><ruleref uri="#millimeters"/><tag><![CDATA[DIST=millimeters.D;UNIT='mm';]]></tag></item>
+ 
+   <item>
+        <ruleref uri="#kilometers"/><tag><![CDATA[KM=kilometers.D;UNIT='km';]]></tag>
+        <item repeat="0-1"> dan </item>
+        <ruleref uri="#meters"/><!--<tag><![CDATA[DIST=KM*1000+meters.D;UNIT='m']]></tag>-->
+        <tag><![CDATA[tmp=String(meters.D); 
+                      if(tmp[tmp.length-1]=='0'){ DIST=KM+(meters.D/1000); }
+                      else { DIST=KM*1000+meters.D; UNIT='m' }
+                      delete tmp; ]]></tag>
+
+   </item>
+
+   <item>
+       <ruleref uri="#meters"/><tag><![CDATA[M=meters.D;UNIT='m';]]></tag>
+       <item repeat="0-1"> dan </item>
+       <ruleref uri="#centimeters"/>
+       <tag><![CDATA[tmp=String(centimeters.D); 
+                      if(tmp[tmp.length-1]=='0'){ DIST=M+(centimeters.D/100); CM=M*100+centimeters.D; }
+                      else { CM=M*100+centimeters.D; DIST=CM; UNIT='cm' }
+                      delete tmp; ]]></tag>          
+       <item repeat="0-1">
+           <item repeat="0-1"> dan </item>
+           <ruleref uri="#millimeters"/>
+           <tag><![CDATA[DIST=CM*10+millimeters.D; UNIT='mm';]]></tag>
+       </item>
+   </item>
+
+   <item>
+       <ruleref uri="#centimeters"/><tag><![CDATA[CM=centimeters.D;UNIT='cm';]]></tag>
+       <item repeat="0-1"> dan </item>
+       <ruleref uri="#millimeters"/>
+       <tag><![CDATA[tmp=String(millimeters.D); 
+                      if(tmp[tmp.length-1]=='0'){ DIST=CM+(millimeters.D/10); }
+                      else { DIST=CM*10+millimeters.D; UNIT='mm' }
+                      delete tmp; ]]></tag>
+   </item>   
+  </one-of>
+</rule>
+
+
+<rule id="DistanceImperial" scope="public">
+  <tag><![CDATA[MI=0;FT=0;YD=0;IN=0;DIST=0;UNIT='?']]></tag>
+  <one-of>
+    <item><ruleref uri="#miles"/><tag><![CDATA[DIST=miles.D;UNIT='mi']]></tag></item>
+    <item><ruleref uri="#yards"/><tag><![CDATA[DIST=yards.D;UNIT='yd']]></tag></item>
+    <item><ruleref uri="#feet"/><tag><![CDATA[DIST=feet.D;UNIT='ft']]></tag></item>
+    <item><ruleref uri="#inches"/><tag><![CDATA[DIST=inches.D;UNIT='in']]></tag></item>
+
+   <item>
+        <ruleref uri="#miles"/><tag><![CDATA[MI=miles.D]]></tag>
+        <item repeat="0-1"> dan </item>
+        <ruleref uri="#yards"/><tag><![CDATA[YD=MI*1760+yards.D;DIST=YD;UNIT='yd']]></tag>
+        <item repeat="0-1">
+            <item repeat="0-1"> dan </item>
+            <ruleref uri="#feet"/><tag><![CDATA[DIST=YD*3+feet.D;UNIT='ft';]]></tag>
+        </item>
+   </item>
+
+   <item>
+        <ruleref uri="#yards"/><tag><![CDATA[YD=yards.D;]]></tag>
+        <item repeat="0-1"> dan </item>
+        <ruleref uri="#feet"/><tag><![CDATA[DIST=YD*3+feet.D;UNIT='ft';]]></tag>
+   </item>
+
+   <item>
+       <ruleref uri="#feet"/><tag><![CDATA[FT=feet.D;]]></tag>
+       <item repeat="0-1"> dan </item>
+       <ruleref uri="#inches"/><tag><![CDATA[DIST=FT*12+inches.D; UNIT='in';]]></tag>
+   </item>
+  </one-of>
+</rule>
+
+<rule id="meters">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item>pasang<tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item>beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> meter </item>
+    <item> m </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="kilometers">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item>beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> kilometer </item>
+    <item> km </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="centimeters">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> centimeter </item>
+    <item> cm </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="millimeters">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> millimeter </item>
+    <item> mm </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="miles">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> batu </item>
+    <item> mi </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="yards">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> ela </item>
+    <item> yd </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="feet">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item>beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> kaki </item>
+    <item> ft </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+<rule id="inches">
+  <tag><![CDATA[D=0;]]></tag>
+  <one-of>
+       <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item>yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item><item repeat="0-1">satu</item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+  </one-of>
+  <one-of>
+    <item> inci </item>
+    <item> in </item>
+  </one-of>
+  <item repeat="0-1">
+     dan
+     <ruleref uri="#halves_and_quarters"/><tag><![CDATA[NUMBER=NUMBER+halves_and_quarters.DISTANCE]]></tag>
+  </item>
+  <tag><![CDATA[D=NUMBER;]]></tag>
+</rule>
+
+
+<rule id="halves_and_quarters">
+    <one-of>
+        <item>
+            <one-of>
+                <item>separuh</item>
+                <item>setengah</item>
+            </one-of>
+            <tag><![CDATA[NUMBER = 0.5;]]></tag>
+        </item>
+        <item>
+            <item>suku</item>
+            <tag><![CDATA[NUMBER = 0.25;]]></tag>
+        </item>
+        <item>
+        	<one-of>
+	           <item>tiga suku</item>
+	           <item>tiga-suku</item>
+	        </one-of>   
+          <tag><![CDATA[NUMBER = 0.75;]]></tag>
+        </item>
+    </one-of>
+    <tag><![CDATA[DISTANCE = NUMBER;]]></tag>
+</rule>
+
+</grammar>

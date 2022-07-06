@@ -1,0 +1,113 @@
+<?xml version='1.0' ?>
+<grammar xml:lang="ms-MY" version="1.0" root="Double" xmlns="http://www.w3.org/2001/06/grammar"> 
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name="swirec_normalize_to_probabilities" content="1"/>
+<meta name='swirec_compile_parser_with_weights' content='1'/>
+<rule id="Double" scope="public">
+   <one-of>
+      <item>
+        <one-of>
+          <item> titik </item>
+          <item> perpuluhan </item>
+        </one-of>
+        <ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[DOUBLE="0."+Number_external.C_NUMBER;]]></tag> 
+      </item>
+      <item>
+         <ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[DOUBLE=Number_external.C_NUMBER]]></tag>
+         <one-of>
+           <item> titik </item>
+           <item> perpuluhan </item>
+           <!--<item> and </item>-->
+         </one-of>
+         <ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[DOUBLE=DOUBLE+"."+Number_external.C_NUMBER;]]></tag> 
+      </item>
+      <item>
+         sifar <tag><![CDATA[DOUBLE="0"]]></tag>
+         kosong <tag><![CDATA[DOUBLE="0"]]></tag>
+         <one-of>
+           <item> titik </item>
+           <item> perpuluhan </item>
+           <!--<item> and </item>-->
+         </one-of>
+         <ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[DOUBLE=DOUBLE+"."+Number_external.C_NUMBER;]]></tag> 
+      </item>
+
+      <item> setengah <tag><![CDATA[DOUBLE="0.5";]]></tag></item>
+      <item> separuh <tag><![CDATA[DOUBLE="0.5";]]></tag></item>
+
+      <item> 
+         <ruleref uri="cardinal_number.grxml#CardinalDigitGt1"/><tag><![CDATA[DOUBLE=CardinalDigitGt1.NUMBER]]></tag>
+         <one-of>
+            <item> per tiga <tag><![CDATA[DOUBLE=DOUBLE+"/3";]]></tag> </item>
+            <item> per empat <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/4;]]></tag> </item>
+            <item> suku <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/4;]]></tag> </item>
+            <item> per lima <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/5;]]></tag> </item>
+            <item> per enam <tag><![CDATA[DOUBLE=DOUBLE+"/6";]]></tag> </item>
+            <item> per tujuh <tag><![CDATA[DOUBLE=DOUBLE+"/7";]]></tag> </item>
+            <item> per lapan <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/8;]]></tag> </item>
+            <item> per sembilan <tag><![CDATA[DOUBLE=DOUBLE+"/9";]]></tag> </item>
+            <item> per sepuluh <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/10;]]></tag> </item>
+         </one-of>
+      </item>
+      <item>
+         <item> satu </item>
+         <tag> DOUBLE=1 </tag>
+         <one-of>
+            <item> per dua <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/2;]]></tag></item>
+            <item> setengah <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/2;]]></tag></item>
+            <item> separuh <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/2;]]></tag></item>
+            <item> per tiga <tag><![CDATA[DOUBLE=DOUBLE+"/3";]]></tag></item>
+            <item> per empat <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/4;]]></tag> </item>
+            <item> suku <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/4;]]></tag> </item>
+            <item> per lima <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/5;]]></tag> </item>
+            <item> per enam <tag><![CDATA[DOUBLE=DOUBLE+"/6";]]></tag> </item>
+            <item> per tujuh <tag><![CDATA[DOUBLE=DOUBLE+"/7";]]></tag> </item>
+            <item> per lapan <tag><![CDATA[DOUBLE=parseInt(DOUBLE)/8;]]></tag> </item>
+            <item> per sembilan <tag><![CDATA[DOUBLE=DOUBLE+"/9";]]></tag> </item>
+            <item> per sepuluh<tag><![CDATA[DOUBLE=parseInt(DOUBLE)/10;]]></tag> </item>
+         </one-of>
+      </item>
+      <item> 
+         <tag><![CDATA[whole=0;num=0;]]></tag>
+         <ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[DOUBLE=Number_external.C_NUMBER; whole=parseInt(Number_external.C_NUMBER);]]></tag>
+         dan
+
+         <one-of>
+            <item>
+               <ruleref uri="cardinal_number.grxml#CardinalDigitGt1"/><tag><![CDATA[DOUBLE=DOUBLE+" "+CardinalDigitGt1.NUMBER;num=parseInt(CardinalDigitGt1.NUMBER)]]></tag>
+               <one-of>
+                  <item> per tiga <tag><![CDATA[DOUBLE=DOUBLE+"/3";]]></tag> </item>
+                  <item> per empat<tag><![CDATA[DOUBLE=whole+num/4;]]></tag> </item>
+                  <item> suku <tag><![CDATA[DOUBLE=whole+num/4;]]></tag> </item>
+                  <item> per lima <tag><![CDATA[DOUBLE=whole+num/5;]]></tag> </item>
+                  <item> per enam <tag><![CDATA[DOUBLE=DOUBLE+"/6";]]></tag> </item>
+                  <item> per tujuh <tag><![CDATA[DOUBLE=DOUBLE+"/7";]]></tag> </item>
+                  <item> per lapan <tag><![CDATA[DOUBLE=whole+num/8;]]></tag> </item>
+                  <item> per sembilan <tag><![CDATA[DOUBLE=DOUBLE+"/9";]]></tag> </item>
+                  <item> per sepuluh <tag><![CDATA[DOUBLE=whole+num/10;]]></tag> </item>
+               </one-of>
+               <tag><![CDATA[delete whole; delete num;]]></tag>
+            </item>
+            <item>
+               <item> satu </item>
+               <tag> DOUBLE=DOUBLE+" 1" </tag>
+               <one-of>
+                  <item> setengah <tag><![CDATA[DOUBLE=whole+0.5;]]></tag></item>
+                  <item> separuh <tag><![CDATA[DOUBLE=whole+0.5;]]></tag></item>
+                  <item> per tiga <tag><![CDATA[DOUBLE=DOUBLE+"/3";]]></tag></item>
+                  <item> per empat <tag><![CDATA[DOUBLE=whole+0.25;]]></tag> </item>
+                  <item> suku <tag><![CDATA[DOUBLE=whole+0.25;]]></tag> </item>
+                  <item> per lima <tag><![CDATA[DOUBLE=whole+0.2;]]></tag> </item>
+                  <item> per enam <tag><![CDATA[DOUBLE=DOUBLE+"/6";]]></tag> </item>
+                  <item> per tujuh <tag><![CDATA[DOUBLE=DOUBLE+"/7";]]></tag> </item>
+                  <item> per lapan <tag><![CDATA[DOUBLE=whole+0.125;]]></tag> </item>
+                  <item> per sembilan <tag><![CDATA[DOUBLE=DOUBLE+"/9";]]></tag> </item>
+                  <item> per sepuluh <tag><![CDATA[DOUBLE=whole+0.1;]]></tag> </item>
+               </one-of>
+            </item>
+         </one-of>
+      </item>
+   </one-of>
+</rule>
+</grammar>
+

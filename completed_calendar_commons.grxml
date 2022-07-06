@@ -1,0 +1,1935 @@
+<?xml version="1.0"?>
+<grammar version="1.0" xml:lang="ms-MY" root="LargeTimeUnitS" tag-format="swi-semantics/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/06/grammar">
+
+<!-- Copyright 2006. Nuance Communications Inc. All Rights Reserved.
+Use of the this software is subject to certain restrictions and
+limitations set forth in a license agreement entered into between
+Nuance Communications, Inc. and Licensee. Refer to the Nuance
+License Agreement for license use rights and restrictions.-->
+
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+<rule id="LargeTimeUnitS" scope="public">
+   <one-of>
+     <item> malam  <tag><![CDATA[XY="night"]]></tag></item>
+     <!--<item> siang  <tag><![CDATA[XY="day"]]></tag></item>-->
+     <item> hari <tag><![CDATA[XY="day"]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="NamedDay" scope="public">
+   <one-of>
+     <item> hari kesyukuran  <tag><![CDATA[XY="Thanksgiving"]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> paskah  <tag><![CDATA[XY="Easter"]]></tag></item>
+     <item> hari buruh  <tag><![CDATA[XY="Labour Day"]]></tag></item>
+     <item> hari raya aidiladha <tag><![CDATA[XY="Eid al-Adha"]]></tag></item>
+     <item> hari raya aidilfitri <tag><![CDATA[XY="Eid al-Fitr"]]></tag></item>
+     <item> tahun baru cina  <tag><![CDATA[XY="Chinese New Year"]]></tag></item>
+     <item> hari thaipusam <tag><![CDATA[XY="Thaipusam"]]></tag></item>
+     <item> awal ramadan <tag><![CDATA[XY="First day of Ramadan"]]></tag></item>
+     <item> hari wesak <tag><![CDATA[XY="Wesak Day"]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> gawai dayak <tag><![CDATA[XY="Gawai Dayak"]]></tag></item>
+     <item> awal muharram <tag><![CDATA[XY="First Day of Muharram"]]></tag></item>
+     <item> hari malaysia <tag><![CDATA[XY="Malaysia Day"]]></tag></item>
+     <item> deepavali <tag><![CDATA[XY="Deepavali"]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> tahun baru <tag><![CDATA[XY="New Year"]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> krismas <tag><![CDATA[XY="Christmas Day"]]></tag></item>
+     <item> hari merdeka <tag><![CDATA[XY="Independence Day"]]></tag></item>
+     <item> maudilur rasul <tag><![CDATA[XY="Muhammad\'s Birthday"]]></tag></item>
+     <item> hari keputeraan yang di-pertuan agong <tag><![CDATA[XY="Yang di-Pertuan Agong\'s Birthday]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="NamedRange" scope="public">
+   <one-of>
+        <item> karnival  <tag><![CDATA[XY="Carnival"]]></tag></item>
+  </one-of>
+</rule>
+
+<rule id="CardinalTen" scope="public">
+   <one-of>
+     <item> dua puluh  <tag><![CDATA[XY=20]]></tag></item>
+     <item> tiga puluh  <tag><![CDATA[XY=30]]></tag></item>
+     <item> empat puluh  <tag><![CDATA[XY=40]]></tag></item>
+     <item> lima puluh  <tag><![CDATA[XY=50]]></tag></item>
+     <item> enam puluh  <tag><![CDATA[XY=60]]></tag></item>
+     <item> tujuh puluh  <tag><![CDATA[XY=70]]></tag></item>
+     <item> lapan puluh  <tag><![CDATA[XY=80]]></tag></item>
+     <item> sembilan puluh  <tag><![CDATA[XY=90]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 20 <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[XY=30]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 40  <tag><![CDATA[XY=40]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 50  <tag><![CDATA[XY=50]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 60  <tag><![CDATA[XY=60]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 70  <tag><![CDATA[XY=70]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 80  <tag><![CDATA[XY=80]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 90  <tag><![CDATA[XY=90]]></tag></item>
+   </one-of>
+</rule>
+
+
+<rule id="CardinalDigits21_99" scope="public">
+    <one-of>
+      <item> <!-- added here to avoid textonly rules -->
+          <ruleref uri="#CardinalTen"/> <tag><![CDATA[ XY=parseInt(CardinalTen.XY)]]></tag>
+          <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + parseInt(CardinalDigit.XY )]]></tag></item>
+        </item>
+
+      <item xml:lang="ms-my-textonly">
+        <one-of>
+	          <item> 21  <tag><![CDATA[XY=21]]></tag></item>
+             <item> 22  <tag><![CDATA[XY=22]]></tag></item>
+             <item> 23  <tag><![CDATA[XY=23]]></tag></item>
+             <item> 24  <tag><![CDATA[XY=24]]></tag></item>
+             <item> 25  <tag><![CDATA[XY=25]]></tag></item>
+             <item> 26  <tag><![CDATA[XY=26]]></tag></item>		
+             <item> 27  <tag><![CDATA[XY=27]]></tag></item>
+             <item> 28  <tag><![CDATA[XY=28]]></tag></item>
+             <item> 29  <tag><![CDATA[XY=29]]></tag></item>
+
+             <item> 31  <tag><![CDATA[XY=31]]></tag></item>
+             <item> 32  <tag><![CDATA[XY=32]]></tag></item>
+             <item> 33  <tag><![CDATA[XY=33]]></tag></item>
+             <item> 34  <tag><![CDATA[XY=34]]></tag></item>
+             <item> 35  <tag><![CDATA[XY=35]]></tag></item>
+             <item> 36  <tag><![CDATA[XY=36]]></tag></item>
+             <item> 37  <tag><![CDATA[XY=37]]></tag></item>
+             <item> 38  <tag><![CDATA[XY=38]]></tag></item>
+             <item> 39  <tag><![CDATA[XY=39]]></tag></item>
+
+             <item> 41  <tag><![CDATA[XY=41]]></tag></item>
+             <item> 42  <tag><![CDATA[XY=42]]></tag></item>
+             <item> 43  <tag><![CDATA[XY=43]]></tag></item>
+             <item> 44  <tag><![CDATA[XY=44]]></tag></item>
+             <item> 45  <tag><![CDATA[XY=45]]></tag></item>
+             <item> 46  <tag><![CDATA[XY=46]]></tag></item>
+             <item> 47  <tag><![CDATA[XY=47]]></tag></item>
+             <item> 48  <tag><![CDATA[XY=48]]></tag></item>
+             <item> 49  <tag><![CDATA[XY=49]]></tag></item>
+
+             <item> 51  <tag><![CDATA[XY=51]]></tag></item>
+             <item> 52  <tag><![CDATA[XY=52]]></tag></item>
+             <item> 53  <tag><![CDATA[XY=53]]></tag></item>
+             <item> 54  <tag><![CDATA[XY=54]]></tag></item>
+             <item> 55  <tag><![CDATA[XY=55]]></tag></item>
+             <item> 56  <tag><![CDATA[XY=56]]></tag></item>
+             <item> 57  <tag><![CDATA[XY=57]]></tag></item>
+             <item> 58  <tag><![CDATA[XY=58]]></tag></item>
+             <item> 59  <tag><![CDATA[XY=59]]></tag></item>
+
+             <item> 61  <tag><![CDATA[XY=61]]></tag></item>
+             <item> 62  <tag><![CDATA[XY=62]]></tag></item>
+             <item> 63  <tag><![CDATA[XY=63]]></tag></item>
+             <item> 64  <tag><![CDATA[XY=64]]></tag></item>
+             <item> 65  <tag><![CDATA[XY=65]]></tag></item>
+             <item> 66  <tag><![CDATA[XY=66]]></tag></item>
+             <item> 67  <tag><![CDATA[XY=67]]></tag></item>
+             <item> 68  <tag><![CDATA[XY=68]]></tag></item>
+             <item> 69  <tag><![CDATA[XY=69]]></tag></item>
+
+             <item> 71  <tag><![CDATA[XY=71]]></tag></item>
+             <item> 72  <tag><![CDATA[XY=72]]></tag></item>
+             <item> 73  <tag><![CDATA[XY=73]]></tag></item>
+             <item> 74  <tag><![CDATA[XY=74]]></tag></item>
+             <item> 75  <tag><![CDATA[XY=75]]></tag></item>
+             <item> 76  <tag><![CDATA[XY=76]]></tag></item>
+             <item> 77  <tag><![CDATA[XY=77]]></tag></item>
+             <item> 78  <tag><![CDATA[XY=78]]></tag></item>
+             <item> 79  <tag><![CDATA[XY=79]]></tag></item>
+
+             <item> 81  <tag><![CDATA[XY=81]]></tag></item>
+             <item> 82  <tag><![CDATA[XY=82]]></tag></item>
+             <item> 83  <tag><![CDATA[XY=83]]></tag></item>
+             <item> 84  <tag><![CDATA[XY=84]]></tag></item>
+             <item> 85  <tag><![CDATA[XY=85]]></tag></item>
+             <item> 86  <tag><![CDATA[XY=86]]></tag></item>
+             <item> 87  <tag><![CDATA[XY=87]]></tag></item>
+             <item> 88  <tag><![CDATA[XY=88]]></tag></item>
+             <item> 89  <tag><![CDATA[XY=89]]></tag></item>
+
+             <item> 91  <tag><![CDATA[XY=91]]></tag></item>
+             <item> 92  <tag><![CDATA[XY=92]]></tag></item>
+             <item> 93  <tag><![CDATA[XY=93]]></tag></item>
+             <item> 94  <tag><![CDATA[XY=94]]></tag></item>
+             <item> 95  <tag><![CDATA[XY=95]]></tag></item>
+             <item> 96  <tag><![CDATA[XY=96]]></tag></item>
+             <item> 97  <tag><![CDATA[XY=97]]></tag></item>
+             <item> 98  <tag><![CDATA[XY=98]]></tag></item>
+             <item> 99  <tag><![CDATA[XY=99]]></tag></item>
+	</one-of>
+     </item>	
+  </one-of>
+</rule>
+
+<rule id="Cardinal1_120" scope="public">
+   <one-of>
+      <item> satu <tag><![CDATA[XY=1]]></tag></item>
+      <item xml:lang='ms-my-textonly'> 1 <tag><![CDATA[XY=1]]></tag></item>
+      <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=CardinalDigit.XY]]></tag></item>
+      <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=CardinalTeen.XY]]></tag></item>
+      <item> dua puluh <tag><![CDATA[XY=20;]]></tag></item>
+      <item> 20 <tag><![CDATA[XY=20;]]></tag></item>
+      <item> <ruleref uri="#CardinalDigits21_99"/> <tag><![CDATA[XY=CardinalDigits21_99.XY]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 100 <tag><![CDATA[XY=100]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 101 <tag><![CDATA[XY=101]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 102 <tag><![CDATA[XY=102]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 103 <tag><![CDATA[XY=103]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 104 <tag><![CDATA[XY=104]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 105 <tag><![CDATA[XY=105]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 106 <tag><![CDATA[XY=106]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 107 <tag><![CDATA[XY=107]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 108 <tag><![CDATA[XY=108]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 109 <tag><![CDATA[XY=109]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 110 <tag><![CDATA[XY=110]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 111 <tag><![CDATA[XY=111]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 112 <tag><![CDATA[XY=112]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 113 <tag><![CDATA[XY=113]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 114 <tag><![CDATA[XY=114]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 115 <tag><![CDATA[XY=115]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 116 <tag><![CDATA[XY=116]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 117 <tag><![CDATA[XY=117]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 118 <tag><![CDATA[XY=118]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 119 <tag><![CDATA[XY=119]]></tag></item>
+      <item xml:lang="ms-my-textonly"> 120 <tag><![CDATA[XY=120]]></tag></item>
+      <item>
+         <item repeat="0-1"> satu </item>
+         ratus <tag><![CDATA[XY=100;]]></tag>
+         <item repeat="0-1">
+            <item repeat="0-1"> dan </item>         
+            <one-of>
+               <item>
+                   <ruleref uri="#CardinalTen"/> <tag><![CDATA[ XY=XY+parseInt(CardinalTen.XY)]]></tag>
+                   <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + parseInt(CardinalDigit.XY )]]></tag></item>
+               </item>
+               <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[ XY=XY+parseInt(CardinalTeen.XY)]]></tag></item>
+               <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY+parseInt(CardinalDigit.XY )]]></tag></item>
+            </one-of>
+          </item>
+       </item>
+   </one-of>
+</rule>
+
+<rule id="Cardinal1_99" scope="public">
+   <one-of>
+     <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=CardinalDigit.XY]]></tag></item>
+     <item> <ruleref uri="#Cardinal10_99"/> <tag><![CDATA[XY=Cardinal10_99.XY]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="Cardinal2_99" scope="public">
+   <one-of>
+     <item> <ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[XY=CardinalDigitGt1.XY]]></tag></item>
+     <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=CardinalTeen.XY]]></tag></item>
+     <!-- <item> 
+		<ruleref uri="#CardinalTen"/> <tag><![CDATA[ XY=parseInt(CardinalTen.XY)]]></tag>       
+		<item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + parseInt(CardinalDigit.XY )]]></tag></item>
+	</item> -->
+	<item> <ruleref uri="#CardinalDigits21_99"/> <tag><![CDATA[XY=CardinalDigits21_99.XY]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="DateMinimal" scope="public"><ruleref uri="#OrdinalDay"/> <tag><![CDATA[XY=OrdinalDay.XY]]></tag></rule>
+
+<rule id="HourAsTime" scope="public"><ruleref uri="#Hour"/> <tag><![CDATA[XY= {'TIME_ABS': {'HOUR':Hour.XY}}]]></tag> </rule>
+
+<rule id="LargerTimeUnitS" scope="public">
+   <one-of>
+     <item> <ruleref uri="#LargeTimeUnitS"/> <tag><![CDATA[XY=LargeTimeUnitS.XY]]></tag></item>
+     <item> minggu  <tag><![CDATA[XY="week"]]></tag></item>
+     <item> bulan  <tag><![CDATA[XY="month"]]></tag></item>
+     <item> tahun  <tag><![CDATA[XY="year"]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="DayOfWeek" scope="public">
+   <one-of>
+     <item> isnin  <tag><![CDATA[XY=2]]></tag></item>
+     <item> selasa  <tag><![CDATA[XY=3]]></tag></item>
+     <item> rabu  <tag><![CDATA[XY=4]]></tag></item>
+     <item> khamis  <tag><![CDATA[XY=5]]></tag></item>
+     <item> jumaat  <tag><![CDATA[XY=6]]></tag></item>
+     <item> sabtu  <tag><![CDATA[XY=7]]></tag></item>
+     <item> ahad  <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> isn  <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> sel  <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> rab  <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> kha  <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jum  <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> sab  <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> aha  <tag><![CDATA[XY=1]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="OrdinalDay" scope="public"><tag><![CDATA[XY=0;]]></tag>
+   <one-of>
+     <item> <ruleref uri="#OrdinalTeen"/> <tag><![CDATA[XY=OrdinalTeen.XY]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-2 <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-6 <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-7 <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-8 <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-9 <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-10 <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-11 <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-12 <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-13 <tag><![CDATA[XY=13]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-14 <tag><![CDATA[XY=14]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-15 <tag><![CDATA[XY=15]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-16 <tag><![CDATA[XY=16]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-17 <tag><![CDATA[XY=17]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-18 <tag><![CDATA[XY=18]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-19 <tag><![CDATA[XY=19]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> ke 1 <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 2 <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 3 <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 4 <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 5 <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 6 <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 7 <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 8 <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 9 <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 10 <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 11 <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 12 <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 13 <tag><![CDATA[XY=13]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 14 <tag><![CDATA[XY=14]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 15 <tag><![CDATA[XY=15]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 16 <tag><![CDATA[XY=16]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 17 <tag><![CDATA[XY=17]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 18 <tag><![CDATA[XY=18]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 19 <tag><![CDATA[XY=19]]></tag></item>
+
+     <item>   
+	     <item repeat="0-1"> dua puluh  <tag><![CDATA[XY=20]]></tag></item>
+        <ruleref uri="#OrdinalDigit"/> <tag><![CDATA[XY=XY + OrdinalDigit.XY]]></tag>
+     </item>
+     <item xml:lang="ms-my-textonly"> ke-21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-29  <tag><![CDATA[XY=29]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> ke 21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 29  <tag><![CDATA[XY=29]]></tag></item>
+
+     <item> kedua puluh  <tag><![CDATA[XY=20]]></tag></item>
+     <item> ketiga puluh  <tag><![CDATA[XY=30]]></tag></item>
+     <item> ketiga puluh satu  <tag><![CDATA[XY=31]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-20  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-30  <tag><![CDATA[XY=30]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-31  <tag><![CDATA[XY=31]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 20  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 30  <tag><![CDATA[XY=30]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 31  <tag><![CDATA[XY=31]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="OrdinalDay1_29" scope="public"><tag><![CDATA[XY=0;]]></tag>
+   <one-of>
+     <item> <ruleref uri="#OrdinalTeen"/> <tag><![CDATA[XY=OrdinalTeen.XY]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-2 <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-6 <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-7 <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-8 <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-9 <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-10 <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-11 <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-12 <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-13 <tag><![CDATA[XY=13]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-14 <tag><![CDATA[XY=14]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-15 <tag><![CDATA[XY=15]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-16 <tag><![CDATA[XY=16]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-17 <tag><![CDATA[XY=17]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-18 <tag><![CDATA[XY=18]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-19 <tag><![CDATA[XY=19]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 1 <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 2 <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 3 <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 4 <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 5 <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 6 <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 7 <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 8 <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 9 <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 10 <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 11 <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 12 <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 13 <tag><![CDATA[XY=13]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 14 <tag><![CDATA[XY=14]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 15 <tag><![CDATA[XY=15]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 16 <tag><![CDATA[XY=16]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 17 <tag><![CDATA[XY=17]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 18 <tag><![CDATA[XY=18]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 19 <tag><![CDATA[XY=19]]></tag></item>
+
+     <item> kedua puluh  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 20  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 20  <tag><![CDATA[XY=20]]></tag></item>
+
+     <item>
+        <item repeat="0-1"> dua puluh  <tag><![CDATA[XY=20]]></tag></item>
+        <ruleref uri="#OrdinalDigit"/> <tag><![CDATA[XY=XY + OrdinalDigit.XY]]></tag>
+     </item>
+
+     <item xml:lang="ms-my-textonly"> ke-21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke-29  <tag><![CDATA[XY=29]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> ke 21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ke 29  <tag><![CDATA[XY=29]]></tag></item>
+  </one-of>
+</rule>
+
+<rule id="CardinalTenLt6" scope="public">
+   <one-of>
+     <item> dua puluh  <tag><![CDATA[XY=20;]]></tag></item>
+     <item> tiga puluh  <tag><![CDATA[XY=30;]]></tag></item>
+     <item> empat puluh  <tag><![CDATA[XY=40;]]></tag></item>
+     <item> lima puluh  <tag><![CDATA[XY=50;]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 20  <tag><![CDATA[XY=20;]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 30  <tag><![CDATA[XY=30;]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 40  <tag><![CDATA[XY=40;]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 50  <tag><![CDATA[XY=50;]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="Date" scope="public"><tag><![CDATA[Y="?";M="?"]]></tag>
+   <one-of>
+     <item>        
+	<item repeat="0-1"> <ruleref uri="#DayOfWeek"/><tag><![CDATA[DR={'DAY_OF_WEEK':DayOfWeek.XY};]]></tag></item>
+	<ruleref uri="#DateCore"/> <tag><![CDATA[M=DateCore.M; D=DateCore.D]]></tag>       
+	<item repeat="0-1"> 
+             <item repeat="0-1"> 
+                <one-of>  
+                   <item> bagi </item>
+                   <item> dalam </item>
+                </one-of>
+             </item>
+             <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY]]></tag>
+       </item>
+	<tag><![CDATA[XY= {'DAY':D} ; if(M!="?"){XY.MONTH=M;} if(Y!="?"){XY.YEAR=Y;} XY= {'DATE_ABS':XY}; delete M; delete Y; delete D; if(typeof(DR)!='undefined'){ XY.DATE_REL=DR; }]]></tag>
+      </item>
+      <!-- inverse: year + date -->
+      <item>
+          <item repeat="0-1"> dalam </item>
+          <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY]]></tag>
+          <item repeat="0-1"> pada </item>
+          <ruleref uri="#DateCore"/> <tag><![CDATA[M=DateCore.M; D=DateCore.D]]></tag>
+          <tag><![CDATA[XY= {'DAY':D} ; if(M!="?"){XY.MONTH=M;} if(Y!="?"){XY.YEAR=Y;} XY= {'DATE_ABS':XY}; delete M; delete Y; delete D; if(typeof(DR)!='undefined'){ XY.DATE_REL=DR; }]]></tag>
+      </item>
+      <item> <!-- sunday the third -->
+         <ruleref uri="#DayOfWeek"/><tag><![CDATA[DR={'DAY_OF_WEEK':DayOfWeek.XY};]]></tag>
+         yang 
+         <item><ruleref uri="#OrdinalDay"/> <tag><![CDATA[D=OrdinalDay.XY]]></tag></item>
+         <tag><![CDATA[XY= {'DATE_ABS':{'DAY':D}} ; if(typeof(DR)!='undefined'){ XY.DATE_REL=DR; } delete M; delete Y; delete D;]]></tag>
+      </item>
+      <item>
+ 	   <item repeat="0-1"> yang </item>
+           <item><ruleref uri="#OrdinalDay"/> <tag><![CDATA[D=OrdinalDay.XY]]></tag></item>
+                
+             hari bagi
+           <item> <ruleref uri="#NamedRange"/> <tag><![CDATA[M=NamedRange.XY]]></tag></item>
+           <item repeat="0-1"> 
+             <item repeat="0-1"> 
+                <one-of> 
+                   <item> bagi </item> 
+                   <item> dalam </item>
+                </one-of>
+             </item>
+             <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY]]></tag>
+       </item>
+
+           <tag><![CDATA[XY= {'DAY':D} ; if(M!="?"){XY.NAMED_RANGE=M;} if(Y!="?"){XY.YEAR=Y;} XY= {'DATE_ABS':XY}; delete M; delete Y; delete D;]]></tag>
+      </item>       
+      <item>
+         pada 
+          <ruleref uri="#DateMinimal"/> <tag><![CDATA[XY= {'DATE_ABS':{'DAY':DateMinimal.XY}} ;]]></tag>
+      </item>
+      <item> <!-- second day of 2020; -->
+         <ruleref uri="#DateMinimal"/> hari <tag><![CDATA[XY= {'DATE_ABS':{'DAY':DateMinimal.XY}} ;]]></tag> 
+         <one-of>
+            <item> bagi </item>
+            <item> dalam </item>
+         </one-of>
+         <ruleref uri="#Year"/> <tag><![CDATA[XY.DATE_ABS.YEAR=Year.XY; if(DateMinimal.XY<=31){XY.DATE_ABS.MONTH=1;}]]></tag>
+      </item>
+      <item> <!-- last day in 2020 (== Dec 31) --> 
+         hari terakhir <tag><![CDATA[XY= {'DATE_ABS':{'DAY':31,'MONTH':12}} ;]]></tag> 
+         <one-of>
+            <item> bagi </item>
+            <item> dalam </item>
+         </one-of>
+         <ruleref uri="#Year"/> <tag><![CDATA[XY.DATE_ABS.YEAR=Year.XY;]]></tag>
+      </item>
+      <item>
+	<item><ruleref uri="#NamedDay"/> <tag><![CDATA[D=NamedDay.XY]]></tag></item>
+        <item> 
+             <item repeat="0-1"> 
+                <one-of> 
+                   <item> bagi </item> 
+                   <item> dalam </item>
+                </one-of>
+             </item>
+             <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY]]></tag>
+       </item>
+	<tag><![CDATA[XY= {'DAY':D} ; if(Y!="?"){XY.YEAR=Y;} XY= {'DATE_ABS':XY}; delete M; delete Y; delete D;]]></tag>
+      </item>
+      <item>
+          <item><ruleref uri="#SpecialDate"/> <tag><![CDATA[D=SpecialDate.XY]]></tag></item>
+        <item repeat="0-1"> 
+             <item repeat="0-1"> 
+                <one-of> 
+                   <item> bagi </item> 
+                   <item> dalam </item>
+                </one-of>
+             </item>
+             <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY]]></tag>
+       </item>
+          <tag><![CDATA[XY= D; if(Y!="?"){XY.YEAR=Y;} XY= {'DATE_ABS':XY}; delete M; delete Y; delete D;]]></tag>
+      </item>
+
+   </one-of>
+</rule>
+
+<rule id="PossessiveDayOfWeek" scope="public"> BUANG!
+   <one-of>
+     <item> monday's  <tag><![CDATA[XY=2]]></tag></item>
+     <item> tuesday's  <tag><![CDATA[XY=3]]></tag></item>
+     <item> wednesday's  <tag><![CDATA[XY=4]]></tag></item>
+     <item> thursday's  <tag><![CDATA[XY=5]]></tag></item>
+     <item> friday's  <tag><![CDATA[XY=6]]></tag></item>
+     <item> saturday's  <tag><![CDATA[XY=7]]></tag></item>
+     <item> sunday's  <tag><![CDATA[XY=1]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="OrdinalDigitGt1" scope="public">
+   <one-of>
+     <item> kedua  <tag><![CDATA[XY=2]]></tag></item>
+     <item> ketiga  <tag><![CDATA[XY=3]]></tag></item>
+     <item> keempat  <tag><![CDATA[XY=4]]></tag></item>
+     <item> kelima  <tag><![CDATA[XY=5]]></tag></item>
+     <item> keenam  <tag><![CDATA[XY=6]]></tag></item>
+     <item> ketujuh  <tag><![CDATA[XY=7]]></tag></item>
+     <item> kelapan  <tag><![CDATA[XY=8]]></tag></item>
+     <item> kesembilan  <tag><![CDATA[XY=9]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="OrdinalTeen" scope="public">
+   <one-of>
+     <item> kesepuluh  <tag><![CDATA[XY=10]]></tag></item>
+     <item> kesebelas  <tag><![CDATA[XY=11]]></tag></item>
+     <item> kedua belas  <tag><![CDATA[XY=12]]></tag></item>
+     <item> ketiga belas <tag><![CDATA[XY=13]]></tag></item>
+     <item> keempat belas <tag><![CDATA[XY=14]]></tag></item>
+     <item> kelima belas <tag><![CDATA[XY=15]]></tag></item>
+     <item> keenam belas <tag><![CDATA[XY=16]]></tag></item>
+     <item> ketujuh belas <tag><![CDATA[XY=17]]></tag></item>
+     <item> kelapan belas <tag><![CDATA[XY=18]]></tag></item>
+     <item> kesembilan belas <tag><![CDATA[XY=19]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="CardinalDay" scope="public"><tag><![CDATA[XY=0]]></tag>
+   <one-of>
+     <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=CardinalTeen.XY]]></tag></item>
+     <item> 
+		<item repeat="0-1"> <one-of> <item> dua puluh </item> <item> 20 </item> </one-of>  <tag><![CDATA[XY=20]]></tag></item>
+		<ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + CardinalDigit.XY]]></tag></item>
+
+     <item> dua puluh  <tag><![CDATA[XY=20]]></tag></item>
+     <item> tiga puluh  <tag><![CDATA[XY=30]]></tag></item>
+     <item> tiga puluh satu  <tag><![CDATA[XY=31]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> 20  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 29  <tag><![CDATA[XY=29]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> 30  <tag><![CDATA[XY=30]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 31  <tag><![CDATA[XY=31]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="CardinalDay1_29" scope="public"><tag><![CDATA[XY=0]]></tag>
+   <one-of>
+     <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=CardinalTeen.XY]]></tag></item>
+     <item>
+                <item repeat="0-1"> <one-of> <item> dua puluh </item> <item> 20 </item> </one-of>  <tag><![CDATA[XY=20]]></tag></item>
+                <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + CardinalDigit.XY]]></tag></item>
+
+     <item> dua puluh  <tag><![CDATA[XY=20]]></tag></item>
+
+     <item xml:lang="ms-my-textonly"> 20  <tag><![CDATA[XY=20]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 21  <tag><![CDATA[XY=21]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 22  <tag><![CDATA[XY=22]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 23  <tag><![CDATA[XY=23]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 24  <tag><![CDATA[XY=24]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 25  <tag><![CDATA[XY=25]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 26  <tag><![CDATA[XY=26]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 27  <tag><![CDATA[XY=27]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 28  <tag><![CDATA[XY=28]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 29  <tag><![CDATA[XY=29]]></tag></item>
+
+   </one-of>
+</rule>
+
+
+<rule id="Hour" scope="public">
+   <one-of>
+     <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=CardinalDigit.XY]]></tag></item>
+     <item> sepuluh  <tag><![CDATA[XY=10]]></tag></item>
+     <item> sebelas  <tag><![CDATA[XY=11]]></tag></item>
+     <item> dua belas  <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 10  <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 11  <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 12  <tag><![CDATA[XY=12]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="FuzzyHour" scope="public">
+   <one-of>
+     <item xml:lang="ms-my-textonly"> lebih kurang sembilan <tag><![CDATA[XY= {'HOUR':9,'MODIFIER':'fuzzy'}]]></tag></item>
+     <item> lebih kurang tengah hari <tag><![CDATA[XY= {'HOUR':12, 'AMPM':'pm', 'MODIFIER':'fuzzy'}]]></tag></item>
+     <item> lebih kurang tengahari <tag><![CDATA[XY= {'HOUR':12, 'AMPM':'pm', 'MODIFIER':'fuzzy'}]]></tag></item>
+     <item> sekitar <ruleref uri="#Hour"/> <tag><![CDATA[XY= {'HOUR':Hour.XY,'MODIFIER':'fuzzy'}]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="TimeCore" scope="public"><tag><![CDATA[H=0;]]></tag>
+   <one-of>
+     <item> pada <item repeat="0-1"> pukul </item> <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY;M=0]]></tag></item>	
+     <item> pukul <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY;M=0]]></tag></item>
+     <item> 
+     	<ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>
+     	<one-of>
+           <item> pukul  <tag><![CDATA[M=0]]></tag></item>
+           <item> jam  <tag><![CDATA[M=0]]></tag></item>
+        </one-of>
+	<item repeat="0-1"> tepat </item>
+     </item>
+
+    <item>
+        <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>
+        <item> <ruleref uri="#Minute"/> <tag><![CDATA[M=Minute.XY]]></tag></item>
+        <item> tepat </item>
+     </item>
+
+     <item>
+        pada
+        <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>
+        <one-of>
+           <item> <ruleref uri="#Minute"/> <tag><![CDATA[M=Minute.XY]]></tag></item>
+           <item> suku <tag><![CDATA[M=15;]]></tag></item>
+           <item> setengah <tag><![CDATA[M=30;]]></tag></item>
+        </one-of>         
+     </item>
+
+      <item>
+        <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>
+        <item> 
+              <ruleref uri="#Minute"/> <tag><![CDATA[M=Minute.XY]]></tag>
+              <one-of>
+                <item> minit </item>
+                <item> min </item>
+              </one-of>
+         </item>
+        <item repeat="0-1"> tepat </item>
+     </item>
+
+	 
+     <item> 
+       <item repeat="0-1"> pada </item>
+       <one-of>
+         <item> suku  <tag><![CDATA[M=15]]></tag></item>
+         <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[M=parseInt(CardinalDigit.XY )]]></tag></item>
+         <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[M=parseInt(CardinalTeen.XY )]]></tag></item>
+         <item> <ruleref uri="#CardinalTenLt6"/> <tag><![CDATA[M=parseInt(CardinalTenLt6.XY )]]></tag>           <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[M=M + parseInt(CardinalDigit.XY )]]></tag></item>
+	  </item>
+      </one-of>
+     
+       <one-of>
+         <item> lepas </item>
+         <item> selepas </item>
+         <item> ke  <tag><![CDATA[M=60-M; H=-1]]></tag></item>
+         <item> sebelum <tag><![CDATA[M=60-M; H=-1]]></tag></item>
+       </one-of>
+     
+       <one-of>
+         <item> <ruleref uri="#Hour"/> <tag><![CDATA[H=H + parseInt(Hour.XY );if(H==0){H=12;}]]></tag></item>
+       </one-of>
+     </item>
+
+     <item> setengah jam lepas 
+       <one-of>
+         <item> <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag></item>
+       </one-of>
+      <tag><![CDATA[M=30]]></tag></item>
+     
+	<item> <ruleref uri="#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>tiga puluh  <tag><![CDATA[M=30]]></tag></item>
+
+   </one-of>
+  <!--<tag><![CDATA[XY= {'TIME_ABS': {'HOUR':H,'MINUTE':M}}]]></tag> -->
+  <tag><![CDATA[if(M!=undefined && M!=0){XY= {'TIME_ABS':{'HOUR':H,'MINUTE':M}};}else{XY={'TIME_ABS':{'HOUR':H}};}]]></tag> 
+</rule>
+
+<rule id="RelativeTime" scope="public"><tag><![CDATA[INCREMENT=1;P='minute']]></tag>
+   <one-of>
+     <item>
+       <one-of>
+         <item> sekarang </item>
+       </one-of>
+       <tag><![CDATA[XY= {'TIME_REL': {'STEP':'hour','INCREMENT':0}}]]></tag></item>
+       <item> 
+         <one-of>
+             <item>
+		<item repeat="0-1"> satu </item>
+                <one-of>
+                   <item> beberapa  <tag><![CDATA[INCREMENT=3]]></tag></item>
+                   <item> pasang  <tag><![CDATA[INCREMENT=2]]></tag></item>
+                </one-of>
+             </item>
+	     <item>
+	        <one-of>
+    	           <item><one-of><item>satu</item><item>se</item></one-of><tag><![CDATA[INCREMENT=1]]></tag></item>
+                   <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[INCREMENT=parseInt(CardinalDigitGt1.XY )]]></tag></item>
+                   <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTeen.XY)]]></tag></item>
+                   <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT+ parseInt(CardinalDigit.XY )]]></tag></item></item>
+               </one-of>
+	    </item>
+          </one-of>
+          <one-of>
+  	     <item> jam </item>
+	     <item xml:lang="ms-my-textonly"> j </item>
+	     <item xml:lang="ms-my-textonly"> jm </item>
+	  </one-of>
+          <tag><![CDATA[XY= {'TIME_REL': {'STEP':'hour','INCREMENT':INCREMENT}} ; delete INCREMENT]]></tag>
+        </item>
+
+        <item>
+           <item repeat="0-1"> satu </item>
+           jam  
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'hour','INCREMENT':1}}]]></tag>
+        </item>
+
+        <item>
+           <item repeat="0-1"> satu </item>
+           jam setengah  
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':90}}]]></tag>
+        </item>
+
+        <item>
+           setengah jam  
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':30}}]]></tag>
+       </item>
+
+       <item>        
+           setengah-jam  
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':30}}]]></tag>
+       </item>
+
+       <item>
+           <item repeat="0-1"> satu </item>
+           perempat jam
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':15}}]]></tag>
+       </item>
+
+       <item>
+           suku jam
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':15}}]]></tag>
+       </item>
+
+       <item>
+           suku-jam
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':15}}]]></tag>
+       </item>
+
+       <item>
+           tiga perempat jam
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':45}}]]></tag>
+       </item>
+
+       <item>
+           <item repeat="0-1"> satu </item>
+           jam suku
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':75}}]]></tag>
+       </item>
+
+       <item>
+           <item repeat="0-1"> satu </item>
+           dan tiga perempat jam
+           <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':105}}]]></tag>
+       </item>
+
+       <item>
+           <tag><![CDATA[INCREMENT=0;]]></tag>
+           <item repeat="0-1">
+           <one-of>
+             <item>
+                <item repeat="0-1"> satu </item>
+                <one-of>
+                  <item> beberapa  <tag><![CDATA[INCREMENT=3]]></tag></item>
+                  <item> pasang  <tag><![CDATA[INCREMENT=2]]></tag></item>
+                </one-of>
+             </item>
+             <item>
+               <one-of>
+                 <item><one-of><item xml:lang="ms-my-textonly">1</item><item>satu</item><item>se</item></one-of><tag><![CDATA[INCREMENT=1]]></tag></item>
+                 <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[INCREMENT=parseInt(CardinalDigitGt1.XY )]]></tag></item>
+                 <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTeen.XY)]]></tag></item>
+                 <item> 
+                     <ruleref uri="#CardinalTen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTen.XY )]]></tag>
+                     <item repeat="0-1"> 
+                         <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT+ parseInt(CardinalDigit.XY )]]></tag>
+                     </item>
+                 </item>
+               </one-of>
+            </item>
+          </one-of>
+          <one-of>
+             <item> jam </item>
+             <item xml:lang="ms-my-textonly"> j </item>
+             <item xml:lang="ms-my-textonly"> jm </item>
+          </one-of>
+          <item repeat="0-1"> dan </item>
+        </item>
+        <one-of>
+          <item>
+            <one-of>
+               <item> sepuluh  <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+10;}else{INCREMENT=10;}]]></tag></item>
+    	       <item xml:lang="ms-my-textonly"> 10  <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+10;}else{INCREMENT=10;}]]></tag></item>
+	       <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(CardinalDigitGt1.XY );}else{INCREMENT=parseInt(CardinalDigitGt1.XY);}]]></tag></item>
+               <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(CardinalTeen.XY);}else{INCREMENT=parseInt(CardinalTeen.XY);}]]></tag></item>
+               <item> 
+                    <ruleref uri="#CardinalTen"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(CardinalTen.XY);}else{INCREMENT=parseInt(CardinalTen.XY );}]]></tag>       
+                    <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT+ parseInt(CardinalDigit.XY )]]></tag></item>
+               </item>
+               <item>
+                 <ruleref uri="#Cardinal10_99"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(Cardinal10_99.XY);}else{INCREMENT=parseInt(Cardinal10_99.XY );}]]></tag>
+               </item>
+               <item> ratus
+                      <item repeat="0-1">
+                       <one-of>
+                         <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(CardinalDigit.XY);}else{INCREMENT=parseInt(CardinalDigit.XY);} INCREMENT=INCREMENT+100;]]></tag></item>
+                         <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(CardinalTeen.XY);}else{INCREMENT=parseInt(CardinalTeen.XY);} INCREMENT=INCREMENT+100;]]></tag></item>
+                        <item>
+                              <ruleref uri="#Cardinal10_99"/> <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+parseInt(Cardinal10_99.XY);}else{INCREMENT=parseInt(Cardinal10_99.XY );} INCREMENT=INCREMENT+100;]]></tag>
+                       </item>
+                     </one-of>
+                   </item>
+              </item>
+            </one-of>
+            <one-of>
+               <item> minit </item>
+            </one-of>   
+            <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+         <item> lima belas minit  
+             <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+15;}else{INCREMENT=15;}XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+         <item xml:lang="ms-my-textonly"> 15 minit  
+             <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+15;}else{INCREMENT=15;}XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+         <item> empat puluh lima minit  
+             <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+45;}else{INCREMENT=45;}XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+         <item xml:lang="ms-my-textonly"> 45 minit  
+             <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+45;}else{INCREMENT=45;}XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+         <item> setengah 
+               <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+30;}else{INCREMENT=30;}XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+         </item>
+       </one-of>
+  </item>
+    <item>
+       <one-of>
+                 <item><one-of><item xml:lang="ms-my-textonly">1</item><item>satu</item></one-of><tag><![CDATA[INCREMENT=1]]></tag></item>
+                 <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[INCREMENT=parseInt(CardinalDigitGt1.XY )]]></tag></item>
+                 <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTeen.XY)]]></tag></item>
+                 <item>
+                     <ruleref uri="#CardinalTen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTen.XY )]]></tag>
+                     <item repeat="0-1">
+                         <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT+ parseInt(CardinalDigit.XY )]]></tag>
+                     </item>
+                 </item>
+               </one-of>
+               dan
+               <one-of>
+                   <item> setengah <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+30;} else {INCREMENT=30;}]]></tag></item>
+                   <item> suku <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+15;} else {INCREMENT=15;}]]></tag></item>
+                   <item> tiga perempat <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+45;} else {INCREMENT=45;}]]></tag></item>
+                   <item> tiga perempat <tag><![CDATA[if(INCREMENT>0){INCREMENT=INCREMENT*60+45;} else {INCREMENT=45;}]]></tag></item>
+               </one-of>
+               <one-of>
+                    <item> jam </item>
+                    <item xml:lang="ms-my-textonly"> j </item>
+                    <item xml:lang="ms-my-textonly"> jm </item>
+                </one-of>
+                <tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+       </item>   
+<!-- -->
+   <!--<item>
+       <one-of>
+           <item> a <tag><![CDATA[INCREMENT=1]]></tag></item>
+           <item> one <tag><![CDATA[INCEREMENT=1]]></tag></item>
+           <item xml:lang="ms-my-textonly"> 1 <tag><![CDATA[INCEREMENT=1]]></tag></item>
+       </one-of>
+       <one-of>
+            <item> hour <tag><![CDATA[P='hour']]></tag></item>
+            <item> minute <tag><![CDATA[P='minute']]></tag> </item>
+            <item> second <tag><![CDATA[P='second']]></tag> </item>
+       </one-of>
+       <tag><![CDATA[XY= {'TIME_REL': {'STEP':P,'INCREMENT':INCREMENT}}]]></tag>
+   </item>-->
+   
+  <item>
+       <one-of>
+          <item> satu <tag><![CDATA[INCREMENT=1]]></tag></item>
+          <item><ruleref uri="#Cardinal1_120"/><tag><![CDATA[INCREMENT=Cardinal1_120.XY;]]></tag></item>
+       </one-of>
+       <one-of>
+            <item> jam <tag><![CDATA[P='hour']]></tag></item>
+            <item> minit <tag><![CDATA[P='minute']]></tag> </item>
+            <item> saat <tag><![CDATA[P='second']]></tag> </item>
+       </one-of>
+       <tag><![CDATA[XY= {'TIME_REL': {'STEP':P,'INCREMENT':INCREMENT}}]]></tag>
+   </item>
+ 
+<!--	<item>
+           <one-of>
+                <item>one<tag><![CDATA[INCREMENT=1]]></tag></item>
+                 <item>1<tag><![CDATA[INCEREMENT=1]]></tag></item>
+                 <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[INCREMENT=CardinalDigitGt1.XY]]></tag></item>
+                 <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[INCREMENT=CardinalTeen.XY]]></tag></item>
+                 <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[INCREMENT=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT + parseInt(CardinalDigit.XY )]]></tag></item></item>
+          </one-of>
+          <one-of>
+                <item> hour </item>
+                <item> hours </item>
+		<item xml:lang="ms-my-textonly"> hr </item>
+		<item xml:lang="ms-my-textonly"> hrs </item>
+		<item xml:lang="ms-my-textonly"> h </item>
+          </one-of>
+        and
+        <one-of>
+         <item><ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[INCREMENT=INCREMENT*60+CardinalDigitGt1.XY]]></tag></item>
+         <item><ruleref uri="#CardinalTeen"/> <tag><![CDATA[INCREMENT=INCREMENT*60+CardinalTeen.XY]]></tag></item>
+         <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[INCREMENT=INCREMENT*60+parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[INCREMENT=INCREMENT + parseInt(CardinalDigit.XY )]]></tag></item></item>
+        </one-of>
+         <one-of>
+                <item> minute <tag><![CDATA[P='minute']]></tag> </item>
+                <item> minutes <tag><![CDATA[P='minute']]></tag> </item>
+        </one-of>
+	<tag><![CDATA[XY= {'TIME_REL': {'STEP':'minute','INCREMENT':INCREMENT}}]]></tag>
+        </item>-->
+     
+   </one-of>
+</rule>
+
+<rule id="Cardinal10_99" scope="public">
+   <one-of>
+     <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=CardinalTeen.XY]]></tag></item>
+     <!--<item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[XY=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + parseInt(CardinalDigit.XY )]]></tag></item>
+		</item>-->
+	 <item> <ruleref uri="#CardinalDigits21_99"/> <tag><![CDATA[XY=CardinalDigits21_99.XY]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="ColloquialTimeRanges" scope="public">
+   <one-of>
+     <item> 
+     jam
+       <one-of>
+         <item> bekerja </item>
+         <item> perniagaan </item>
+       </one-of>
+     <tag><![CDATA[S= {'HOUR':9,'AMPM':'am','MODIFIER':'fuzzy'} ; E= {'HOUR':5,'AMPM':'pm','MODIFIER':'fuzzy'}]]></tag></item>
+     <item> waktu perdana  <tag><![CDATA[S= {'HOUR':7,'AMPM':'pm','MODIFIER':'fuzzy'} ; E= {'HOUR':10,'AMPM':'pm','MODIFIER':'fuzzy'}]]></tag></item>
+     <item> 
+       <one-of>
+         <item> 
+           <item> waktu </item>
+           <one-of>
+             <item> makan lewat malam </item>
+             <item> makan malam </item>
+           </one-of>
+		</item>
+         <item> masa makam malam </item>
+       </one-of>
+      <tag><![CDATA[S= {'HOUR':5,'AMPM':'pm','MODIFIER':'fuzzy'} ; E= {'HOUR':7,'AMPM':'pm','MODIFIER':'fuzzy'}]]></tag></item>
+     <item> 
+       <one-of>
+         <item> waktu makan tengah hari </item>
+         <item> masa makan tengah hari  </item>
+         <item> waktu makan tengahari </item>
+         <item> masa makan tengahari  </item>       
+       </one-of>
+      <tag><![CDATA[S= {'HOUR':11,'MINUTE':45,'AMPM':'am','MODIFIER':'fuzzy'} ; E= {'HOUR':1,'AMPM':'pm','MODIFIER':'fuzzy'}]]></tag></item>
+     <item> 
+       <one-of>
+         <item> waktu sarapan </item>
+         <item> masa sarapan </item>
+       </one-of>
+      <tag><![CDATA[S= {'HOUR':7,'AMPM':'am','MODIFIER':'fuzzy'} ; E= {'HOUR':8,'AMPM':'am','MODIFIER':'fuzzy'}]]></tag></item>
+   </one-of>
+  <tag><![CDATA[XY= {'TIME_RANGE': {'TR_START': {'TIME': {'TIME_ABS':S}} ,'TR_END': {'TIME': {'TIME_ABS':E}}}} ; delete S; delete E]]></tag> </rule>
+  
+<rule id="CardinalTeen" scope="public">
+   <one-of>
+     <item> sepuluh  <tag><![CDATA[XY=10]]></tag></item>
+     <item> sebelas  <tag><![CDATA[XY=11]]></tag></item>
+     <item> dua belas  <tag><![CDATA[XY=12]]></tag></item>
+     <item> tiga belas  <tag><![CDATA[XY=13]]></tag></item>
+     <item> empat belas  <tag><![CDATA[XY=14]]></tag></item>
+     <item> lima belas  <tag><![CDATA[XY=15]]></tag></item>
+     <item> enam belas  <tag><![CDATA[XY=16]]></tag></item>
+     <item> tujuh belas  <tag><![CDATA[XY=17]]></tag></item>
+     <item> lapan belas  <tag><![CDATA[XY=18]]></tag></item>
+     <item> sembilan belas  <tag><![CDATA[XY=19]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 10  <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 11  <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 12  <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 13  <tag><![CDATA[XY=13]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 14  <tag><![CDATA[XY=14]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 15  <tag><![CDATA[XY=15]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 16  <tag><![CDATA[XY=16]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 17  <tag><![CDATA[XY=17]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 18  <tag><![CDATA[XY=18]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 19  <tag><![CDATA[XY=19]]></tag></item>
+
+   </one-of>
+</rule>
+
+<rule id="MonthWDur" scope="public">
+   <one-of>
+     <item> januari  <tag><![CDATA[D=31; M=1]]></tag></item>
+     <item> februari  <tag><![CDATA[D=28; M=2]]></tag></item>
+     <item> mac  <tag><![CDATA[D=31; M=3]]></tag></item>
+     <item> april  <tag><![CDATA[D=30; M=4]]></tag></item>
+     <item> mei  <tag><![CDATA[D=31; M=5]]></tag></item>
+     <item> jun  <tag><![CDATA[D=30; M=6]]></tag></item>
+     <item> julai  <tag><![CDATA[D=31; M=7]]></tag></item>
+     <item> ogos  <tag><![CDATA[D=31; M=8]]></tag></item>
+     <item> september  <tag><![CDATA[D=30; M=9]]></tag></item>
+     <item> oktober  <tag><![CDATA[D=31; M=10]]></tag></item>
+     <item> november  <tag><![CDATA[D=30; M=11]]></tag></item>
+     <item> disember  <tag><![CDATA[D=31; M=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jan  <tag><![CDATA[D=31; M=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> feb  <tag><![CDATA[D=28; M=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mac  <tag><![CDATA[D=31; M=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> apr  <tag><![CDATA[D=30; M=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mei  <tag><![CDATA[D=31; M=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jun  <tag><![CDATA[D=30; M=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jul  <tag><![CDATA[D=31; M=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ogo  <tag><![CDATA[D=31; M=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> sept  <tag><![CDATA[D=30; M=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> okt  <tag><![CDATA[D=31; M=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> nov  <tag><![CDATA[D=30; M=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> dis  <tag><![CDATA[D=31; M=12]]></tag></item>
+     <item>
+         bulan
+       <one-of>
+          <item> pertama <tag><![CDATA[D=31;M=1;]]></tag></item>
+          <item> kedua <tag><![CDATA[D=28;M=2;]]></tag></item>
+          <item> ketiga <tag><![CDATA[D=31;M=3;]]></tag></item>
+          <item> keempat <tag><![CDATA[D=30;M=4;]]></tag></item>
+          <item> kelima <tag><![CDATA[D=31;M=5;]]></tag></item>
+          <item> keenam <tag><![CDATA[D=30,M=6;]]></tag></item>
+          <item> ketujuh <tag><![CDATA[D=31;M=7;]]></tag></item>
+          <item> kelapan <tag><![CDATA[D=31;M=8;]]></tag></item>
+          <item> kesembilan <tag><![CDATA[D=30;M=9;]]></tag></item>
+          <item> kesepuluh <tag><![CDATA[D=31;M=10;]]></tag></item>
+          <item> kesebelas <tag><![CDATA[D=30;M=11;]]></tag></item>
+          <item> kedua belas <tag><![CDATA[D=31;M=12;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[D=31;M=1;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-2 <tag><![CDATA[D=28;M=2;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[D=31;M=3;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[D=30;M=4;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[D=31;M=5;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-6 <tag><![CDATA[D=30;M=6;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-7 <tag><![CDATA[D=31;M=7;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-8 <tag><![CDATA[D=31;M=8;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-9 <tag><![CDATA[D=30;M=9;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-10 <tag><![CDATA[D=31;M=10;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-11 <tag><![CDATA[D=30;M=11;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-12 <tag><![CDATA[D=30;M=12;]]></tag></item>
+       </one-of>
+     </item>
+   </one-of>
+  <tag><![CDATA[XY= {'DAY':D,'MONTH':M}]]></tag> 
+</rule>
+  
+<rule id="SpecialDate" scope="public">
+   <one-of>
+     <item> hari merdeka  <tag><![CDATA[XY= {'DAY':31,'MONTH':8,'HOLIDAY':'Independence Day'}]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> krismas <tag><![CDATA[XY= {'DAY':25,'MONTH':12, 'HOLIDAY':'Christmas Day'}]]></tag></item>
+     <item> malam krismas  <tag><![CDATA[XY= {'DAY':24,'MONTH':12, 'HOLIDAY':'Christmas Eve'}]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> tahun baru  <tag><![CDATA[XY= {'DAY':1,'MONTH':1,'HOLIDAY':'New Year'}]]></tag></item>
+     <item> malam tahun baru  <tag><![CDATA[XY= {'DAY':31,'MONTH':12, 'HOLIDAY':'New Year\'s Eve'}]]></tag></item>
+     <item> 
+       <one-of>
+         <item xml:lang="ms-my-textonly"> hallowe'en </item>
+         <item> halloween </item>
+       </one-of>
+       <tag><![CDATA[XY= {'DAY':31,'MONTH':10, 'HOLIDAY':'Halloween'}]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> valentine <tag><![CDATA[XY= {'DAY':14,'MONTH':2, 'HOLIDAY':'Valentine\'s Day'}]]></tag></item>
+     <item> <item repeat="0-1"> hari </item> gawai dayak <tag><![CDATA[XY= {'DAY':31,'MONTH':5, 'HOLIDAY':'Gawai Dayak'}]]></tag></item>
+     <item> hari buruh <tag><![CDATA[XY= {'DAY':1,'MONTH':5, 'HOLIDAY':'Labour Day'}]]></tag></item>
+     <item> hari malaysia <tag><![CDATA[XY= {'DAY':16,'MONTH':9, 'HOLIDAY':'Malaysia Day'}]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="DateOnOrNear" scope="public">
+   <one-of>
+     <!--<item> on  <tag><![CDATA[XY="="]]></tag></item>-->
+     <item> sekitar  <tag><![CDATA[XY="~"]]></tag></item>
+     <item> dekat dengan  <tag><![CDATA[XY="~"]]></tag></item>
+     <item> di
+       <one-of>
+         <item> sekitar </item>
+         <item> kejiranan </item>
+       </one-of>
+     <tag><![CDATA[XY="~"]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="AMPM" scope="public">
+   <one-of>
+     <item> 
+       <one-of>
+         <!--<item> am </item>--> <!-- AA: commenting out because it is causing a lot of false annotations-->
+         <item> a_m </item>
+         <item> a m </item>
+	 <item> a.m. </item>
+	 <item> a. m. </item>
+       </one-of>
+      <tag><![CDATA[XY="am"]]></tag></item>
+     <item> 
+       <one-of>
+         <item> pm </item>
+         <item> PM </item>
+         <item> p_m </item>
+         <item> p m </item>
+	 <item> p.m. </item>
+	 <item> p. m. </item>
+       </one-of>
+      <tag><![CDATA[XY="pm"]]></tag></item>
+     <item>        
+		<item repeat="0-1"> pada          
+		   <item repeat="0-1"> 
+           <one-of>
+             <item> awal </item>
+             <item> lewat </item>
+           </one-of>
+         </item>
+	 </item>
+     <one-of>
+         <item> pagi  <tag><![CDATA[XY="am"]]></tag></item>
+         <item> tengah hari  <tag><![CDATA[XY="pm"]]></tag></item>
+         <item> petang  <tag><![CDATA[XY="pm"]]></tag></item>
+       </one-of>
+     </item>
+   </one-of>
+</rule>
+
+<rule id="DateCore" scope="public"><tag><![CDATA[M="?"; D="?"]]></tag>
+   <one-of>
+     <item> 
+        <one-of>
+	  <item><ruleref uri="#OrdinalDay1_29"/> <tag><![CDATA[D=OrdinalDay1_29.XY]]></tag><item repeat="0-1"> hari </item></item>
+          <item><ruleref uri="#CardinalDay1_29"/> <tag><![CDATA[D=CardinalDay1_29.XY]]></tag></item>
+        </one-of>
+	<item repeat="0-1"> 
+          <one-of>
+             <item> pada </item>
+             <item> dalam </item>
+          </one-of>
+        </item>
+	<item><ruleref uri="#Month"/> <tag><![CDATA[M=Month.XY]]></tag></item>
+     </item>
+     <item> 
+         hari terakhir <one-of><item> pada </item> <item> dalam </item> </one-of>
+         <ruleref uri="#MonthWDur"/> <tag><![CDATA[M=MonthWDur.M;D=MonthWDur.D;]]></tag>
+     </item>       
+     <item>
+        <one-of>
+          <item> ketiga puluh </item>
+          <item xml:lang="ms-my-textonly"> ke-30 </item>
+          <item xml:lang="ms-my-textonly"> ke 30 </item>
+          <item xml:lang="ms-my-textonly"> 30 </item>
+        </one-of>
+        <tag><![CDATA[D=30;]]></tag>
+        <item repeat="0-1"> 
+          <one-of>
+             <item> pada </item>
+             <item> dalam </item>
+          </one-of>
+        </item>
+        <item><ruleref uri="#MonthShort"/> <tag><![CDATA[M=MonthShort.XY]]></tag></item>
+     </item>
+
+     <item>
+        <one-of>
+          <item> ketiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item> ketiga puluh satu <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 31 <tag><![CDATA[D=31;]]></tag></item>
+        </one-of>
+        <item repeat="0-1"> 
+          <one-of>
+             <item> pada </item>
+             <item> dalam </item>
+          </one-of>
+        </item>
+        <item><ruleref uri="#MonthLong"/> <tag><![CDATA[M=MonthLong.XY]]></tag></item>
+     </item>
+
+     <item> 
+        <ruleref uri="#Month"/> <tag><![CDATA[M=Month.XY]]></tag>       
+        <one-of>
+           <item> <ruleref uri="#OrdinalDay1_29"/> <tag><![CDATA[D=OrdinalDay1_29.XY]]></tag></item>
+           <item> <ruleref uri="#CardinalDay1_29"/> <tag><![CDATA[D=CardinalDay1_29.XY]]></tag></item>
+        </one-of>
+     </item>
+
+     <item>
+        <item><ruleref uri="#MonthShort"/> <tag><![CDATA[M=MonthShort.XY]]></tag></item>
+        <one-of>
+          <item> ketiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item> tiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 30 <tag><![CDATA[D=30;]]></tag></item>
+        </one-of>
+     </item>
+
+     <item>        
+        <item><ruleref uri="#MonthLong"/> <tag><![CDATA[M=MonthLong.XY]]></tag></item>
+        <item repeat="0-1"> the </item>
+        <one-of>
+          <item> ketiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item> tiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item> ketiga puluh satu <tag><![CDATA[D=31;]]></tag></item>
+          <item> tiga puluh satu <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 31 <tag><![CDATA[D=31;]]></tag></item>
+        </one-of>
+     </item>
+
+     <item>
+        <item> <ruleref uri="#CardinalDay1_29"/> <tag><![CDATA[D=CardinalDay1_29.XY]]></tag></item>
+        <item> <ruleref uri="#Month"/> <tag><![CDATA[M=Month.XY]]></tag></item>
+     </item>
+
+     <item>
+        <one-of>
+          <item> ketiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item> tiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item> ketiga puluh satu <tag><![CDATA[D=31;]]></tag></item>
+          <item> tiga puluh satu <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-31 <tag><![CDATA[D=31;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 31 <tag><![CDATA[D=31;]]></tag></item>
+        </one-of>
+        <item><ruleref uri="#MonthLong"/> <tag><![CDATA[M=MonthLong.XY]]></tag></item>
+     </item>
+
+
+    <item>
+        <one-of>
+          <item> ketiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item> tiga puluh <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> 30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-30 <tag><![CDATA[D=30;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke 30 <tag><![CDATA[D=30;]]></tag></item>
+        </one-of>
+        <item><ruleref uri="#MonthShort"/><tag><![CDATA[M=MonthShort.XY]]></tag></item>
+     </item>
+
+       <!--<item> <ruleref uri="#NamedDay"/> <tag><![CDATA[D=NamedDay.XY]]></tag> </item>-->
+   </one-of>
+</rule>
+
+<rule id="StandardTimeRanges" scope="public">
+   <one-of>
+     <item> pagi  <tag><![CDATA[XY= {'TR_START': {'HOUR':5,'AMPM':'am','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':11,'MINUTE':59,'AMPM':'am','MODIFIER':'fuzzy'} ,'AMPM':'am'}]]></tag></item>
+     <item> tengah hari  <tag><![CDATA[XY= {'TR_START': {'HOUR':12,'AMPM':'pm','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':5,'MINUTE':59,'AMPM':'pm','MODIFIER':'fuzzy'} ,'AMPM':'pm'}]]></tag></item>
+     <item> pertengahan hari <tag><![CDATA[XY= {'TR_START': {'HOUR':11,'AMPM':'am','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':2,'AMPM':'pm','MODIFIER':'fuzzy'} ,'AMPM':'pm'}]]></tag></item>
+     <item> petang  <tag><![CDATA[XY= {'TR_START': {'HOUR':6,'AMPM':'pm','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':11,'MINUTE':59,'AMPM':'pm','MODIFIER':'fuzzy'} ,'AMPM':'pm'}]]></tag></item>
+     <item> malam  <tag><![CDATA[XY= {'TR_START': {'HOUR':10,'AMPM':'pm','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':3,'MINUTE':59,'AMPM':'am','MODIFIER':'fuzzy'} ,'AMPM':'pm'}]]></tag></item>
+	 <item> <one-of><item>am</item><item>a m</item><item>a_m</item><item>AM</item></one-of>  <tag><![CDATA[XY= {'TR_START': {'HOUR':12,'AMPM':'am','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':11,'MINUTE':59,'AMPM':'am','MODIFIER':'fuzzy'} ,'AMPM':'am'}]]></tag></item>
+     <item> <one-of><item>pm</item><item>p m</item><item>p_m</item></one-of>  <tag><![CDATA[XY= {'TR_START': {'HOUR':12,'AMPM':'pm','MODIFIER':'fuzzy'} ,'TR_END': {'HOUR':11,'MINUTE':59,'AMPM':'pm','MODIFIER':'fuzzy'} ,'AMPM':'pm'}]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="CardinalDigitGt1" scope="public">
+   <one-of>
+     <item> dua  <tag><![CDATA[XY=2]]></tag></item>
+     <item> tiga  <tag><![CDATA[XY=3]]></tag></item>
+     <item> empat  <tag><![CDATA[XY=4]]></tag></item>
+     <item> lima  <tag><![CDATA[XY=5]]></tag></item>
+     <item> enam  <tag><![CDATA[XY=6]]></tag></item>
+     <item> tujuh  <tag><![CDATA[XY=7]]></tag></item>
+     <item> lapan  <tag><![CDATA[XY=8]]></tag></item>
+     <item> sembilan  <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 2  <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 3  <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 4  <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 5  <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 6  <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 7  <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 8  <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 9  <tag><![CDATA[XY=9]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="OrdinalDigit" scope="public">
+   <one-of>
+     <item> <ruleref uri="#OrdinalDigitGt1"/> <tag><![CDATA[XY=OrdinalDigitGt1.XY]]></tag></item>
+     <item> pertama  <tag><![CDATA[XY=1]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="Month" scope="public">
+   <one-of>
+     <item>januari  <tag><![CDATA[XY=1]]></tag></item>
+     <item> februari  <tag><![CDATA[XY=2]]></tag></item>
+     <item> mac  <tag><![CDATA[XY=3]]></tag></item>
+     <item> april  <tag><![CDATA[XY=4]]></tag></item>
+     <item> mei  <tag><![CDATA[XY=5]]></tag></item>
+     <item> jun  <tag><![CDATA[XY=6]]></tag></item>
+     <item> julai  <tag><![CDATA[XY=7]]></tag></item>
+     <item> ogos  <tag><![CDATA[XY=8]]></tag></item>
+     <item> september  <tag><![CDATA[XY=9]]></tag></item>
+     <item> oktober  <tag><![CDATA[XY=10]]></tag></item>
+     <item> november  <tag><![CDATA[XY=11]]></tag></item>
+     <item> disember  <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jan  <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> feb  <tag><![CDATA[XY=2]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mac  <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> apr  <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mei  <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jun  <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jul  <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ogo  <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> sep  <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> okt  <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> nov  <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> dis  <tag><![CDATA[XY=12]]></tag></item>
+     <item>
+        bulan
+       <one-of>
+          <item> pertama <tag><![CDATA[XY=1;]]></tag></item>
+          <item> kedua <tag><![CDATA[XY=2;]]></tag></item>
+          <item> ketiga <tag><![CDATA[XY=3;]]></tag></item>
+          <item> keempat <tag><![CDATA[XY=4;]]></tag></item>
+          <item> kelima <tag><![CDATA[XY=5;]]></tag></item>
+          <item> keenam <tag><![CDATA[XY=6;]]></tag></item>
+          <item> ketujuh <tag><![CDATA[XY=7;]]></tag></item>
+          <item> kelapan <tag><![CDATA[XY=8;]]></tag></item>
+          <item> kesembilan <tag><![CDATA[XY=9;]]></tag></item>
+          <item> kesepuluh <tag><![CDATA[XY=10;]]></tag></item>
+          <item> kesebelas <tag><![CDATA[XY=11;]]></tag></item>
+          <item> kedua belas <tag><![CDATA[XY=12;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[XY=1;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-2 <tag><![CDATA[XY=2;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[XY=3;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[XY=4;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[XY=5;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-6 <tag><![CDATA[XY=6;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-7 <tag><![CDATA[XY=7;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-8 <tag><![CDATA[XY=8;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-9 <tag><![CDATA[XY=9;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-10 <tag><![CDATA[XY=10;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-11 <tag><![CDATA[XY=11;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-12 <tag><![CDATA[XY=12;]]></tag></item>
+       </one-of>
+      </item>
+   </one-of>
+</rule>
+
+<rule id="MonthLong" scope="public">
+   <one-of>
+     <item> januari  <tag><![CDATA[XY=1]]></tag></item>
+     <item> mac  <tag><![CDATA[XY=3]]></tag></item>
+     <item> mei  <tag><![CDATA[XY=7]]></tag></item>
+     <item> ogos  <tag><![CDATA[XY=8]]></tag></item>
+     <item> oktober  <tag><![CDATA[XY=10]]></tag></item>
+     <item> disember  <tag><![CDATA[XY=12]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jan  <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mac  <tag><![CDATA[XY=3]]></tag></item>
+     <item xml:lang="ms-my-textonly"> mei  <tag><![CDATA[XY=5]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jul  <tag><![CDATA[XY=7]]></tag></item>
+     <item xml:lang="ms-my-textonly"> ogo  <tag><![CDATA[XY=8]]></tag></item>
+     <item xml:lang="ms-my-textonly"> okt  <tag><![CDATA[XY=10]]></tag></item>
+     <item xml:lang="ms-my-textonly"> dis  <tag><![CDATA[XY=12]]></tag></item>
+     <item>
+         bulan
+       <one-of>
+          <item> pertama <tag><![CDATA[XY=1;]]></tag></item>
+          <item> ketiga <tag><![CDATA[XY=3;]]></tag></item>
+          <item> kelima <tag><![CDATA[XY=5;]]></tag></item>
+          <item> ketujuh <tag><![CDATA[XY=7;]]></tag></item>
+          <item> kelapan <tag><![CDATA[XY=8;]]></tag></item>
+          <item> kesebuluh <tag><![CDATA[XY=10;]]></tag></item>
+          <item> kedua belas <tag><![CDATA[XY=12;]]></tag></item>
+          <item> terakhir <tag><![CDATA[XY=12;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[XY=1;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[XY=3;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[XY=5;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-7 <tag><![CDATA[XY=7;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-8 <tag><![CDATA[XY=8;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-10 <tag><![CDATA[XY=10;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-12 <tag><![CDATA[XY=12;]]></tag></item>
+       </one-of>
+       </item>
+   </one-of>
+</rule>
+
+<rule id="MonthShort" scope="public">
+   <one-of>
+     <item> april  <tag><![CDATA[XY=4]]></tag></item>
+     <item> jun  <tag><![CDATA[XY=6]]></tag></item>
+     <item> september  <tag><![CDATA[XY=9]]></tag></item>
+     <item> november  <tag><![CDATA[XY=11]]></tag></item>
+     <item xml:lang="ms-my-textonly"> apr  <tag><![CDATA[XY=4]]></tag></item>
+     <item xml:lang="ms-my-textonly"> jun  <tag><![CDATA[XY=6]]></tag></item>
+     <item xml:lang="ms-my-textonly"> sep  <tag><![CDATA[XY=9]]></tag></item>
+     <item xml:lang="ms-my-textonly"> nov  <tag><![CDATA[XY=11]]></tag></item>
+     <item>
+        bulan
+       <one-of>
+          <item> keempat <tag><![CDATA[XY=4;]]></tag></item>
+          <item> keenam <tag><![CDATA[XY=6;]]></tag></item>
+          <item> kesembilan <tag><![CDATA[XY=9;]]></tag></item>
+          <item> kesebelas <tag><![CDATA[XY=11;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[XY=4;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-6 <tag><![CDATA[XY=6;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-9 <tag><![CDATA[XY=9;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-11 <tag><![CDATA[XY=11;]]></tag></item>
+       </one-of>
+     </item>
+   </one-of>
+</rule>
+
+<rule id="Minute" scope="public">
+   <one-of>
+     <item> <item repeat="0-1"> oh </item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=parseInt(CardinalDigit.XY )]]></tag></item>
+     <item> <item repeat="0-1"> kosong </item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=parseInt(CardinalDigit.XY )]]></tag></item>
+     <item> <item repeat="0-1"> sifar </item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=parseInt(CardinalDigit.XY )]]></tag></item>
+     <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[XY=parseInt(CardinalTeen.XY )]]></tag></item>
+     <item> <ruleref uri="#CardinalTenLt6"/> <tag><![CDATA[XY=parseInt(CardinalTenLt6.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[XY=XY + parseInt(CardinalDigit.XY )]]></tag></item>
+	 </item>
+   </one-of>
+</rule>
+  
+<rule id="Year" scope="public">   
+   <item repeat="0-1"> tahun </item>
+   <one-of>
+     <item> 
+       <one-of>
+        <item> sembilan belas  <tag><![CDATA[XY="19"]]></tag></item>
+	<item> dua puluh  <tag><![CDATA[XY="20"]]></tag></item>
+        <item> dua ribu            
+        	<item repeat="0-1"> dan </item>
+	<tag><![CDATA[XY="20"]]></tag></item>
+       </one-of>
+       <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[Y=parseInt(Cardinal1_99.XY); if(Y<10)Y="0" + Y; XY=XY + Y]]></tag>
+     </item>
+     <item> dua ribu  <tag><![CDATA[XY="2000"]]></tag></item>
+     <!--<item> <ruleref uri="#Year_digit"/> <tag><![CDATA[XY=Year_digit.XY]]></tag></item>
+   </one-of>
+   <tag><![CDATA[XY=parseInt(XY);]]></tag>
+</rule>
+
+<rule id="Year_digit">-->
+  <!-- small set of likely years from 1950 to 2020; not covering all possible years -->
+  <item>
+  <one-of xml:lang="ms-my-textonly"> 
+    <item>1900 <tag><![CDATA[XY="1900"]]></tag></item>
+    <item>1901 <tag><![CDATA[XY="1901"]]></tag></item>
+    <item>1902 <tag><![CDATA[XY="1902"]]></tag></item>
+    <item>1903 <tag><![CDATA[XY="1903"]]></tag></item>
+    <item>1904 <tag><![CDATA[XY="1904"]]></tag></item>
+    <item>1905 <tag><![CDATA[XY="1905"]]></tag></item>
+    <item>1906 <tag><![CDATA[XY="1906"]]></tag></item>
+    <item>1907 <tag><![CDATA[XY="1907"]]></tag></item>
+    <item>1908 <tag><![CDATA[XY="1908"]]></tag></item>
+    <item>1909 <tag><![CDATA[XY="1909"]]></tag></item>
+    <item>1910 <tag><![CDATA[XY="1910"]]></tag></item>
+    <item>1911 <tag><![CDATA[XY="1911"]]></tag></item>
+    <item>1912 <tag><![CDATA[XY="1912"]]></tag></item>
+    <item>1913 <tag><![CDATA[XY="1913"]]></tag></item>
+    <item>1914 <tag><![CDATA[XY="1914"]]></tag></item>
+    <item>1915 <tag><![CDATA[XY="1915"]]></tag></item>
+    <item>1916 <tag><![CDATA[XY="1916"]]></tag></item>
+    <item>1917 <tag><![CDATA[XY="1917"]]></tag></item>
+    <item>1918 <tag><![CDATA[XY="1918"]]></tag></item>
+    <item>1919 <tag><![CDATA[XY="1919"]]></tag></item>
+    <item>1920 <tag><![CDATA[XY="1920"]]></tag></item>
+    <item>1921 <tag><![CDATA[XY="1921"]]></tag></item>
+    <item>1922 <tag><![CDATA[XY="1922"]]></tag></item>
+    <item>1923 <tag><![CDATA[XY="1923"]]></tag></item>
+    <item>1924 <tag><![CDATA[XY="1924"]]></tag></item>
+    <item>1925 <tag><![CDATA[XY="1925"]]></tag></item>
+    <item>1926 <tag><![CDATA[XY="1926"]]></tag></item>
+    <item>1927 <tag><![CDATA[XY="1927"]]></tag></item>
+    <item>1928 <tag><![CDATA[XY="1928"]]></tag></item>
+    <item>1929 <tag><![CDATA[XY="1929"]]></tag></item>
+    <item>1930 <tag><![CDATA[XY="1930"]]></tag></item>
+    <item>1931 <tag><![CDATA[XY="1931"]]></tag></item>
+    <item>1932 <tag><![CDATA[XY="1932"]]></tag></item>
+    <item>1933 <tag><![CDATA[XY="1933"]]></tag></item>
+    <item>1934 <tag><![CDATA[XY="1934"]]></tag></item>
+    <item>1935 <tag><![CDATA[XY="1935"]]></tag></item>
+    <item>1936 <tag><![CDATA[XY="1936"]]></tag></item>
+    <item>1937 <tag><![CDATA[XY="1937"]]></tag></item>
+    <item>1938 <tag><![CDATA[XY="1938"]]></tag></item>
+    <item>1939 <tag><![CDATA[XY="1939"]]></tag></item>
+    <item>1940 <tag><![CDATA[XY="1940"]]></tag></item>
+    <item>1941 <tag><![CDATA[XY="1941"]]></tag></item>
+    <item>1942 <tag><![CDATA[XY="1942"]]></tag></item>
+    <item>1943 <tag><![CDATA[XY="1943"]]></tag></item>
+    <item>1944 <tag><![CDATA[XY="1944"]]></tag></item>
+    <item>1945 <tag><![CDATA[XY="1945"]]></tag></item>
+    <item>1946 <tag><![CDATA[XY="1946"]]></tag></item>
+    <item>1947 <tag><![CDATA[XY="1947"]]></tag></item>
+    <item>1948 <tag><![CDATA[XY="1948"]]></tag></item>
+    <item>1949 <tag><![CDATA[XY="1949"]]></tag></item>
+    <item>1950 <tag><![CDATA[XY="1950"]]></tag></item>
+    <item>1951 <tag><![CDATA[XY="1951"]]></tag></item>
+    <item>1952 <tag><![CDATA[XY="1952"]]></tag></item>
+    <item>1953 <tag><![CDATA[XY="1953"]]></tag></item>
+    <item>1954 <tag><![CDATA[XY="1954"]]></tag></item>
+    <item>1955 <tag><![CDATA[XY="1955"]]></tag></item>
+    <item>1956 <tag><![CDATA[XY="1956"]]></tag></item>
+    <item>1957 <tag><![CDATA[XY="1957"]]></tag></item>
+    <item>1958 <tag><![CDATA[XY="1958"]]></tag></item>
+    <item>1959 <tag><![CDATA[XY="1959"]]></tag></item>
+    <item>1960 <tag><![CDATA[XY="1960"]]></tag></item>
+    <item>1961 <tag><![CDATA[XY="1961"]]></tag></item>
+    <item>1962 <tag><![CDATA[XY="1962"]]></tag></item>
+    <item>1963 <tag><![CDATA[XY="1963"]]></tag></item>
+    <item>1964 <tag><![CDATA[XY="1964"]]></tag></item>
+    <item>1965 <tag><![CDATA[XY="1965"]]></tag></item>
+    <item>1966 <tag><![CDATA[XY="1966"]]></tag></item>
+    <item>1967 <tag><![CDATA[XY="1967"]]></tag></item>
+    <item>1968 <tag><![CDATA[XY="1968"]]></tag></item>
+    <item>1969 <tag><![CDATA[XY="1969"]]></tag></item>
+    <item>1970 <tag><![CDATA[XY="1970"]]></tag></item>
+    <item>1971 <tag><![CDATA[XY="1971"]]></tag></item>
+    <item>1972 <tag><![CDATA[XY="1972"]]></tag></item>
+    <item>1973 <tag><![CDATA[XY="1973"]]></tag></item>
+    <item>1974 <tag><![CDATA[XY="1974"]]></tag></item>
+    <item>1975 <tag><![CDATA[XY="1975"]]></tag></item>
+    <item>1976 <tag><![CDATA[XY="1976"]]></tag></item>
+    <item>1977 <tag><![CDATA[XY="1977"]]></tag></item>
+    <item>1978 <tag><![CDATA[XY="1978"]]></tag></item>
+    <item>1979 <tag><![CDATA[XY="1979"]]></tag></item>
+    <item>1980 <tag><![CDATA[XY="1980"]]></tag></item>
+    <item>1981 <tag><![CDATA[XY="1981"]]></tag></item>
+    <item>1982 <tag><![CDATA[XY="1982"]]></tag></item>
+    <item>1983 <tag><![CDATA[XY="1983"]]></tag></item>
+    <item>1984 <tag><![CDATA[XY="1984"]]></tag></item>
+    <item>1985 <tag><![CDATA[XY="1985"]]></tag></item>
+    <item>1986 <tag><![CDATA[XY="1986"]]></tag></item>
+    <item>1987 <tag><![CDATA[XY="1987"]]></tag></item>
+    <item>1988 <tag><![CDATA[XY="1988"]]></tag></item>
+    <item>1989 <tag><![CDATA[XY="1989"]]></tag></item>
+    <item>1990 <tag><![CDATA[XY="1990"]]></tag></item>
+    <item>1991 <tag><![CDATA[XY="1991"]]></tag></item>
+    <item>1992 <tag><![CDATA[XY="1992"]]></tag></item>
+    <item>1993 <tag><![CDATA[XY="1993"]]></tag></item>
+    <item>1994 <tag><![CDATA[XY="1994"]]></tag></item>
+    <item>1995 <tag><![CDATA[XY="1995"]]></tag></item>
+    <item>1996 <tag><![CDATA[XY="1996"]]></tag></item>
+    <item>1997 <tag><![CDATA[XY="1997"]]></tag></item>
+    <item>1998 <tag><![CDATA[XY="1998"]]></tag></item>
+    <item>1999 <tag><![CDATA[XY="1999"]]></tag></item>
+    <item>2000 <tag><![CDATA[XY="2000"]]></tag></item>
+    <item>2001 <tag><![CDATA[XY="2001"]]></tag></item>
+    <item>2002 <tag><![CDATA[XY="2002"]]></tag></item>
+    <item>2003 <tag><![CDATA[XY="2003"]]></tag></item>
+    <item>2004 <tag><![CDATA[XY="2004"]]></tag></item>
+    <item>2005 <tag><![CDATA[XY="2005"]]></tag></item>
+    <item>2006 <tag><![CDATA[XY="2006"]]></tag></item>
+    <item>2007 <tag><![CDATA[XY="2007"]]></tag></item>
+    <item>2008 <tag><![CDATA[XY="2008"]]></tag></item>
+    <item>2009 <tag><![CDATA[XY="2009"]]></tag></item>
+    <item>2010 <tag><![CDATA[XY="2010"]]></tag></item>
+    <item>2011 <tag><![CDATA[XY="2011"]]></tag></item>
+    <item>2012 <tag><![CDATA[XY="2012"]]></tag></item>
+    <item>2013 <tag><![CDATA[XY="2013"]]></tag></item>
+    <item>2014 <tag><![CDATA[XY="2014"]]></tag></item>
+    <item>2015 <tag><![CDATA[XY="2015"]]></tag></item>
+    <item>2016 <tag><![CDATA[XY="2016"]]></tag></item>
+    <item>2017 <tag><![CDATA[XY="2017"]]></tag></item>
+    <item>2018 <tag><![CDATA[XY="2018"]]></tag></item>
+    <item>2019 <tag><![CDATA[XY="2019"]]></tag></item>
+    <item>2020 <tag><![CDATA[XY="2020"]]></tag></item>
+    <item>2021 <tag><![CDATA[XY="2021"]]></tag></item>
+    <item>2022 <tag><![CDATA[XY="2022"]]></tag></item>
+    <item>2023 <tag><![CDATA[XY="2023"]]></tag></item>
+    <item>2024 <tag><![CDATA[XY="2024"]]></tag></item>
+    <item>2025 <tag><![CDATA[XY="2025"]]></tag></item>
+    <item>2026 <tag><![CDATA[XY="2026"]]></tag></item>
+    <item>2027 <tag><![CDATA[XY="2027"]]></tag></item>
+    <item>2028 <tag><![CDATA[XY="2028"]]></tag></item>
+    <item>2029 <tag><![CDATA[XY="2029"]]></tag></item>
+    <item>2030 <tag><![CDATA[XY="2030"]]></tag></item>
+    <item>2031 <tag><![CDATA[XY="2031"]]></tag></item>
+    <item>2032 <tag><![CDATA[XY="2032"]]></tag></item>
+    <item>2033 <tag><![CDATA[XY="2033"]]></tag></item>
+    <item>2034 <tag><![CDATA[XY="2034"]]></tag></item>
+    <item>2035 <tag><![CDATA[XY="2035"]]></tag></item>
+    <item>2036 <tag><![CDATA[XY="2036"]]></tag></item>
+    <item>2037 <tag><![CDATA[XY="2037"]]></tag></item>
+    <item>2038 <tag><![CDATA[XY="2038"]]></tag></item>
+    <item>2039 <tag><![CDATA[XY="2039"]]></tag></item>
+    <item>2040 <tag><![CDATA[XY="2040"]]></tag></item>
+    <item>2041 <tag><![CDATA[XY="2041"]]></tag></item>
+    <item>2042 <tag><![CDATA[XY="2042"]]></tag></item>
+    <item>2043 <tag><![CDATA[XY="2043"]]></tag></item>
+    <item>2044 <tag><![CDATA[XY="2044"]]></tag></item>
+    <item>2045 <tag><![CDATA[XY="2045"]]></tag></item>
+    <item>2046 <tag><![CDATA[XY="2046"]]></tag></item>
+    <item>2047 <tag><![CDATA[XY="2047"]]></tag></item>
+    <item>2048 <tag><![CDATA[XY="2049"]]></tag></item>
+    <item>2049 <tag><![CDATA[XY="2049"]]></tag></item>
+    <item>2050 <tag><![CDATA[XY="2050"]]></tag></item>
+  </one-of>  
+  </item>
+  </one-of>
+  <tag><![CDATA[XY=parseInt(XY);]]></tag>
+</rule>
+
+<rule id="CardinalDigit" scope="public">
+   <one-of>
+     <item> satu  <tag><![CDATA[XY=1]]></tag></item>
+     <item xml:lang="ms-my-textonly"> 1  <tag><![CDATA[XY=1]]></tag></item>
+
+     <item> <ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[XY=CardinalDigitGt1.XY]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="MixedAbsRelDate" scope="public">
+   <tag><![CDATA[DATE={};]]></tag>
+   <one-of>
+     <item> <!-- Nth DOW of MONTH -->
+       <one-of>
+          <item> pertama <tag><![CDATA[C=1;]]></tag></item>
+          <item> kedua <tag><![CDATA[C=2;]]></tag></item>
+          <item> ketiga <tag><![CDATA[C=3;]]></tag></item>
+          <item> keempat <tag><![CDATA[C=4;]]></tag></item>
+          <item> kelima <tag><![CDATA[C=5;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-1 <tag><![CDATA[C=1;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-2 <tag><![CDATA[C=2;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-3 <tag><![CDATA[C=3;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-4 <tag><![CDATA[C=4;]]></tag></item>
+          <item xml:lang="ms-my-textonly"> ke-5 <tag><![CDATA[C=5;]]></tag></item>
+          <!--<item> last <tag><![CDATA[C=1;]]></tag></item>-->
+       </one-of>
+       <ruleref uri="#DayOfWeek"/><tag><![CDATA[DOW=DayOfWeek.XY; DATE.DATE_REL={'DAY_OF_WEEK':DOW,'INCREMENT':C};]]></tag>
+       <one-of>
+          <item> pada </item>
+          <item> dalam </item>
+       </one-of>
+       <one-of>
+          <item><ruleref uri="#Month"/><tag><![CDATA[M=Month.XY]]></tag>
+                <tag><![CDATA[DATE.DATE_ABS={'MONTH':M};]]></tag></item>
+          <item><ruleref uri="#Year"/><tag><![CDATA[Y=Year.XY;]]></tag>
+                <tag><![CDATA[DATE.DATE_ABS={'YEAR':Y};]]></tag></item>
+      </one-of>
+      </item>
+      <item> <!-- last day of this/next/lasy year (== Dec 31) -->
+         hari terakhir <tag><![CDATA[DATE= {'DATE_ABS':{'DAY':31,'MONTH':12}} ;]]></tag>
+         <one-of>
+            <item> pada </item>
+            <item> dalam </item>
+         </one-of>
+          tahun
+         <one-of>
+            <item> ini <tag><![CDATA[C=0;]]></tag></item>
+            <item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+            <item> depan <tag><![CDATA[C=1;]]></tag></item>
+         </one-of>
+         <tag><![CDATA[DATE.DATE_REL={'STEP':'year','INCREMENT':C};]]></tag>
+      </item>
+<!-- temporarily moved to ranges for consistency with 'april of 2020' -->
+
+      <!-- MONTH of this/next/last year -->
+<!--      <item>
+         <ruleref uri="#Month"/><tag><![CDATA[DATE={'DATE_ABS':{'MONTH':Month.XY}};]]></tag>
+         of
+         <item>
+            <one-of>
+               <item> this <tag><![CDATA[C=0;]]></tag></item>
+               <item> the <tag><![CDATA[C=0;]]></tag></item>
+               <item> <item repeat="0-1"> the </item> last <tag><![CDATA[C=-1;]]></tag></item>
+               <item> <item repeat="0-1"> the </item> next <tag><![CDATA[C=1;]]></tag></item>
+            </one-of>
+            year
+           <tag><![CDATA[DATE.DATE_REL={'STEP':'year','INCREMENT':C};]]></tag>
+         </item>
+      </item>
+-->
+      <!-- ordinal day of next/last.. month -->
+      <item>
+         <item repeat="0-1"> pada </item>
+         <item repeat="0-1"> hari </item>
+         <ruleref uri="#OrdinalDay"/><tag><![CDATA[D=OrdinalDay.XY;DATE_ABS={'DAY':D}; ]]></tag>
+         <item repeat="0-1"> dalam </item>
+         <one-of>
+            <item>
+               <one-of>
+                  <item> tahun <tag><![CDATA[if(D<=31){ DATE_ABS.MONTH=1; }DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':C}};]]></tag></item>
+                  <item> bulan <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':C}};]]></tag></item>
+              </one-of>
+               <one-of>
+               <item> ini <tag><![CDATA[C=0;]]></tag></item>
+               <item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+               <item> depan <tag><![CDATA[C=1;]]></tag></item>
+               </one-of>
+            </item>
+            <item>
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               bulan 
+               <one-of>
+                  <item> lalu <tag><![CDATA[C=C*-1;]]></tag></item>
+                  <item> kemudian </item> <!-- NEW -->
+               </one-of>
+               <tag><![CDATA[ DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item> <!-- NEW -->
+                dalam
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               bulan
+               <tag><![CDATA[ DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item> <!-- NEW -->
+              dalam <one-of><item> sebulan </item><item> satu bulan</item> </one-of> 
+              <tag><![CDATA[ DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':1}}; ]]></tag>
+           </item>
+           <item>
+              sebulan lalu <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':-1}};]]></tag>
+            </item>
+           <item> <!-- NEW -->
+              <one-of><item> sebulan kemudian </item><item> satu bulan kemudian </item> </one-of>
+              <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'month','INCREMENT':1}};]]></tag>
+            </item>
+        </one-of>
+      </item>
+      <!-- date abs of next/last/this... year -->
+      <item>
+         <ruleref uri="#DateCore"/><tag><![CDATA[M=DateCore.M;D=DateCore.D;DATE_ABS={'DAY':D,'MONTH':M};]]></tag>
+         <item repeat="0-1"> pada </item>
+         <item repeat="0-1"> dalam </item>
+         <one-of>
+            <item>
+               tahun <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':C}};]]></tag>
+               <one-of>
+                 <item> ini <tag><![CDATA[C=0;]]></tag></item>
+                 <item> depan <tag><![CDATA[C=1;]]></tag></item>
+                 <item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+               </one-of>
+            </item>
+            <item>
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               tahun 
+               <one-of>
+                   <item> lalu <tag><![CDATA[C=C*-1;]]></tag></item>
+                   <item> kemudian </item> <!-- NEW -->
+               </one-of>
+               <tag><![CDATA[ DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item>
+              setahun lepas <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':-1}};]]></tag>
+            </item>
+           <item> <!-- NEW -->
+              setahun kemudian <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':1}};]]></tag>
+            </item>
+            <item>
+               dalam
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               tahun
+               <tag><![CDATA[ DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item>
+              dalam 
+              <one-of><item> setahun </item><item> satu tahun </item> </one-of>
+              <tag><![CDATA[DATE={'DATE_ABS':DATE_ABS,'DATE_REL':{'STEP':'year','INCREMENT':1}};]]></tag>
+            </item>
+        </one-of>
+      </item>
+      <!-- inverse: relative year first, abs date second -->
+      <item>
+         <one-of>
+            <item>
+               tahun <tag><![CDATA[DATE={'DATE_REL':{'STEP':'year','INCREMENT':C}};]]></tag>
+               <one-of>
+                 <item> ini <tag><![CDATA[C=0;]]></tag></item>
+                 <item> depan <tag><![CDATA[C=1;]]></tag></item>
+                 <item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+               </one-of>
+            </item>
+            <item>
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               tahun
+               <one-of>
+                   <item> lalu <tag><![CDATA[C=C*-1;]]></tag></item>
+                   <item> kemudian </item> <!-- NEW -->
+               </one-of>
+               <tag><![CDATA[ DATE={'DATE_REL':{'STEP':'year','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item>
+              setahun lalu <tag><![CDATA[DATE={'DATE_REL':{'STEP':'year','INCREMENT':-1}};]]></tag>
+            </item>
+           <item> <!-- NEW -->
+              setahun kemudian <tag><![CDATA[DATE={'DATE_REL':{'STEP':'year','INCREMENT':1}};]]></tag>
+            </item>
+            <item>
+               dalam
+               <one-of>
+                  <item> dua <tag><![CDATA[C=2;]]></tag></item>
+                  <item> tiga <tag><![CDATA[C=3;]]></tag></item>
+                  <item> empat <tag><![CDATA[C=4;]]></tag></item>
+                  <item> lima <tag><![CDATA[C=5;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[C=2;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[C=3;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[C=4;]]></tag></item>
+                  <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[C=5;]]></tag></item>
+               </one-of>
+               tahun
+               <tag><![CDATA[ DATE={'DATE_REL':{'STEP':'year','INCREMENT':C}}; ]]></tag>
+           </item>
+           <item>
+              dalam
+              <one-of><item> setahun </item><item> satu tahun </item> </one-of>
+              <tag><![CDATA[DATE={'DATE_REL':{'STEP':'year','INCREMENT':1}};]]></tag>
+            </item>
+        </one-of>
+        <item repeat='0-1'> pada </item>
+        <ruleref uri="#DateCore"/><tag><![CDATA[M=DateCore.M;D=DateCore.D;DATE_ABS={'DAY':D,'MONTH':M};]]></tag>
+         <tag><![CDATA[if(typeof(DATE)!='undefined'){ DATE.DATE_ABS=DATE_ABS; } else {DATE=DATE_ABS; }]]></tag>
+     </item>
+     <!-- abs year + rel date -->
+     <item>
+        <item repeat="0-1"> dalam </item>
+        <ruleref uri="#Year"/> <tag><![CDATA[Y=Year.XY;DATE={'DATE_ABS':{'YEAR':Y}};]]></tag>
+        <one-of>
+                 <item> esok  <tag><![CDATA[CC=1; DT= {'INCREMENT':CC} ; DT.STEP="day"; ]]></tag></item>
+                <item> hari ini  <tag><![CDATA[CC=0; DT= {'INCREMENT':CC} ; DT.STEP="day"; ]]></tag></item>
+                <item> semalam  <tag><![CDATA[CC=-1; DT= {'INCREMENT':CC} ; DT.STEP="day"; ]]></tag></item>
+                <item>
+                  <ruleref uri="#Cardinal1_120"/> <tag><![CDATA[C=parseInt(Cardinal1_120.XY);DT= {'INCREMENT':CC} ; DT.STEP="day"; ]]></tag>
+                 hari lalu
+               </item>
+         </one-of>
+         <tag><![CDATA[if(typeof(DATE)!='undefined'){ DATE.DATE_REL=DT; } else {DATE={'DATE_REL':DT}; }]]></tag>
+      </item> 
+    </one-of>
+</rule>
+
+
+</grammar>

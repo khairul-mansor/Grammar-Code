@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<grammar root="Amount" version="1.0" xml:lang="ms-MY" tag-format="swi-semantics/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/06/grammar">
+<!-- Copyright 2006. Nuance Communications Inc. All Rights Reserved.
+Use of the this software is subject to certain restrictions and
+limitations set forth in a license agreement entered into between
+Nuance Communications, Inc. and Licensee. Refer to the Nuance
+License Agreement for license use rights and restrictions.-->
+<meta name='swirec_optimization' content='12'/>
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_max_parses_per_literal' content='10'/>
+<meta name="swirec_compile_parser_with_weights" content="1"/>
+
+<rule id="Amount" scope="public"><tag><![CDATA[X=0; C=".00"; AMOUNT=""; CURRENCY="UNK";]]></tag>
+<ruleref uri="functions.grxml#functions"/><ruleref uri="meaning.grxml#meaning"/>
+<one-of>
+<item> 
+	<item repeat="0-1"> 
+             <item repeat="0-1"><ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=parseInt(Cardinal1_99.X)]]></tag></item> 
+             juta <tag><![CDATA[if(X!='undefined' && X!=0){ X=X* 1000000; }else{X=1000000;}]]></tag>
+  </item>
+	<item repeat="0-1">
+	    <item repeat="0-1">
+	        <ruleref uri="#CardinalDigit"/><tag><![CDATA[X=X+parseInt(CardinalDigit.X)*100;]]></tag> 
+	        ratus
+	        <item repeat="0-1"> dan </item>
+	    </item>
+	    <item repeat="0-1">
+	         <one-of>
+	             <item> satu <tag><![CDATA[X=X+1]]></tag></item>
+	             <item><ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=X+parseInt(Cardinal1_99.X)]]></tag></item>
+	         </one-of>    
+	    </item>     
+	    ribu<tag><![CDATA[X=X* 1000;]]></tag>
+	</item>
+	<item repeat="0-1"> 
+	     <ruleref uri="#CardinalDigitGt1"/> 
+	     <tag><![CDATA[X=X + parseInt(CardinalDigitGt1.X)* 100]]></tag>
+	     ratus 
+	</item>
+  <item repeat="0-1"> 
+		<item repeat="0-1"> dan </item> 
+		<ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=X + parseInt(Cardinal1_99.X )]]></tag>
+	</item>
+	<item> <!-- this is the only required item here -->
+        <ruleref uri="#currency"/>
+        <tag><![CDATA[CURRENCY=currency.XY;if(X==0)X=1;]]></tag>
+	</item>
+  <item repeat="0-1">            
+            <item repeat="0-1"> dan </item>
+            <ruleref uri="#Cardinal1_99"/> 
+            <tag><![CDATA[C=parseInt(Cardinal1_99.X); if(C<10)C=".0" + C; else C="." + C]]></tag>
+            <ruleref uri="#currency_small"/>
+  </item>
+
+<tag><![CDATA[X=X + C]]></tag>
+</item>
+
+    <item>        
+        <item repeat="0-1"> 
+         <one-of>
+           <item> satu  <tag><![CDATA[X=100]]></tag></item>
+           <item> <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=parseInt(Cardinal1_99.X)* 100]]></tag></item>
+         </one-of>
+          ratus          
+          <item repeat="0-1"> dan </item>
+        </item>
+        <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=X + parseInt(Cardinal1_99.X )]]></tag>
+        <ruleref uri="#currency"/>
+        <tag><![CDATA[CURRENCY=currency.XY;]]></tag>
+        <item repeat="0-1">
+           <item repeat="0-1"> dan </item>
+           <ruleref uri="#Cardinal1_99"/> 
+           <tag><![CDATA[C=parseInt(Cardinal1_99.X); if(C<10)C=".0" + C; else C="." + C]]></tag>
+           <ruleref uri="#currency_small"/>
+           <tag><![CDATA[X=X + C]]></tag>
+        </item>
+    </item>
+
+     <item> 
+       <one-of>
+         <item> satu  <tag><![CDATA[X=100]]></tag></item>
+         <item> <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=parseInt(Cardinal1_99.X)* 100]]></tag></item>
+       </one-of>
+     
+       <one-of>
+         <item> ratus </item>
+         <item> ribu  <tag><![CDATA[X=X * 10]]></tag></item>
+	       <item> juta  <tag><![CDATA[X=X * 10000]]></tag></item>
+       </one-of>
+       <ruleref uri="#currency"/>
+       <tag><![CDATA[CURRENCY=currency.XY;]]></tag>
+       <item repeat="0-1">            
+           <item repeat="0-1"> dan </item>
+           <ruleref uri="#Cardinal1_99"/> 
+           <tag><![CDATA[C=parseInt(Cardinal1_99.X); if(C<10)C=".0" + C; else C="." + C]]></tag>
+           <ruleref uri="#currency_small"/>
+       </item>
+       <tag><![CDATA[X=X + C]]></tag>
+     </item>
+
+     <item> satu 
+         <ruleref uri="#currency"/>
+         <tag><![CDATA[CURRENCY=currency.XY;]]></tag>
+         <tag><![CDATA[X="1.00"]]></tag>
+     </item>
+
+     <item>
+        <ruleref uri="#Cardinal1_99"/> 
+        <tag><![CDATA[X=parseInt(Cardinal1_99.X)/100;]]></tag>
+        <ruleref uri="#currency_small"/>
+        <tag><![CDATA[ CURRENCY=currency_small.XY; ]]></tag>
+     </item>
+
+     <item>
+       <item repeat="0-1">
+         <item repeat="0-1">
+           <one-of>
+             <item> satu  <tag><![CDATA[X=100]]></tag></item>
+             <item> <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=parseInt(Cardinal1_99.X)* 100]]></tag></item>
+           </one-of>
+           ratus
+           <item repeat="0-1"> dan </item>
+         </item>
+         <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[X=X + parseInt(Cardinal1_99.X )]]></tag>
+         <ruleref uri="#currency"/>
+         <tag><![CDATA[CURRENCY=currency.XY;]]></tag>
+         <item repeat="0-1"> dan </item>
+       </item>
+       <item>
+          <one-of>
+           <item> satu <tag><![CDATA[C=1;]]></tag></item>
+           <item>
+             <ruleref uri="#Cardinal1_99"/>
+             <tag><![CDATA[C=parseInt(Cardinal1_99.X);]]></tag>
+           </item>
+          </one-of>
+          <ruleref uri="#coin"/>
+          <tag><![CDATA[ CURRENCY=coin.C; X= X+coin.X*C; ]]></tag>
+       </item>
+     </item>
+      <!-- 1 dollar fifty -->
+     <item> 
+         <one-of>
+           <item> satu <tag><![CDATA[X=1;]]></tag></item>
+           <item>
+             <ruleref uri="#Cardinal1_99"/>
+             <tag><![CDATA[X=parseInt(Cardinal1_99.X);]]></tag>
+           </item>
+         </one-of>
+           <ruleref uri="#currency"/>
+           <tag><![CDATA[CURRENCY=currency.XY;]]></tag>
+           <item>
+             <ruleref uri="#Cardinal1_99"/>
+             <tag><![CDATA[C=parseInt(Cardinal1_99.X);X=X+(C/100);]]></tag>
+           </item>
+     </item>
+</one-of>
+  <tag><![CDATA[
+               if(typeof(X)!='undefined'){
+                 var numStr = String(X);
+                 if((numStr.indexOf('.')>0 && Number(X)-parseInt(X)!=0) || numStr.indexOf('\/')>0){ X={'DOUBLE':Number(X)}; }
+                 else{ X={'CARDINAL_NUMBER':parseInt(X)}; }   
+               }
+
+               if(CURRENCY!="UNK"){AMOUNT={"NUMBER" : X, "UNIT": CURRENCY};}else{AMOUNT={"NUMBER" : X}; } ;
+AMOUNT = meaning.amountMeaning(AMOUNT);
+AMOUNT=functions.js2json(AMOUNT); AMOUNT_obj=AMOUNT; delete X; delete C; delete CURRENCY;]]></tag>
+</rule>
+
+ <rule id="currency">
+    <one-of>
+      <item> dolar <tag><![CDATA[ XY="USD"; ]]></tag></item>
+      <item> us dolar <tag><![CDATA[ XY="USD"; ]]></tag></item>
+      <item> dolar us <tag><![CDATA[ XY="USD"; ]]></tag></item>
+      <item> euro <tag><![CDATA[ XY="EUR"; ]]></tag></item>
+      <item> ringgit <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+      <item> ringgit malaysia <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+      <item> malaysia ringgit <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+      <item> rm <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+    </one-of>
+ </rule>
+
+ <rule id="currency_small">
+   <one-of>
+     <item> cent <tag><![CDATA[ XY="USD"; ]]></tag></item>
+     <item> cents <tag><![CDATA[ XY="USD"; ]]></tag></item>
+     <item> sen <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+     <item> kupang <tag><![CDATA[ XY="MYR"; ]]></tag></item>
+   </one-of>
+ </rule>
+
+<rule id="Cardinal1_99" >
+ <one-of>
+   <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[X=CardinalDigit.X]]></tag></item>
+   <item> <ruleref uri="#Cardinal10_99"/> <tag><![CDATA[X=Cardinal10_99.X]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="CardinalDigit" >
+ <one-of>
+   <item> satu  <tag><![CDATA[X=1]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 1 <tag><![CDATA[X=1]]></tag></item>
+   <item> <ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[X=CardinalDigitGt1.X]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="CardinalDigitGt1" >
+ <one-of>
+   <item> dua  <tag><![CDATA[X=2]]></tag></item>
+   <item> tiga  <tag><![CDATA[X=3]]></tag></item>
+   <item> empat  <tag><![CDATA[X=4]]></tag></item>
+   <item> lima  <tag><![CDATA[X=5]]></tag></item>
+   <item> enam  <tag><![CDATA[X=6]]></tag></item>
+   <item> tujuh  <tag><![CDATA[X=7]]></tag></item>
+   <item> lapan  <tag><![CDATA[X=8]]></tag></item>
+   <item> sembilan  <tag><![CDATA[X=9]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 2 <tag><![CDATA[X=2]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[X=3]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 4 <tag><![CDATA[X=4]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[X=5]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 6 <tag><![CDATA[X=6]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 7 <tag><![CDATA[X=7]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 8 <tag><![CDATA[X=8]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 9 <tag><![CDATA[X=9]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="Cardinal10_99" >
+ <one-of>
+   <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[X=CardinalTeen.X]]></tag></item>
+   <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[X=parseInt(CardinalTen.X )]]></tag>     <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag>X=X + parseInt(CardinalDigit.X )</tag></item>
+   </item>
+   <item> <ruleref uri="cardinal_number.grxml#TensWithDash"/> <tag><![CDATA[X=parseInt(TensWithDash.XY)]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="CardinalTeen" >
+ <one-of>
+   <item> sepuluh  <tag><![CDATA[X=10]]></tag></item>
+   <item> sebelas  <tag><![CDATA[X=11]]></tag></item>
+   <item> dua belas  <tag><![CDATA[X=12]]></tag></item>
+   <item> tiga belas <tag><![CDATA[X=13]]></tag></item>
+   <item> empat belas <tag><![CDATA[X=14]]></tag></item>
+   <item> lima belas <tag><![CDATA[X=15]]></tag></item>
+   <item> enam belas <tag><![CDATA[X=16]]></tag></item>
+   <item> tujuh belas <tag><![CDATA[X=17]]></tag></item>
+   <item> lapan belas <tag><![CDATA[X=18]]></tag></item>
+   <item> sembilan belas <tag><![CDATA[X=19]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 10 <tag><![CDATA[X=10]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="CardinalTen" >
+ <one-of>
+   <item> dua puluh  <tag><![CDATA[X=20]]></tag></item>
+   <item> tiga puluh <tag><![CDATA[X=30]]></tag></item>
+   <item> empat puluh <tag><![CDATA[X=40]]></tag></item>
+   <item> lima puluh <tag><![CDATA[X=50]]></tag></item>
+   <item> enam puluh <tag><![CDATA[X=60]]></tag></item>
+   <item> tujuh puluh <tag><![CDATA[X=70]]></tag></item>
+   <item> lapan puluh <tag><![CDATA[X=80]]></tag></item>
+   <item> sembilan puluh <tag><![CDATA[X=90]]></tag></item>
+ </one-of>
+</rule>
+
+<rule id="coin"> 
+  <item> sekupang <tag><![CDATA[X=0.1; C="MYR"]]></tag></item>
+
+</rule>  
+
+</grammar>

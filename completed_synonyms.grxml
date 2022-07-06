@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+   <!--  $Id: commandgrammar.xml,v 1.1 2006/04/14 14:30:57 cgodeke Exp $
+   -->
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+ xml:lang="ms-MY" mode="voice" root="SYN_ROOT">
+<!--$Id: commandgrammar.xml,v 1.1 2006/04/14 14:30:57 cgodeke Exp $-->
+ <meta name='swirec_enable_robust_compile' content='1'/>
+ <meta name='swirec_compile_parser_with_weights' content='1'/>
+  <rule id="SYN_ROOT" scope="public">
+     <one-of>
+	      <item> <ruleref uri="#I_WANT_TO"/> <tag>SYN_GROUP=I_WANT_TO.MEANING</tag></item>
+	      <item> <ruleref uri="#WHAT_IS"/> <tag>SYN_GROUP=WHAT_IS.MEANING</tag></item>
+	      <item> <ruleref uri="#DO_NOT"/> <tag>SYN_GROUP=DO_NOT.MEANING</tag></item>
+	      <item> <ruleref uri="#A"/> <tag>SYN_GROUP=A.MEANING</tag></item>
+	      <item> <ruleref uri="#SHOULD_NOT"/> <tag>SYN_GROUP=SHOULD_NOT.MEANING</tag></item>
+	      <item> <ruleref uri="#CAN_NOT"/> <tag>SYN_GROUP=CAN_NOT.MEANING</tag></item>
+        <item><ruleref uri="#HAVE_NOT"/> <tag>SYN_GROUP=HAVE_NOT.MEANING</tag></item>
+        <item><ruleref uri="#WILL_NOT"/> <tag>SYN_GROUP=WILL_NOT.MEANING</tag></item>
+        <item><ruleref uri="#MUST_NOT"/> <tag>SYN_GROUP=MUST_NOT.MEANING</tag></item>
+        <item><ruleref uri="#GOING_TO"/> <tag>SYN_GROUP=GOING_TO.MEANING</tag></item>
+        <item><ruleref uri="#I_WILL"/> <tag>SYN_GROUP=I_WILL.MEANING</tag></item>
+        <item><ruleref uri="#I_AM"/> <tag>SYN_GROUP=I_AM.MEANING</tag></item>
+        <item><ruleref uri="#I_HAVE"/> <tag>SYN_GROUP=I_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#IT_WILL"/> <tag>SYN_GROUP=IT_WILL.MEANING</tag></item>
+        <item><ruleref uri="#IT_IS"/> <tag>SYN_GROUP=IT_IS.MEANING</tag></item>
+        <item><ruleref uri="#THAT_IS"/> <tag>SYN_GROUP=THAT_IS.MEANING</tag></item>
+        <item><ruleref uri="#WHO_IS"/> <tag>SYN_GROUP=WHO_IS.MEANING</tag></item>
+        <item><ruleref uri="#HE_IS"/> <tag>SYN_GROUP=HE_IS.MEANING</tag></item>
+        <item><ruleref uri="#SHOULD_HAVE"/> <tag>SYN_GROUP=SHOULD_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#THERE_ARE"/> <tag>SYN_GROUP=THERE_ARE.MEANING</tag></item>
+        <item><ruleref uri="#THERE_IS"/> <tag>SYN_GROUP=THERE_IS.MEANING</tag></item>
+        <item><ruleref uri="#THEY_HAVE"/> <tag>SYN_GROUP=THEY_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#WE_WILL"/> <tag>SYN_GROUP=WE_WILL.MEANING</tag></item>
+        <item><ruleref uri="#WE_ARE"/> <tag>SYN_GROUP=WE_ARE.MEANING</tag></item>
+        <item><ruleref uri="#WE_HAVE"/> <tag>SYN_GROUP=WE_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#WHAT_HAVE"/> <tag>SYN_GROUP=WHAT_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#WHERE_ARE"/> <tag>SYN_GROUP=WHERE_ARE.MEANING</tag></item>
+        <item><ruleref uri="#YOU_ARE"/> <tag>SYN_GROUP=YOU_ARE.MEANING</tag></item>
+        <item><ruleref uri="#YOU_HAVE"/> <tag>SYN_GROUP=YOU_HAVE.MEANING</tag></item>
+        <item><ruleref uri="#UNTIL"/> <tag>SYN_GROUP=UNTIL.MEANING</tag></item>
+        <item><ruleref uri="#WHY_DID"/> <tag>SYN_GROUP=WHY_DID.MEANING</tag></item>
+        <item><ruleref uri="#HOW_DID"/> <tag>SYN_GROUP=HOW_DID.MEANING</tag></item>
+        <item><ruleref uri="#WHEN_DID"/> <tag>SYN_GROUP=WHEN_DID.MEANING</tag></item>
+        <item><ruleref uri="#KIND_OF"/> <tag>SYN_GROUP=KIND_OF.MEANING</tag></item>
+        <item><ruleref uri="#GIVE_ME"/> <tag>SYN_GROUP=GIVE_ME.MEANING</tag></item>
+        <item><ruleref uri="#LET_ME"/> <tag>SYN_GROUP=LET_ME.MEANING</tag></item>
+        <item><ruleref uri="#LET_US"/> <tag>SYN_GROUP=LET_US.MEANING</tag></item>
+        <item><ruleref uri="#WHAT_ARE_YOU"/> <tag>SYN_GROUP=WHAT_ARE_YOU.MEANING</tag></item>
+	   </one-of>
+  </rule>
+
+  <rule id="I_WANT_TO" scope="public">
+   <item>
+      <tag>MEANING='I_WANT_TO';</tag>
+      <one-of>
+	    <item>saya mahu</item>
+      <item>saya ingin</item>
+      <item>saya hendak</item>
+      <item>saya nak</item>
+      <item>saya perlu</item>
+	    <item>aku mahu</item>
+      <item>aku ingin</item>
+      <item>aku hendak</item>
+      <item>aku nak</item>
+      <item>aku perlu</item>
+	    <item>kami mahu</item>
+      <item>kami ingin</item>
+      <item>kami hendak</item>
+      <item>kami nak</item>
+      <item>kami perlu</item>
+      </one-of>
+   </item>
+  </rule>
+
+	<rule id="WHAT_IS" scope="public">
+      <item>
+        <tag>MEANING='WHAT_IS';</tag>
+          <one-of>
+	          <item>apa</item>
+            <item>apakah</item>
+          </one-of>
+      </item>
+  </rule>
+
+    <rule id="DO_NOT" scope="public">
+     <item>
+        <tag>MEANING='DO_NOT';</tag>
+          <one-of>
+            <item>jangan</item>
+            <item>tidak</item>
+            <item>tak</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="SHOULD_NOT" scope="public">
+     <item>
+        <tag>MEANING='SHOULD_NOT';</tag>
+          <one-of>
+            <item>tidak patut</item>
+            <item>tak patut</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="CAN_NOT" scope="public">
+     <item>
+        <tag>MEANING='CAN_NOT';</tag>
+          <one-of>
+            <item>tidak boleh</item>
+            <item>tak boleh</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="HAVE_NOT" scope="public">
+     <item>
+        <tag>MEANING='HAVE_NOT';</tag>
+          <one-of>
+            <item>belum</item>
+            <item>belum lagi</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="WILL_NOT" scope="public">
+     <item>
+        <tag>MEANING='WILL_NOT';</tag>
+          <one-of>
+            <item>tidak akan</item>
+            <item>tak akan</item>
+          </one-of>
+     </item>
+    </rule>
+ 
+    <rule id="MUST_NOT" scope="public">
+     <item>
+        <tag>MEANING='MUST_NOT';</tag>
+          <one-of>
+            <item>tidak perlu</item>
+            <item>tak perlu</item>
+          </one-of>
+     </item>
+    </rule>
+
+     <rule id="GOING_TO" scope="public">
+     <item>
+        <tag>MEANING='GOING_TO';</tag>
+          <one-of>
+            <item>ingin</item>
+            <item>mahu</item>
+            <item>hendak</item>
+            <item>nak</item>
+            <item>akan ke</item>
+            <item>akan pergi ke</item>
+          </one-of>
+     </item>
+     </rule>
+
+     <rule id="I_WILL" scope="public">
+     <item>
+        <tag>MEANING='I_WILL';</tag>
+          <one-of>
+            <item>saya akan</item>
+            <item>aku akan</item>
+          </one-of>
+     </item>
+     </rule>
+
+    <rule id="I_AM" scope="public">
+     <item>
+        <tag>MEANING='I_AM';</tag>
+          <one-of>
+            <item>saya ialah</item>
+            <item>aku ialah</item>
+            <item>saya adalah</item>
+            <item>aku adalah</item>
+            <item>saya merupakan</item>
+            <item>aku merupakan</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="I_HAVE" scope="public">
+     <item>
+        <tag>MEANING='I_HAVE';</tag>
+          <one-of>
+            <item>saya ada</item>
+            <item>aku ada</item>
+            <item>saya mempunyai</item>
+            <item>aku mempunyai</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="IT_WILL" scope="public">
+     <item>
+        <tag>MEANING='IT_WILL';</tag>
+          <one-of>
+            <item>ianya akan</item>
+            <item>ia akan</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="IT_IS" scope="public">
+     <item>
+        <tag>MEANING='IT_IS';</tag>
+          <one-of>
+            <item>ianya adalah</item>
+            <item>ianya ialah</item>
+            <item>ia adalah</item>
+            <item>ia ialah</item>
+            <item>ianya merupakan</item>
+            <item>ia merupakan</item>
+          </one-of>
+     </item>
+    </rule>
+
+     <rule id="THAT_IS" scope="public">
+     <item>
+        <tag>MEANING='THAT_IS';</tag>
+          <one-of>
+            <item>itu adalah</item>
+            <item>itu ialah</item>
+            <item>tu adalah</item>
+            <item>tu ialah</item>
+            <item>itu merupakan</item>
+            <item>tu merupakan</item>
+          </one-of>
+     </item>
+     </rule>
+
+     <rule id="WHO_IS" scope="public">
+     <item>
+        <tag>MEANING='WHO_IS';</tag>
+          <one-of>
+            <item>siapakah</item>
+            <item>siapa</item>
+          </one-of>
+     </item>
+     </rule>
+
+     <rule id="HE_IS" scope="public">
+     <item>
+        <tag>MEANING='HE_IS';</tag>
+          <one-of>
+            <item>dia adalah</item>
+            <item>dia ialah</item>
+            <item>dia merupakan</item>
+          </one-of>
+     </item>
+     </rule>
+
+    <rule id="SHOULD_HAVE" scope="public">
+     <item>
+        <tag>MEANING='SHOULD_HAVE';</tag>
+          <one-of>
+            <item>patut mempunyai</item>
+            <item>patut ada</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="THERE_IS" scope="public">
+     <item>
+        <tag>MEANING='THERE_IS';</tag>
+          <one-of>
+            <item>terdapat</item>
+            <item>ada</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="THEY_ARE" scope="public">
+     <item>
+        <tag>MEANING='THEY_ARE';</tag>
+          <one-of>
+            <item>mereka adalah</item>
+            <item>mereka ialah</item>
+            <item>mereka merupakan</item>
+            <item>mereka merupakan</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="THEY_HAVE" scope="public">
+     <item>
+        <tag>MEANING='THEY_HAVE';</tag>
+          <one-of>
+            <item>mereka mempunyai</item>
+            <item>mereka ada</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="WE_WILL" scope="public">
+     <item>
+        <tag>MEANING='WE_WILL';</tag>
+          <one-of>
+            <item>kami akan</item>
+            <item>kita akan</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="WE_ARE" scope="public">
+     <item>
+        <tag>MEANING='WE_ARE';</tag>
+          <one-of>
+            <item>kami adalah</item>
+            <item>kami ialah</item>
+            <item>kita adalah</item>
+            <item>kita ialah</item>
+            <item>kita merupakan</item>
+            <item>kita merupakan</item>
+          </one-of>
+     </item>
+    </rule>
+
+     <rule id="WE_HAVE" scope="public">
+     <item>
+        <tag>MEANING='WE_HAVE';</tag>
+          <one-of>
+            <item>kami mempunyai</item>
+            <item>kita mempunyai</item>
+            <item>kami ada</item>
+            <item>kita ada</item>
+          </one-of>
+     </item>
+     </rule>
+
+    <rule id="WHAT_HAVE" scope="public">
+     <item>
+        <tag>MEANING='WHAT_HAVE';</tag>
+          <one-of>
+            <item>apakah yang</item>
+            <item>apa yang</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="WHERE_ARE" scope="public">
+     <item>
+        <tag>MEANING='WHERE_ARE';</tag>
+          <one-of>
+            <item>di manakah</item>
+            <item>di mana</item>
+            <item>dekat manakah</item>
+            <item>dekat mana</item>
+            <item>kat manakah</item>
+            <item>kat mana</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="YOU_ARE" scope="public">
+     <item>
+        <tag>MEANING='YOU_ARE';</tag>
+          <one-of>
+            <item>kamu adalah</item>
+            <item>kamu ialah</item>
+            <item>kamu merupakan</item>
+            <item>kau adalah</item>
+            <item>kau ialah</item>
+            <item>kau merupakan</item>
+            <item>awak adalah</item>
+            <item>awak ialah</item>
+            <item>awak merupakan</item>
+            <item>anda adalah</item>
+            <item>anda ialah</item>
+            <item>anda merupakan</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="YOU_HAVE" scope="public">
+     <item>
+        <tag>MEANING='YOU_HAVE';</tag>
+          <one-of>
+            <item>kamu mempunyai</item>
+            <item>kamu ada</item>
+            <item>kau mempunyai</item>
+            <item>kau ada</item>
+            <item>awak mempunyai</item>
+            <item>awak ada</item>
+            <item>anda mempunyai</item>
+            <item>anda ada</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="UNTIL" scope="public">
+     <item>
+        <tag>MEANING='UNTIL';</tag>
+          <one-of>
+            <item>sehingga</item>
+            <item>hingga</item>
+          </one-of>
+     </item>
+    </rule>
+
+    <rule id="WHY_DID" scope="public">
+     <item>
+        <tag>MEANING='WHY_DID';</tag>
+          <one-of>
+            <item>kenapakah</item>
+            <item>kenapa</item>
+            <item>mengapakah</item>
+            <item>mengapa</item>
+          </one-of>
+     </item>
+    </rule>
+
+   <rule id="HOW_DID" scope="public">
+     <item>
+        <tag>MEANING='HOW_DID';</tag>
+          <one-of>
+            <item>bagaimanakah</item>
+            <item>bagaimana</item>
+            <item>macam manakah</item>
+            <item>macam mana</item>
+          </one-of>
+     </item>
+   </rule>
+
+   <rule id="WHEN_DID" scope="public">
+     <item>
+        <tag>MEANING='WHEN_DID';</tag>
+          <one-of>
+            <item>bilakah</item>
+            <item>bila</item>
+          </one-of>
+     </item>
+   </rule>
+
+  <rule id="KIND_OF" scope="public">
+     <item>
+        <tag>MEANING='KIND_OF';</tag>
+          <one-of>
+            <item>agak</item>
+            <item>agaklah</item>
+          </one-of>
+     </item>
+  </rule>
+
+  <rule id="GIVE_ME" scope="public">
+     <item>
+        <tag>MEANING='GIVE_ME';</tag>
+          <one-of>
+            <item>berikan saya</item>
+            <item>berikan aku</item>
+            <item>beri saya</item>
+            <item>beri aku</item>
+            <item>bagikan saya</item>
+            <item>bagikan aku</item>
+            <item>bagi saya</item>
+            <item>bagi aku</item>
+          </one-of>
+     </item>
+  </rule>
+
+  <rule id="LET_ME" scope="public">
+     <item>
+        <tag>MEANING='LET_ME';</tag>
+          <one-of>
+            <item>biarkan saya</item>
+            <item>biarkan aku</item>
+            <item>biar saya</item>
+            <item>biar aku</item>
+            <item>mari saya</item>
+            <item>mari aku</item>
+          </one-of>
+     </item>
+  </rule>
+
+  <rule id="LET_US" scope="public">
+     <item>
+        <tag>MEANING='LET_US';</tag>
+          <one-of>
+            <item>biarkan kami</item>
+            <item>biarkan kita</item>
+            <item>biar kami</item>
+            <item>biar kita</item>
+            <item>mari kami</item>
+            <item>mari kita</item>
+          </one-of>
+     </item>
+  </rule>
+
+  <rule id="WHAT_ARE_YOU" scope="public">
+     <item>
+        <tag>MEANING='WHAT_ARE_YOU';</tag>
+          <one-of>
+            <item>apakah yang kamu</item>
+            <item>apa yang kamu</item>
+            <item>apakah yang kau</item>
+            <item>apa yang kau</item>
+            <item>apakah yang awak</item>
+            <item>apa yang awak</item>
+            <item>apakah yang anda</item>
+            <item>apa yang anda</item>
+          </one-of>
+     </item>
+  </rule>
+
+    <rule id="A" scope="public">
+    <tag>MEANING='A';</tag>
+    <one-of>
+        <item>satu</item>
+        <item>sebiji</item>
+        <item>sebuah</item>
+        <item>seekor</item>
+        <item>seorang</item>
+        <item>sekuntum</item>
+    </one-of>
+    </rule>
+
+</grammar>

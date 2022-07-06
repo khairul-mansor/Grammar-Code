@@ -1,0 +1,64 @@
+<?xml version='1.0' ?>
+<grammar xml:lang="ms-MY" version="1.0" root="GenericOrder" xmlns="http://www.w3.org/2001/06/grammar">
+    <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+	<rule id="GenericOrder" scope="public">
+        <ruleref uri="functions.grxml"/>
+        <ruleref uri="meaning.grxml"/>
+		<one-of>
+        <item>
+           <item repeat="0-1"> yang</item>
+  		   <one-of>
+			<item>
+				<ruleref uri="ordinal_number.grxml#OrdinalNumber"/>
+				<tag><![CDATA[
+				if (OrdinalNumber.ORDINAL == '1')
+				   GENERIC_ORDER={'ORDER_REL':'min'};
+				else
+				   GENERIC_ORDER={'ORDINAL_NUMBER':parseInt(OrdinalNumber.ORDINAL)};
+				]]></tag>
+			</item>
+			<item>terakhir<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'max'}]]></tag></item>
+ 		    <item>terkini<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'max'}]]></tag></item>
+ 		    <item>terbaru<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'max'}]]></tag></item>
+			<item>seterusnya<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'succ'}]]></tag></item>
+			<item>berikutnya<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'succ'}]]></tag></item>
+			<item>berikut<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'succ'}]]></tag></item>
+			<item>terawal<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'min'}]]></tag></item>
+			<item>paling awal<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'min'}]]></tag></item>
+			<item>sebelumnya<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'prec'}]]></tag></item>
+			<item>sebelum ini<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'prec'}]]></tag></item>
+			<item>terdahulu<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'prec'}]]></tag></item>
+			<item>lepas<tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'prec'}]]></tag></item>
+            <item>
+                <one-of>
+                    <item> kedua terakhir </item>
+                    <item> kedua dari terakhir </item>
+                </one-of>
+                <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'penultimate'}]]></tag>
+            </item>
+			<item> tengah <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'middle'}]]></tag></item>
+			<item> lain <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'other'}]]></tag></item>
+		   </one-of>
+	    </item>
+		<item>
+			<item repeat="0-1"> yang </item>
+            <one-of>
+                <item> di penghujung <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'max'}]]></tag></item>			
+				<item> di permulaan <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'min'}]]></tag></item>
+				<item> di pertengahan <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'middle'}]]></tag></item>
+        	</one-of>
+		</item>
+        <item>
+            <item repeat="0-1"> yang </item>
+			<one-of>
+                <item> selepas <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'succ'}]]></tag></item>			
+			    <item> sebelum <tag><![CDATA[GENERIC_ORDER = {'ORDER_REL':'prec'}]]></tag></item>
+        	</one-of>
+		</item> 
+		</one-of>	
+    	<tag><![CDATA[GENERIC_ORDER=meaning.generic_orderMeaning(GENERIC_ORDER);GENERIC_ORDER=functions.js2json(GENERIC_ORDER);]]></tag>
+    </rule>
+</grammar>

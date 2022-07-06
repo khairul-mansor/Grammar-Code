@@ -1,0 +1,162 @@
+<?xml version='1.0' ?>
+<grammar xml:lang="ms-MY" version="1.0" root="OrdinalNumber" xmlns="http://www.w3.org/2001/06/grammar">	
+    <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+	<rule id="OrdinalNumber" scope="public">
+		<one-of>
+            <item>
+            	<ruleref uri="#OrdinalNumberUpToHundredth"/>
+            	<tag><![CDATA[ORDINAL=OrdinalNumberUpToHundredth.ORDINAL;]]></tag>
+            </item>
+            <item>
+                <ruleref uri="#ordinals101_999"/>
+                <tag><![CDATA[ORDINAL=ordinals101_999.ORDINAL;]]></tag>
+            </item>
+            <item>
+                <ruleref uri="#ordinals1001_9999"/>
+                <tag><![CDATA[ORDINAL=ordinals1001_9999.ORDINAL;]]></tag>
+            </item>
+    	</one-of>
+    </rule>
+
+	<rule id="OrdinalNumberUpToHundredth">
+     <one-of>
+	    <item><ruleref uri="#OrdinalDigit"/><tag><![CDATA[ORDINAL=OrdinalDigit.ORDINAL;]]></tag></item>
+	    <item><ruleref uri="#OrdinalTeens"/><tag><![CDATA[ORDINAL=OrdinalTeens.ORDINAL;]]></tag></item>
+	    <item><ruleref uri="#OrdinalRoundTens"/><tag><![CDATA[ORDINAL=OrdinalRoundTens.ORDINAL;]]></tag></item>
+	    <item>kesepuluh<tag><![CDATA[ORDINAL=10]]></tag></item>
+	    <item>kesebelas<tag><![CDATA[ORDINAL=11]]></tag></item>
+        <item>keseribu<tag><![CDATA[ORDINAL=1000]]></tag></item>
+        <item>kesejuta<tag><![CDATA[ORDINAL=1000000]]></tag></item>
+	    <item>
+	     <one-of>
+		   <item>dua<tag><![CDATA[ORDINAL=20;]]></tag></item>
+		   <item>tiga<tag><![CDATA[ORDINAL=30;]]></tag></item>
+		   <item>empat<tag><![CDATA[ORDINAL=40;]]></tag></item>
+		   <item>lima<tag><![CDATA[ORDINAL=50;]]></tag></item>
+		   <item>enam<tag><![CDATA[ORDINAL=60;]]></tag></item>
+		   <item>tujuh<tag><![CDATA[ORDINAL=70;]]></tag></item>
+		   <item>lapan<tag><![CDATA[ORDINAL=80;]]></tag></item>
+		   <item>sembilan<tag><![CDATA[ORDINAL=90;]]></tag></item>
+		 </one-of>
+		 puluh
+         <ruleref uri="#OrdinalDigit"/><tag><![CDATA[ORDINAL=ORDINAL+OrdinalDigit.ORDINAL;]]></tag>
+        </item>	
+        <item><ruleref uri="#OrdinalsWithDash"/><tag><![CDATA[ORDINAL=OrdinalsWithDash.ORDINAL;]]></tag></item>			
+	 </one-of>
+    </rule>
+
+	<rule id="OrdinalDigit" scope="public">
+	    <one-of>
+	        <item>pertama<tag><![CDATA[ORDINAL=1]]></tag></item>
+		    <item>kedua<tag><![CDATA[ORDINAL=2]]></tag></item>
+		    <item>ketiga<tag><![CDATA[ORDINAL=3]]></tag></item>
+		    <item>keempat<tag><![CDATA[ORDINAL=4]]></tag></item>
+		    <item>kelima<tag><![CDATA[ORDINAL=5]]></tag></item>
+		    <item>keenam<tag><![CDATA[ORDINAL=6]]></tag></item>
+		    <item>ketujuh<tag><![CDATA[ORDINAL=7]]></tag></item>
+		    <item>kelapan<tag><![CDATA[ORDINAL=8]]></tag></item>
+		    <item>kesembilan<tag><![CDATA[ORDINAL=9]]></tag></item>
+		</one-of>  
+	</rule>
+	
+	<rule id="OrdinalTeens" scope="public">
+	    <one-of>
+		    <item>kedua<tag><![CDATA[ORDINAL=12]]></tag></item>
+		    <item>ketiga<tag><![CDATA[ORDINAL=13]]></tag></item>
+		    <item>keempat<tag><![CDATA[ORDINAL=14]]></tag></item>
+		    <item>kelima<tag><![CDATA[ORDINAL=15]]></tag></item>
+		    <item>keenam<tag><![CDATA[ORDINAL=16]]></tag></item>
+		    <item>ketujuh<tag><![CDATA[ORDINAL=17]]></tag></item>
+		    <item>kelapan<tag><![CDATA[ORDINAL=18]]></tag></item>
+		    <item>kesembilan<tag><![CDATA[ORDINAL=19]]></tag></item>
+		</one-of>
+		<item> belas </item>
+	</rule>	
+	
+	<rule id="OrdinalRoundTens" scope="public">
+	    <one-of>
+	        <item>kedua<tag><![CDATA[ORDINAL=20]]></tag></item>
+	        <item>ketiga<tag><![CDATA[ORDINAL=30]]></tag></item>
+	        <item>keempat<tag><![CDATA[ORDINAL=40]]></tag></item>
+	        <item>kelima<tag><![CDATA[ORDINAL=50]]></tag></item>
+	        <item>keenam<tag><![CDATA[ORDINAL=60]]></tag></item>
+	 		<item>ketujuh<tag><![CDATA[ORDINAL=70]]></tag></item>
+			<item>kelapan<tag><![CDATA[ORDINAL=80]]></tag></item>
+	        <item>kesembilan<tag><![CDATA[ORDINAL=90]]></tag></item>
+	    </one-of>
+	    <item> puluh </item>
+    </rule>		
+	
+	<rule id="OrdinalsWithDash" scope="public">
+	    <item>
+		<one-of> 
+		    <item>ke-dua<tag><![CDATA[ORDINAL=20;]]></tag></item>
+	        <item>ke-tiga<tag><![CDATA[ORDINAL=30]]></tag></item>
+		    <item>ke-empat<tag><![CDATA[ORDINAL=40]]></tag></item>
+		    <item>ke-lima<tag><![CDATA[ORDINAL=50]]></tag></item>
+		    <item>ke-enam<tag><![CDATA[ORDINAL=60]]></tag></item>
+		    <item>ke-tujuh<tag><![CDATA[ORDINAL=70]]></tag></item>
+		    <item>ke-lapan<tag><![CDATA[ORDINAL=80]]></tag></item>
+		    <item>ke-sembilan<tag><![CDATA[ORDINAL=90]]></tag></item>
+		</one-of>
+        puluh
+        <one-of>				
+		    		<item>satu<tag><![CDATA[ORDINAL=ORDINAL+1]]></tag></item>
+                    <item>dua<tag><![CDATA[ORDINAL=ORDINAL+2]]></tag></item>
+                    <item>tiga<tag><![CDATA[ORDINAL=ORDINAL+3]]></tag></item>
+                    <item>empat<tag><![CDATA[ORDINAL=ORDINAL+4]]></tag></item>
+                    <item>lima<tag><![CDATA[ORDINAL=ORDINAL+5]]></tag></item>
+                    <item>enam<tag><![CDATA[ORDINAL=ORDINAL+6]]></tag></item>
+                    <item>tujuh<tag><![CDATA[ORDINAL=ORDINAL+7]]></tag></item>
+                    <item>lapan<tag><![CDATA[ORDINAL=ORDINAL+8]]></tag></item>
+                    <item>sembilan<tag><![CDATA[ORDINAL=ORDINAL+9]]></tag></item>
+		</one-of>
+             </item>
+	</rule>
+	
+    <rule id="ordinals101_999">
+         <item>
+             <tag><![CDATA[ORDINAL=1;]]></tag>
+             <item repeat="0-1"><ruleref uri="cardinal_number.grxml#CardinalDigit"/><tag><![CDATA[ORDINAL=CardinalDigit.NUMBER;]]></tag></item>
+             <item> <one-of> <item> seratus </item> <item> ratus </item> </one-of> <tag><![CDATA[ORDINAL=ORDINAL*100;]]></tag> </item>
+             <item repeat="0-1"> dan </item>
+             <ruleref uri='#OrdinalNumberUpToHundredth'/><tag><![CDATA[ORDINAL=ORDINAL+parseInt(OrdinalNumberUpToHundredth.ORDINAL);]]></tag>
+         </item>
+    </rule>
+            
+
+    <rule id="ordinals1001_9999">
+       <one-of>
+        <item>
+          <item>
+            <tag><![CDATA[ORDINAL=1;]]></tag>
+            <item repeat="0-1"><ruleref uri="cardinal_number.grxml#CardinalDigit"/><tag><![CDATA[ORDINAL=CardinalDigit.NUMBER;]]></tag></item>
+            <item> <one-of> <item> seribu </item> <item> ribu </item> </one-of> <tag><![CDATA[ORDINAL=ORDINAL*1000;]]></tag> </item>
+          </item>
+          <item repeat="0-1"> dan </item>
+          <one-of>
+            <item>
+               <item repeat="0-1"><ruleref uri="cardinal_number.grxml#CardinalDigit"/><tag><![CDATA[ORDINAL=ORDINAL+parseInt(CardinalDigit.NUMBER*100);]]></tag></item>
+               <item> keseratus </item>
+            </item>
+            <item>
+              <item repeat="0-1">
+                <item repeat="0-1"><ruleref uri="cardinal_number.grxml#CardinalDigit"/><tag><![CDATA[ORDINAL=ORDINAL+CardinalDigit.NUMBER*100;]]></tag></item>
+                <item> <one-of> <item> seratus </item> <item> ratus </item> </one-of> </item>
+              </item>
+              <item repeat="0-1"> dan </item>
+              <ruleref uri='#OrdinalNumberUpToHundredth'/><tag><![CDATA[ORDINAL=ORDINAL+parseInt(OrdinalNumberUpToHundredth.ORDINAL);]]></tag>
+            </item>
+          </one-of>
+          </item>
+          <item>
+             <ruleref uri="cardinal_number.grxml#CardinalDigit"/><tag><![CDATA[ORDINAL=CardinalDigit.NUMBER*1000;]]></tag>
+             <item> keseribu </item>
+        </item>
+       </one-of>
+    </rule>
+
+</grammar>

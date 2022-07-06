@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<grammar root="Number" version="1.0" xml:lang="ms-MY" tag-format="swi-semantics/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/06/grammar">
+<!-- Copyright 2006. Nuance Communications Inc. All Rights Reserved.
+Use of the this software is subject to certain restrictions and
+limitations set forth in a license agreement entered into between
+Nuance Communications, Inc. and Licensee. Refer to the Nuance
+License Agreement for license use rights and restrictions.-->
+<meta name='swirec_optimization' content='12'/>
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_max_parses_per_literal' content='10'/>
+<meta name="swirec_compile_parser_with_weights" content="1"/>
+<!--meta name="swirec_user_dict_name" content="alphanum.userdict"/-->
+
+
+<rule id="Number_external" scope="public">
+         <one-of>
+            <item><ruleref uri="#Number_inner"/><tag><![CDATA[C_NUMBER=Number_inner.C_NUMBER; ]]></tag></item>
+         </one-of>
+</rule>
+
+
+<rule id="Number_inner" scope="public">
+	<tag><![CDATA[C_NUMBER="";]]></tag>
+	<one-of>
+		  <!--<item> <ruleref uri="cardinal_number.grxml#CardinalNumber"/> <tag><![CDATA[C_NUMBER=String(CardinalNumber.CARDINAL)]]></tag></item>-->
+		  <item> <ruleref uri="#OneToFourDigitNumber"/> <tag><![CDATA[C_NUMBER=OneToFourDigitNumber.NUMBER; ]]></tag></item>
+        <item> <ruleref uri="#digit_sequences"/> <tag><![CDATA[C_NUMBER=digit_sequences.NUMBER;]]></tag></item>
+        <item> <ruleref uri="#fractionalLargeNumbers"/> <tag><![CDATA[C_NUMBER=fractionalLargeNumbers.NUMBER;]]></tag></item>
+	</one-of>
+</rule>
+
+
+<rule id="OneToFourDigitNumber" scope="public">
+<tag><![CDATA[NUMBER="";]]></tag>
+ <one-of>
+    <item><ruleref uri="#CardinalDigitW0"/><tag><![CDATA[NUMBER=CardinalDigitW0.NUMBER;]]></tag></item>
+    <item><ruleref uri="#Cardinal10_99"/><tag><![CDATA[NUMBER=Cardinal10_99.NUMBER;]]></tag></item>
+    <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=hundreds.NUMBER;]]></tag> </item>
+    <item> <ruleref uri="#thousands"/> <tag><![CDATA[NUMBER=thousands.NUMBER;]]></tag></item>
+    <item> <ruleref uri="#millions"/> <tag><![CDATA[NUMBER=millions.NUMBER;]]></tag></item>
+    <item> <ruleref uri="#billions"/> <tag><![CDATA[NUMBER=billions.NUMBER;]]></tag></item>
+    <item> <ruleref uri="#trillions"/> <tag><![CDATA[NUMBER=trillions.NUMBER;]]></tag></item>
+ </one-of>
+</rule>
+
+
+
+<rule id="digit_sequences">
+   <tag><![CDATA[NUMBER="";]]></tag>
+   <one-of>
+        <item repeat="2-"><ruleref uri="#CardinalDigitW0"/> <tag><![CDATA[NUMBER=NUMBER+String(CardinalDigitW0.NUMBER )]]></tag></item>
+        <item repeat="2-"><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER+String(Cardinal10_99.NUMBER )]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="CardinalDigitW0" >
+ <one-of>
+   <item> 
+   <one-of>
+     <item> kosong </item>
+     <item> sifar </item>
+     <item xml:lang="ms-my-textonly"> 0 </item>
+   </one-of>
+   <tag><![CDATA[NUMBER="0"]]></tag></item>
+   <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=CardinalDigit.NUMBER]]></tag></item>
+ </one-of>
+</rule>
+
+
+<rule id="CardinalDigit" scope="public">
+ <one-of>
+   <item> satu  <tag><![CDATA[NUMBER="1"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 1  <tag><![CDATA[NUMBER="1"]]></tag></item>
+   <item> <ruleref uri="#CardinalDigitGt1"/> <tag><![CDATA[NUMBER=CardinalDigitGt1.NUMBER]]></tag></item>
+ </one-of>
+</rule>
+
+
+
+<rule id="CardinalDigitGt1" scope="public">
+ <one-of>
+   <item> dua  <tag><![CDATA[NUMBER="2"]]></tag></item>
+   <item> tiga  <tag><![CDATA[NUMBER="3"]]></tag></item>
+   <item> empat  <tag><![CDATA[NUMBER="4"]]></tag></item>
+   <item> lima  <tag><![CDATA[NUMBER="5"]]></tag></item>
+   <item> enam  <tag><![CDATA[NUMBER="6"]]></tag></item>
+   <item> tujuh  <tag><![CDATA[NUMBER="7"]]></tag></item>
+   <item> lapan  <tag><![CDATA[NUMBER="8"]]></tag></item>
+   <item> sembilan  <tag><![CDATA[NUMBER="9"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 2  <tag><![CDATA[NUMBER="2"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 3 <tag><![CDATA[NUMBER="3"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 4  <tag><![CDATA[NUMBER="4"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 5 <tag><![CDATA[NUMBER="5"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 6 <tag><![CDATA[NUMBER="6"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 7 <tag><![CDATA[NUMBER="7"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 8 <tag><![CDATA[NUMBER="8"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 9  <tag><![CDATA[NUMBER="9"]]></tag></item>
+ </one-of>
+</rule>
+
+
+<rule id="Cardinal10_99" >
+ <one-of>
+   <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[NUMBER=CardinalTeen.NUMBER]]></tag></item>
+   <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[NUMBER=parseInt(CardinalTen.NUMBER )]]></tag>     
+   <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>
+   </item>
+ </one-of>
+</rule>
+
+
+
+<rule id="Cardinal1_99" >
+ <one-of>
+    <item> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=parseInt(CardinalDigit.NUMBER )]]></tag></item>
+    <item> <ruleref uri="#CardinalTeen"/> <tag><![CDATA[NUMBER=CardinalTeen.NUMBER]]></tag></item>
+    <item> <ruleref uri="#CardinalTen"/> <tag><![CDATA[NUMBER=parseInt(CardinalTen.NUMBER )]]></tag>
+            <item repeat="0-1"> <ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>
+    </item>
+ </one-of>
+</rule>
+
+
+
+
+<rule id="CardinalTeen" >
+ <one-of>
+   <item> sepuluh  <tag><![CDATA[NUMBER="10"]]></tag></item>
+   <item> sebelas  <tag><![CDATA[NUMBER="11"]]></tag></item>
+   <item>
+      <one-of> 
+         <item> dua  <tag><![CDATA[NUMBER="12"]]></tag></item>
+         <item> tiga  <tag><![CDATA[NUMBER="13"]]></tag></item>
+         <item> empat  <tag><![CDATA[NUMBER="14"]]></tag></item>
+         <item> lima  <tag><![CDATA[NUMBER="15"]]></tag></item>
+         <item> enam  <tag><![CDATA[NUMBER="16"]]></tag></item>
+         <item> tujuh  <tag><![CDATA[NUMBER="17"]]></tag></item>
+         <item> lapan  <tag><![CDATA[NUMBER="18"]]></tag></item>
+         <item> sembilan  <tag><![CDATA[NUMBER="19"]]></tag></item>
+      </one-of>
+      <item> belas </item> 
+   </item>    
+   <item xml:lang="ms-my-textonly"> 10 <tag><![CDATA[NUMBER="10"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 11 <tag><![CDATA[NUMBER="11"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 12 <tag><![CDATA[NUMBER="12"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 13  <tag><![CDATA[NUMBER="13"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 14  <tag><![CDATA[NUMBER="14"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 15  <tag><![CDATA[NUMBER="15"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 16  <tag><![CDATA[NUMBER="16"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 17  <tag><![CDATA[NUMBER="17"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 18  <tag><![CDATA[NUMBER="18"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 19  <tag><![CDATA[NUMBER="19"]]></tag></item>
+ </one-of>
+</rule>
+
+
+<rule id="CardinalTen" >
+ <one-of>
+   <item>
+      <one-of> 
+         <item> dua  <tag><![CDATA[NUMBER="20"]]></tag></item>
+         <item> tiga  <tag><![CDATA[NUMBER="30"]]></tag></item>
+         <item> empat  <tag><![CDATA[NUMBER="40"]]></tag></item>
+         <item> lima  <tag><![CDATA[NUMBER="50"]]></tag></item>
+         <item> enam  <tag><![CDATA[NUMBER="60"]]></tag></item>
+         <item> tujuh  <tag><![CDATA[NUMBER="70"]]></tag></item>
+         <item> lapan  <tag><![CDATA[NUMBER="80"]]></tag></item>
+         <item> sembilan  <tag><![CDATA[NUMBER="90"]]></tag></item>
+      </one-of>
+      <item> puluh </item>
+   </item>     
+   <item xml:lang="ms-my-textonly"> 20 <tag><![CDATA[NUMBER="20"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 30  <tag><![CDATA[NUMBER="30"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 40  <tag><![CDATA[NUMBER="40"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 50  <tag><![CDATA[NUMBER="50"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 60  <tag><![CDATA[NUMBER="60"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 70  <tag><![CDATA[NUMBER="70"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 80  <tag><![CDATA[NUMBER="80"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 90  <tag><![CDATA[NUMBER="90"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 45  <tag><![CDATA[NUMBER="45"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 48  <tag><![CDATA[NUMBER="48"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 24  <tag><![CDATA[NUMBER="24"]]></tag></item>
+   <item xml:lang="ms-my-textonly"> 72  <tag><![CDATA[NUMBER="72"]]></tag></item>
+ </one-of>
+</rule>
+
+ 
+
+<rule id="hundreds" scope="public" >
+   <tag><![CDATA[NUMBER=1;]]></tag>
+   <item repeat="0-1">
+       <one-of>
+         <item><ruleref uri="#Cardinal1_99"/> <tag><![CDATA[NUMBER=parseInt(Cardinal1_99.NUMBER);]]></tag></item>
+         <item> se <tag><![CDATA[NUMBER=1;]]></tag></item>
+       </one-of>
+   </item>
+   <one-of>
+     <item> ratus </item>
+   </one-of>
+   <tag><![CDATA[NUMBER=NUMBER*100;]]></tag> 
+   <item repeat="0-1">
+     <item repeat="0-1"> dan </item>
+     <one-of>
+        <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+        <item><ruleref uri="#CardinalDigitW0"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigitW0.NUMBER )]]></tag></item>
+     </one-of>
+    </item>
+</rule>     
+
+<rule id="thousands" scope="public">
+     <tag><![CDATA[NUMBER=1;]]></tag>
+     <item repeat="0-1">
+          <one-of>
+             <item> <ruleref uri="#Cardinal1_99"/> <tag><![CDATA[NUMBER=parseInt(Cardinal1_99.NUMBER);]]></tag></item>
+             <item><ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=hundreds.NUMBER;]]></tag></item>
+             <item> se <tag><![CDATA[NUMBER=1;]]></tag></item>
+          </one-of>
+     </item>
+     <one-of>
+           <item> ribu </item>
+     </one-of>
+     <tag><![CDATA[NUMBER=NUMBER*1000;]]></tag>
+
+     <item repeat="0-1"> 
+        <item repeat="0-1"> dan </item>
+             <one-of>
+                <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>       
+                <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=NUMBER+hundreds.NUMBER;]]></tag> </item>
+                <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER+parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+         </one-of>
+     </item>
+  </rule>
+
+  <rule id="millions">
+      <tag><![CDATA[NUMBER=1;]]></tag>
+      <item repeat="0-1">
+        <one-of>
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=parseInt(CardinalDigit.NUMBER )]]></tag></item>
+           <item> se <tag><![CDATA[NUMBER=1;]]></tag></item>
+       </one-of>
+      </item>
+      <one-of>
+         <item> juta </item>
+      </one-of>
+      <tag><![CDATA[NUMBER=NUMBER*1000000;]]></tag>
+      <item repeat="0-1">
+        <one-of>
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=NUMBER+thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=NUMBER+hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER+parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>
+       </one-of>
+      </item>
+
+  </rule>
+
+ <rule id="billions">
+      <tag><![CDATA[NUMBER=1;]]></tag>
+      <item repeat="0-1">
+        <one-of>
+           <item><ruleref uri="#millions"/><tag><![CDATA[NUMBER=millions.NUMBER;]]></tag></item>
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=parseInt(CardinalDigit.NUMBER )]]></tag></item>
+           <item> se <tag><![CDATA[NUMBER=1;]]></tag></item>
+       </one-of>
+      </item>
+      <one-of>
+         <item> bilion </item>
+      </one-of>
+      <tag><![CDATA[NUMBER=NUMBER*1000000000;]]></tag>
+      <item repeat="0-1">
+        <one-of>
+           <item><ruleref uri="#millions"/><tag><![CDATA[NUMBER=NUMBER+millions.NUMBER;]]></tag></item>
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=NUMBER+thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=NUMBER+hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER+parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>
+       </one-of>
+      </item>
+
+  </rule>
+
+  <rule id="trillions">
+      <tag><![CDATA[NUMBER=1;]]></tag>
+      <item repeat="0-1">
+        <one-of>           <!-- stopping at thousands trillions -->
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=parseInt(CardinalDigit.NUMBER )]]></tag></item>
+           <item> se <tag><![CDATA[NUMBER=1;]]></tag></item>
+       </one-of>
+      </item>
+      <one-of>
+         <item> trilion </item>
+      </one-of>
+      <tag><![CDATA[NUMBER=NUMBER*1000000000000;]]></tag>
+      <item repeat="0-1">
+        <one-of>
+           <item><ruleref uri="#billions"/><tag><![CDATA[NUMBER=NUMBER+billions.NUMBER;]]></tag></item>
+           <item><ruleref uri="#millions"/><tag><![CDATA[NUMBER=NUMBER+millions.NUMBER;]]></tag></item>
+           <item><ruleref uri="#thousands"/><tag><![CDATA[NUMBER=NUMBER+thousands.NUMBER;]]></tag></item>
+           <item> <ruleref uri="#hundreds"/><tag><![CDATA[NUMBER=NUMBER+hundreds.NUMBER;]]></tag> </item>
+           <item><ruleref uri="#Cardinal10_99"/> <tag><![CDATA[NUMBER=NUMBER+parseInt(Cardinal10_99.NUMBER )]]></tag></item>
+           <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=NUMBER + parseInt(CardinalDigit.NUMBER )]]></tag></item>
+       </one-of>
+      </item>
+
+  </rule>
+
+  <rule id="fractionalLargeNumbers" scope="public">
+    <tag><![CDATA[NUMBER=0;]]></tag>
+    <item repeat="0-1">
+       <one-of>
+          <item><ruleref uri="#CardinalDigit"/> <tag><![CDATA[NUMBER=parseInt(CardinalDigit.NUMBER )]]></tag></item>
+       </one-of>
+       <item> dan </item>
+       <item repeat="0-1"> satu </item>
+    </item>
+    <one-of>
+       <item> setengah <tag><![CDATA[NUMBER=NUMBER+0.5;]]></tag></item>
+       <item> suku <tag><![CDATA[NUMBER=NUMBER+0.25;]]></tag></item>
+       <item> tiga suku <tag><![CDATA[NUMBER=NUMBER+0.75;]]></tag></item>
+    </one-of>
+    <item repeat="0-1"> daripada </item>
+    <item repeat="0-1"> satu </item>
+    <one-of>
+       <item>
+          <one-of>
+             <item> juta </item>
+          </one-of>
+          <tag><![CDATA[NUMBER=NUMBER*1000000;]]></tag>
+       </item>
+       <item>
+         <one-of>
+            <item> bilion </item>
+          </one-of>
+          <tag><![CDATA[NUMBER=NUMBER*1000000000;]]></tag>
+       </item>
+       <item>
+          <one-of>
+             <item> trilion </item>
+          </one-of>
+          <tag><![CDATA[NUMBER=NUMBER*1000000000000;]]></tag>
+       </item>
+    </one-of>
+  </rule>
+
+</grammar>

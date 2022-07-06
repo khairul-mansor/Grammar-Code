@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--generated from GrBuilder.java-->
+<grammar xml:lang="ms-MY" version="1.0" root="RefThing" xmlns="http://www.w3.org/2001/06/grammar">
+
+<meta name="swirec_enable_robust_compile" content="1"/>
+<meta name="swirec_max_parses_per_literal" content="10"/>
+<meta name="swirec_compile_parser_with_weights" content="1"/>
+<meta name="swirec_combined_slot_confidence_factor" content="0.3"/>
+<meta name="swirec_slot_confidence_norm_factor" content="1.0"/>
+<meta name="swirec_normalize_to_probabilities" content="1"/>
+
+<!--<rule id="Anaphora" scope="public" xml:lang="en-us-textonly">  dummyanaphorarootrule </rule>-->
+
+<rule id="RefThing" scope="public">
+   <tag> REF_THING="" </tag>
+   <one-of>
+      <item> nya </item>
+      <item> itu </item>
+      <item> tu </item>
+      <item> ini </item>
+      <item> ni </item>
+      <item> tersebut </item>
+   </one-of>
+</rule>
+<rule id="RefPlace" scope="public">
+   <tag> REF_PLACE="" </tag>
+   <one-of>
+      <item> di sana </item>
+      <item> di situ </item>
+   </one-of>
+</rule>
+<rule id="RefMoment" scope="public">
+   <tag> REF_MOMENT="MOMENT" </tag>
+   <one-of>
+      <item> kemudian </item>
+   </one-of>
+</rule>
+<rule id="RefPerson" scope="public">
+   <tag> REF_PERSON="" </tag>
+   <one-of>
+     <item> dia </item>
+   </one-of>
+</rule>     
+<rule id="Establishment" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> penubuhan </item>
+   </one-of>
+</rule>
+<rule id="Business" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> perniagaan </item>
+   </one-of>
+</rule>
+<rule id="Restaurant" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> restoran </item>
+   </one-of>
+</rule>
+<rule id="CoffeeShop" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> kedai kopi </item>
+   </one-of>
+</rule>
+<rule id="FastFood" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> makanan segera </item>
+   </one-of>
+</rule>
+<rule id="City" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> bandar </item>
+   </one-of>
+</rule>
+<rule id="Airport" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> lapangan terbang </item>
+   </one-of>
+</rule>
+<rule id="Location" scope="public">
+   <tag> X="PLACE" </tag>
+   <one-of>
+      <item> lokasi </item>
+   </one-of>
+</rule>
+<rule id="Seat" scope="public">
+   <tag> X="THING" </tag>
+   <one-of>
+      <item> tempat duduk </item>
+   </one-of>
+</rule>
+<rule id="Calendarx" scope="public">
+   <tag> X="MOMENT" </tag>
+   <one-of>
+       <item> masa </item>
+       <item> tarikh </item>
+   </one-of>
+</rule>
+
+</grammar>

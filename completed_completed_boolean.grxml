@@ -1,0 +1,134 @@
+<?xml version='1.0'?>
+<grammar xml:lang="ms-MY" version="1.0" root="Boolean" xmlns="http://www.w3.org/2001/06/grammar">
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+	<meta name='swirec_enable_robust_compile' content='1'/>
+	<rule id="Boolean" scope="public">
+	    <one-of>
+		<!-- True utterances -->
+        <item>
+		    <one-of>
+                <item>
+                    <one-of>
+		                <item>ya</item>
+                    </one-of>
+                    <item repeat='0-1'>
+                        <one-of>
+                            <item>benar</item>
+                            <item>semestinya</item>
+                            <item>boleh lah</item>
+                            <item>saya mahu</item>
+                            <item>silakan</item>
+                        </one-of>
+                    </item>
+                </item>
+		        <item>
+		            <item repeat="0-1">
+			            <one-of>
+			                <item>ini</item>
+			                <item>ni</item>
+			                <item>itu</item>
+			                <item>tu</item>
+			                <item>ini adalah</item>
+							<item>ni adalah</item>
+							<item>itu adalah</item>
+							<item>tu adalah</item>
+			            </one-of>
+		            </item>
+		            <item repeat="0-1">
+		                <ruleref uri="#Adverb_Entirely"/>
+		            </item>
+		            <one-of>
+		                <item>betul</item>
+			            <item>tepat</item>
+		                <item>bagus</item>
+			            <item>tiada salah</item>
+			            <item>pada sasaran</item>
+		                <item>ok</item>
+			            <item>okey</item>
+		                <item>baik</item>
+		                <item>sempurna</item>
+			            <item>pasti</item>
+			            <item>perlu</item>
+		                <item>sah</item>
+		            </one-of>
+		        </item>
+				<item>
+					<item>yang</item>
+		            <item>
+			            <one-of>
+			                <item>ini</item>
+			                <item>ni</item>
+			                <item>itu</item>
+			                <item>tu</item>
+			            </one-of>
+		            </item>
+		        </item>
+		        <item>benar</item>
+		        <item>betul sekali</item>
+		        <item>tepat sekali</item>
+		        <item>sememangnya</item>
+		        <item>silakan</item>
+		        <item>itu yang saya maksudkan</item>
+		        <item>tu yang saya maksudkan</item>
+                <item>semestinya</item>
+                <item>baiklah</item>
+                <item>sudah tentu</item>
+	        </one-of>
+	        <tag><![CDATA[BOOLEAN="true";]]></tag>
+	    </item>
+
+	    <!-- False utterances -->
+	    <item>
+	        <one-of>
+		        <item><ruleref uri="#Sentence_Denial"/></item>
+	   	        <item>itu bukan apa yang saya maksudkan</item>
+		        <item>tu bukan apa yang saya maksudkan</item>
+		        <item>bukan</item>
+		        <item>tidak benar</item>
+		        <item>tidak betul</item>
+                <item>tidak tepat</item>
+		        <item>belum lagi</item>
+		        <item>salah</item>
+		        <item>bukan sekarang</item>
+                <item>tak payah</item>
+  	        </one-of>
+	        <tag><![CDATA[BOOLEAN="false";]]></tag>
+	    </item>
+        </one-of>
+        <item repeat="0-1">untuk saya</item>
+    </rule>
+
+    <rule id="Sentence_Denial" scope="public">
+        <item repeat="0-2">
+            <one-of>
+                <item>tak</item>
+                <item>tidak</item>
+				<item>jangan</item>
+                <item>lupakan sahaja</item>
+            </one-of>
+        </item>
+        <one-of>
+            <item>tak</item>
+            <item>tidak</item>
+            <item>jangan</item>
+			<item>lupakan sahaja</item>
+        </one-of>
+        <tag><![CDATA[BOOLEAN="false";]]></tag>
+    </rule>
+
+	<rule id="Adverb_Entirely" scope="public">
+        <one-of>
+            <item>benar-benar</item>
+            <item>sangat</item>
+            <item>sama sekali</item>
+            <item>cukup</item>
+            <item>sepenuhnya</item>
+            <item>semua</item>
+            <item>kesemua</item>
+            <item>seluruh</item>
+			<item>keseluruhan</item>
+        </one-of>
+    </rule>
+
+</grammar>

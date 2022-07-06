@@ -1,0 +1,766 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<grammar xml:lang="ms-MY" version="1.0" root="Duration" xmlns="http://www.w3.org/2001/06/grammar">
+
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+<rule id="Duration" scope="public">
+	<ruleref uri="functions.grxml#functions"/>
+	<ruleref uri="meaning.grxml#meaning"/>
+<tag> DURATION5 = {} </tag> 
+	<one-of>
+		<item><ruleref uri="#DurationAbs"/><tag><![CDATA[if(typeof(DurationAbs.DURATION)!='undefined' && typeof(DurationAbs.DURATION.DURATION_ABS)!='undefined')DURATION={'DURATION_ABS':DurationAbs.DURATION.DURATION_ABS};if(typeof(DurationAbs.DURATION5)!='undefined'){ DURATION5=DurationAbs.DURATION5;}]]></tag></item>
+        <item><ruleref uri="#DurationRel"/><tag><![CDATA[if(typeof(DurationRel.DURATION)!='undefined' && typeof(DurationRel.DURATION.DURATION_REL)!='undefined')DURATION={'DURATION_REL':DurationRel.DURATION.DURATION_REL}]]></tag></item>
+        </one-of>
+        <tag><![CDATA[if(typeof(DURATION)!='undefined'){DURATION=meaning.durationMeaning(DURATION5, DURATION);DURATION_slots=DURATION; DURATION=functions.js2json(DURATION);}]]></tag>
+</rule>                
+
+<rule id="DurationAbs" scope="public">
+    <tag><![CDATA[M="?"]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="functions.grxml#functions"/>
+            <ruleref uri="meaning.grxml#meaning"/>
+<tag> DURATION5 = {} </tag> 
+            <tag><![CDATA[SECOND = "?"; MSECOND = "?"; MINUTE = "?"; HOUR = "?"; DAY = "?"; WEEK = "?"; MONTH = "?"; YEAR = "?"; M = "?"; ]]></tag>
+            <item repeat="0-1">
+                <ruleref uri="#duration_keyword"/>
+            </item>
+            <item repeat="0-1">
+                <ruleref uri="#fuzzy"/>
+                <tag><![CDATA[M = "fuzzy";]]></tag>
+            </item>
+            <one-of>
+                <item>
+                    <ruleref uri="#years"/>
+                     <tag><![CDATA[YEAR = years.YEAR;if(years.M!='undefined' && years.M!='?')M=years.M]]></tag>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#months"/>
+                        <tag><![CDATA[MONTH = months.MONTH;if(months.M!='undefined' && months.M!='?')M=months.M]]></tag>
+                    </item>
+                    <item repeat="0-1">
+                       <item repeat="0-1">dan</item>
+                       <ruleref uri="#weeks"/>
+                       <tag><![CDATA[WEEK =weeks.WEEK; if(weeks.M!='undefined' && weeks.M!='?')M=weeks.M]]></tag>
+                    </item>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#days"/>
+                        <tag><![CDATA[DAY=days.DAY;if(days.M!='undefined' && days.M!='?')M=days.M]]></tag>
+                    </item>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#time"/>
+                        <tag><![CDATA[MINUTE = time.MINUTE; SECOND = time.SECOND; HOUR = time.HOUR; MSECOND = time.MSECOND; if(time.M!='undefined' && time.M!='?')M=time.M]]></tag>
+                    </item>
+                </item>
+                <item>
+                    <ruleref uri="#months"/>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#weeks"/>
+                        <tag><![CDATA[WEEK =weeks.WEEK; if(weeks.M!='undefined' && weeks.M!='?')M=weeks.M]]></tag>
+                    </item>
+                    <item repeat="0-1">
+                       <item repeat="0-1">dan</item>
+                       <ruleref uri="#days"/>
+                       <tag><![CDATA[DAY =days.DAY; if(days.M!='undefined' && days.M!='?')M=days.M]]></tag>
+                    </item>
+                    <item repeat="0-1">
+                       <item repeat="0-1">dan</item>
+                       <ruleref uri="#time"/>
+                       <tag><![CDATA[MINUTE = time.MINUTE; MSECOND = time.MSECOND; SECOND = time.SECOND; HOUR = time.HOUR; ]]></tag>
+                    </item>
+                    <tag><![CDATA[MONTH = months.MONTH; if(months.M!='undefined' && months.M!='?')M=parseInt(months.M) ]]></tag>
+                </item>
+                <item>
+               	    <item><ruleref uri="#Number"/></item>
+                	dan <item repeat="0-1"> satu </item>
+                    <item><ruleref uri="#parts"/></item>
+                    <tag><![CDATA[
+                		if(typeof(parts.HOUR)!='undefined' && parts.HOUR!="?"){ HOUR=parts.HOUR+24*parseInt(Number.MEANING); }
+                		else if(typeof(parts.MONTH)!='undefined' && parts.MONTH!="?" && parts.MONTH=="0.5"){ MONTH=parseInt(Number.MEANING)+0.5; }
+                		else if(typeof(parts.MONTH)!='undefined' && parts.MONTH!="?"){ MONTH=parts.MONTH; YEAR=Number.MEANING;}
+                		else if(typeof(parts.YEAR)!='undefined' && parts.YEAR!="?"){ YEAR=Number.MEANING+parseInt(parts.YEAR); }
+                	]]></tag>	
+                </item>
+                <item>
+                        <item><ruleref uri="#years"/><tag><![CDATA[YEAR=years.NUMBER]]></tag></item>
+                        dan<item repeat="0-1"> satu </item>
+                        <item><ruleref uri="#halves_and_quarters"/></item>
+                        <tag><![CDATA[N=halves_and_quarters.NUMBER;if(N==30){ MONTH=6; }
+                                 else if(N==15){ MONTH=3; }
+                                 else if(N==45){ MONTH=9; }
+                        ]]></tag>
+                </item>
+                <item>
+                        <item><ruleref uri="#months"/><tag><![CDATA[MONTH=Number(months.MONTH)]]></tag></item>
+                        dan <item repeat="0-1"> satu </item>
+                        <item><ruleref uri="#halves_and_quarters"/></item>
+                        <tag><![CDATA[N=halves_and_quarters.NUMBER;
+                              if(N==30){ MONTH=MONTH+Number(.5); }
+                              else if(N==15){ MONTH=MONTH+Number(.25); }
+                              else if(N==45){ MONTH=MONTH+Number(0.75); } 
+                        ]]></tag>
+                </item>
+                <item>
+                        <item><ruleref uri="#weeks"/><tag><![CDATA[WEEK=Number(weeks.WEEK)]]></tag></item>
+                        dan <item repeat="0-1"> satu </item>
+                        <item><ruleref uri="#halves_and_quarters"/></item>
+                        <tag><![CDATA[N=halves_and_quarters.NUMBER;
+                              if(N==30){ WEEK=WEEK+Number(.5); }
+                              else if(N==15){ WEEK=WEEK+Number(.25); }
+                              else if(N==45){ WEEK=WEEK+Number(.75); } 
+                        ]]></tag>
+                </item>
+                <item>
+                        <item><ruleref uri="#days"/><tag><![CDATA[HOUR=days.NUMBER*24]]></tag></item>
+                        dan <item repeat="0-1"> satu </item>
+                        <item><ruleref uri="#halves_and_quarters"/></item>
+                        <tag><![CDATA[N=halves_and_quarters.NUMBER;
+                              if(N==30){ HOUR=HOUR+12; }
+                              else if(N==15){ HOUR=HOUR+6; }
+                              else if(N==45){ HOUR=HOUR+18; } 
+                        ]]></tag>
+                </item>
+
+                <item>
+                    <ruleref uri="#weeks"/>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#days"/>
+                        <item repeat="0-1">
+                            <item repeat="0-1">dan</item>
+                            <ruleref uri="#time"/>
+                            <tag><![CDATA[MINUTE = time.MINUTE; SECOND = time.SECOND; MSECOND = time.MSECOND; HOUR = time.HOUR; if(time.M!='undefined' && time.M!='?')M=time.M]]></tag>
+                        </item>
+                        <tag><![CDATA[DAY =days.DAY; if(days.M!='undefined' && days.M!='?')M=days.M ]]></tag>
+                    </item>
+                    <tag><![CDATA[if(typeof(DAY)!='undefined' && DAY!="?" && DAY>0){DAY=DAY+7*weeks.WEEK;} else {if(typeof(weeks.WEEK)!='string'){DAY=7*weeks.WEEK;} else {WEEK=weeks.WEEK}} if(weeks.M!='undefined' && weeks.M!='?')M=weeks.M ]]></tag>
+                </item>
+                <item>
+                    <ruleref uri="#days"/>
+                    <item repeat="0-1">
+                        <item repeat="0-1">dan</item>
+                        <ruleref uri="#time"/>
+                        <tag><![CDATA[MINUTE = time.MINUTE; SECOND = time.SECOND; MSECOND = time.MSECOND; HOUR = time.HOUR; if(time.M!='undefined' && time.M!='?')M=time.M ]]></tag>
+                    </item>
+                    <tag><![CDATA[DAY =days.DAY; if(days.M!='undefined' && days.M!='?')M=days.M ]]></tag>
+                </item>
+                <item>
+                    <ruleref uri="#time"/>
+                    <tag><![CDATA[MINUTE = time.MINUTE; SECOND = time.SECOND; MSECOND = time.MSECOND; HOUR = time.HOUR; if(time.M!='undefined' && time.M!='?')M=time.M ]]></tag>
+                </item>
+                <item>
+                    <ruleref uri="#parts"/>
+                    <tag><![CDATA[
+                         if(typeof(parts.HOUR)!='undefined' && parts.HOUR!="?"){ HOUR=parts.HOUR; }
+                         else if(typeof(parts.MONTH)!='undefined' && parts.MONTH!="?" && parts.MONTH=="0.5"){ MONTH=parts.MONTH; }
+                         else if(typeof(parts.MONTH)!='undefined' && parts.MONTH!="?"){ MONTH=parts.MONTH; }
+                         else if(typeof(parts.DAY)!='undefined' && parts.DAY!="?"){ DAY=parts.DAY;}
+                         else if(typeof(parts.YEAR)!='undefined' && parts.YEAR!="?"){ YEAR=parts.YEAR; }
+                    ]]></tag>
+
+                </item>
+                <item>
+                    <!-- This is still debatable. -->
+                    <ruleref uri="#always"/>
+                    <tag><![CDATA[HOUR = 24;]]></tag>
+                </item>
+            </one-of>
+            <item repeat="0-1">
+                <ruleref uri="#duration_keyword"/>
+            </item>
+    <tag><![CDATA[ 
+        DURATION5 = {};
+if(typeof(YEAR)!='undefined' && YEAR!="?"){ if(typeof(YEAR)=='string'){DURATION5.YEAR=Number(YEAR);}else{DURATION5.YEAR=YEAR;} if(String(YEAR).indexOf("/") !== -1 ) {DURATION5.YEAR=YEAR;} }
+if(typeof(MONTH)!='undefined' && MONTH!="?"){ if(typeof(MONTH)=='string'){DURATION5.MONTH=Number(MONTH);}else{DURATION5.MONTH=MONTH;} if(String(MONTH).indexOf("/") !== -1 ) {DURATION5.MONTH=MONTH;} }
+if(typeof(WEEK)!='undefined' && WEEK!="?"){ DURATION5.WEEK=WEEK; if(typeof(WEEK)=='string'){DURATION5.WEEK=Number(WEEK);} if(String(WEEK).indexOf("/") !== -1 ) {DURATION5.WEEK=WEEK;} }
+if(typeof(DAY)!='undefined' && DAY!="?"){ DURATION5.DAY=DAY; if(typeof(DAY)=='string'){DURATION5.DAY=Number(DAY);} if(String(DAY).indexOf("/") !== -1 ) {DURATION5.DAY=DAY;} }
+if(typeof(HOUR)!='undefined' && HOUR!="?"){ DURATION5.HOUR=HOUR; if(typeof(HOUR)=='string'){DURATION5.HOUR=Number(HOUR);} if(String(HOUR).indexOf("/") !== -1 ) {DURATION5.HOUR=HOUR;} }
+if(typeof(MINUTE)!='undefined' && MINUTE!="?"){ DURATION5.MINUTE=MINUTE; if(typeof(MINUTE)=='string'){DURATION5.MINUTE=Number(MINUTE);} if(String(MINUTE).indexOf("/") !== -1 ) {DURATION5.MINUTE=MINUTE;} }
+if(typeof(SECOND)!='undefined' && SECOND!="?"){ DURATION5.SECOND=SECOND; if(typeof(SECOND)=='string'){DURATION5.SECOND=Number(SECOND);} if(String(SECOND).indexOf("/") !== -1 ) {DURATION5.SECOND=SECOND;} }
+if(typeof(MILLISECOND)!='undefined' && MILLISECOND!="?"){ DURATION5.MILLISECOND=MILLISECOND; if(typeof(MILLISECOND)=='string'){DURATION5.Number(MILLISECOND)=Number(MILLISECOND);} if(String(MILLISECOND).indexOf("/") !== -1 ) {DURATION5.MILLISECOND=MILLISECOND;} } ]]></tag>
+            <tag><![CDATA[
+ num=-1; 
+
+                          unit = "?";
+                          if(MSECOND != "?"){ 
+                               unit="millisecond"; 
+                               num = MSECOND;
+                               part = "?";
+                               if((YEAR!="?" || MONTH!="?" || WEEK!="?" || DAY!="?" || HOUR!="?" || MINUTE!="?" || SECOND!="?") && String(MSECOND).indexOf(' ')>-1){ 
+                                  MSECOND=String(MSECOND);
+                                  num = parseInt(MSECOND.substring(0,MSECOND.indexOf(' ')));
+                                  part = MSECOND.substring(MSECOND.indexOf(' '));
+                               }                                   
+                               if(YEAR!="?"){ num=num+YEAR*365*24*3600000; }
+                               if(MONTH!='?'){ num=num+MONTH*30*24*3600000; }
+                               if(WEEK!='?'){ num=num+WEEK*7*24*360000; }
+                               if(DAY!='?'){ num=num+DAY*24*3600000; }
+
+                               if(HOUR!='?'){ num=num+HOUR*3600000; }
+                               if(MINUTE!='?'){ num=num+MINUTE*60000; }
+                               if(SECOND!='?'){ num=num+SECOND*1000; }
+                               if(part != "?"){ num = String(num)+part; }
+                               HOUR="?"; MINUTE="?"; SECOND="?"; delete part;
+                               YEAR="?"; MONTH="?"; WEEK!="?"; DAY!="?";
+                          }  
+                          if(SECOND != "?"){ 
+                               unit="second"; 
+                               num = SECOND;
+                               part = "?";
+                               if((YEAR!="?" || MONTH!="?" || WEEK!="?" || DAY!="?" || HOUR!="?" || MINUTE!="?") && String(SECOND).indexOf(' ')>-1){ 
+                                  SECOND=String(SECOND);
+                                  index = SECOND.indexOf(' ');
+                                  num = parseInt(SECOND.substring(0,index));
+                                  part = SECOND.substring(index);
+                                  delete index;
+                               }
+                              
+                               if(YEAR!="?"){ num=num+YEAR*365*24*60*60; }
+                               if(MONTH!='?'){ num=num+MONTH*30*24*60*60; }
+                               if(WEEK!='?'){ num=num+WEEK*7*24*60*60; }
+                               if(DAY!='?'){ num=num+DAY*24*60*60; } 
+
+                               if(HOUR!='?'){ num=num+HOUR*3600; }
+                               if(MINUTE!='?'){ num=num+MINUTE*60; }
+                               if(part != "?"){ num = String(num)+part; }
+                               HOUR="?"; MINUTE="?"; DAY="?"; WEEK="?"; MONTH="?"; YEAR="?"; delete part;
+                          }  
+                          if(MINUTE != "?"){ 
+                               unit="minute"; 
+                               num = MINUTE;
+                               part = "?";
+                               if((YEAR!="?" || MONTH!="?" || WEEK!="?" || DAY!="?" || HOUR!="?") && String(MINUTE).indexOf(' ')>-1){ 
+                                  MINUTE=String(MINUTE); 
+                                  num = parseInt(MINUTE.substring(0,MINUTE.indexOf(' ')));
+                                  part = MINUTE.substring(MINUTE.indexOf(' '));
+                               }
+                               if(YEAR!='?'){ num=num+YEAR*365*24*60; }
+                               if(MONTH!='?'){ num=num+MONTH*30*24*60; }
+                               if(WEEK!='?'){ num=num+WEEK*7*24*60; }
+                               if(DAY!='?'){ num=num+DAY*24*60; } 
+                               if(HOUR!='?'){ num=num+HOUR*60; }
+                               
+                               if(part != "?"){ num = String(num)+part; }
+                               HOUR="?"; DAY="?"; WEEK="?"; MONTH="?"; YEAR="?"; delete part;
+                          }  
+                          if(HOUR != "?"){ 
+                               unit="hour"; 
+                               num = HOUR;
+                               part = "?";
+                               if((MONTH!='?' || DAY!="?" || YEAR!="?") && String(HOUR).indexOf(' ')>-1){ 
+                               
+                                  HOUR=String(HOUR); 
+                                  num = parseInt(HOUR.substring(0,HOUR.indexOf(' ')));
+                                  part = HOUR.substring(HOUR.indexOf(' '));
+                               }
+                               if(YEAR!="?"){ num=num+YEAR*365*24; }
+                               if(MONTH!="?"){ num=num+MONTH*30*24; }
+                               if(WEEK!='?'){ num=num+WEEK*7*24; }
+                               if(DAY!='?'){ num=num+DAY*24; }
+			       if(String(num).indexOf('.') > -1){ num=num*60; unit="minute"; }
+                               if(part != "?"){ num = String(num)+part; }
+                               DAY="?"; WEEK="?"; MONTH="?"; YEAR="?";
+                          }  
+                          if(DAY != "?"){ 
+                               unit="day"; 
+                               num = DAY;
+                               part = "?";
+                               if((YEAR!="?" || MONTH !="?" || WEEK != "?") && String(DAY).indexOf(' ')>-1){ 
+                                  DAY=String(DAY); 
+                                  num = parseInt(DAY.substring(0,DAY.indexOf(' ')));
+                                  part = DAY.substring(DAY.indexOf(' '));
+                               }
+                               if(YEAR!='?'){ num=num+365*YEAR; }
+                               if(MONTH!='?'){ num=num+30*MONTH; }
+                               if(WEEK!='?'){ num=num+7*WEEK; }
+                               if(part != "?"){ num = String(num)+part; }
+                               DAY="?"; YEAR="?"; MONTH="?"; WEEK="?"; 
+                          }   
+                          if(WEEK != "?"){ 
+                               unit="week"; 
+                               num = WEEK;
+                               part = "?";
+                               if((YEAR!="?" || MONTH !="?") && String(WEEK).indexOf(' ')>-1){ 
+                                  WEEK=String(WEEK); 
+                                  num = parseInt(WEEK.substring(0,WEEK.indexOf(' ')));
+                                  part = WEEK.substring(WEEK.indexOf(' '));
+                               }
+                               if(typeof(WEEK)=='number' && parseInt(WEEK)==WEEK){ unit="day"; num=7*WEEK; } 
+                               if(YEAR!='?'){ if(unit=="week"){num=num+YEAR*52;}else if(unit=="day"){num=num+YEAR*365;} }
+                               if(MONTH!='?'){ if(unit=="week"){num=num+MONTH*4.3;}else if(unit=="day"){num=num+MONTH*30;} }
+                               if(part != "?"){ num = String(num)+part; }
+                               YEAR="?"; MONTH="?"; 
+                          }
+                          if(MONTH != "?"){ 
+                               unit="month"; 
+                               num = MONTH;
+                               part = "?";
+                               if(YEAR!="?" && String(MONTH).indexOf(' ')>-1){ 
+                                  MONTH=String(MONTH); 
+                                  num = parseInt(MONTH.substring(0,MONTH.indexOf(' ')));
+                                  part = MONTH.substring(MONTH.indexOf(' '));
+                               }  
+                               if(YEAR!='?'){ num=num+12*YEAR; }
+                               if(part != "?"){ num = String(num)+part; }
+                               YEAR="?"; 
+                          }   
+                          if(YEAR != "?"){ unit="year"; num = YEAR; }
+                         
+                          if(num != -1){
+                             var numStr = String(num);
+                             if(numStr.indexOf('\.')>0 || numStr.indexOf('\/')>0){ num={'DOUBLE':num}; }
+                             else{ num={'CARDINAL_NUMBER':num}; }   
+                          } 
+                          if(unit!="?" && num !=-1){ DURATION = {'DURATION_ABS':{'NUMBER':num, 'UNIT':unit}}; }
+                          if (M != "?" && typeof(DURATION)!='undefined') { DURATION.DURATION_ABS.MODIFIER = M; } 
+                          delete M; delete SECOND; delete MSECOND; delete MINUTE; delete HOUR; delete DAY; delete WEEK; delete MONTH; delete YEAR; 
+                           //DURATION_obj = DURATION; 
+                           //DURATION = functions.js2json(DURATION); 
+                          ]]>
+            </tag>
+        </item>
+    </one-of>
+</rule>
+
+
+<rule id="DurationRel"  scope="public">
+    <item>
+    	<tag><![CDATA[D="?";C=1;M="?"]]></tag>
+           <one-of>
+              <item>
+                 <ruleref uri="#DurationAbs"/>
+                 <tag><![CDATA[ if(typeof(DurationAbs.DURATION)!='undefined' && typeof(DurationAbs.DURATION.DURATION_ABS)!='undefined')D=DurationAbs.DURATION.DURATION_ABS; ]]></tag>
+                 <item>
+                   <one-of>
+                        <item> lebih <tag><![CDATA[C=1;M="INC";]]></tag></item>
+                        <item> lebih lama <tag><![CDATA[C=1;M="INC"]]></tag></item>
+                        <item> kurang <tag><![CDATA[C=-1;M="INC"]]></tag></item>                        
+                   </one-of>
+                 </item>
+              </item>
+              <item>
+	            <one-of>
+	            <item>
+	                <one-of>
+		                <item> lebih <tag><![CDATA[C=1;M="GT"]]></tag></item>
+		                <item> lebih lama <tag><![CDATA[C=1;M="GT"]]></tag></item>
+		                <item> kurang <tag><![CDATA[C=1;M="LT"]]></tag></item>
+		                <item> lagi lama<tag><![CDATA[C=1;M="GT"]]></tag></item>
+		                <item> lagi pendek <tag><![CDATA[C=1;M="LT"]]></tag></item>
+		                <item> lebih pendek <tag><![CDATA[C=1;M="LT"]]></tag></item>
+	                </one-of>
+	                daripada
+	            </item>
+              <item>
+               <one-of>
+                 <item> sekurang-kurangnya <tag><![CDATA[C=1;M="LE"]]></tag></item>
+                 <item> minimum <tag><![CDATA[C=1;M="GE"]]></tag></item>
+                 <item> maksimum <tag><![CDATA[C=1;M="LE"]]></tag></item>
+                 <item> paling banyak <tag><![CDATA[C=1;M="LE"]]></tag></item>
+                 <item> dalam lingkungan <tag><![CDATA[C=1;M="LE"]]></tag></item>
+               </one-of>
+              </item>
+           </one-of>
+	 <ruleref uri="#DurationAbs"/>
+	 <tag><![CDATA[ if(typeof(DurationAbs.DURATION)!='undefined' && typeof(DurationAbs.DURATION.DURATION_ABS)!='undefined')D=DurationAbs.DURATION.DURATION_ABS; ]]></tag>
+              </item>
+      <item> <!-- two more hours -->
+        <one-of>
+           <item>
+             <ruleref uri="#Number"/>
+             <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+           </item>
+           <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+           <item> <item repeat="0-1"> satu </item> pasang <tag><![CDATA[NUMBER = 2;]]></tag></item>
+           <item> beberapa <tag><![CDATA[NUMBER = 3;]]></tag></item>
+        </one-of>
+        <one-of>
+           <item> lebih <tag><![CDATA[C=1;M="GT"]]></tag></item>
+           <item> kurang <tag><![CDATA[C=1;M="LT"]]></tag></item>
+           <item> lebih lama <tag><![CDATA[C=1;M="GT"]]></tag></item>
+           <item> lebih pendek <tag><![CDATA[C=1;M="LT"]]></tag></item>
+        </one-of>
+        <one-of>
+          <item> milisaat <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'millisecond'};]]></tag></item>
+          <item> saat <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'second'};]]></tag></item>
+          <item> minit <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'minute'};]]></tag></item>
+          <item> jam <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'hour'};]]></tag></item>
+          <item> hari <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'day'};]]></tag></item>
+          <item> minggu <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'day'};]]></tag></item>
+          <item> bulan <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'month'};]]></tag></item>
+          <item> tahun <tag><![CDATA[D={'NUMBER':NUMBER,'UNIT':'year'};]]></tag></item>
+        </one-of>  
+      </item>
+    </one-of>
+	<tag><![CDATA[
+                if(C==-1 && typeof(D)!='undefined' && typeof(D.NUMBER)!='undefined'){ 
+                   if(typeof(D.NUMBER.CARDINAL_NUMBER)!='undefined'){ D.NUMBER.CARDINAL_NUMBER=C*D.NUMBER.CARDINAL_NUMBER; } else if (typeof(D.NUMBER.DOUBLE)!='undefined'){ D.NUMBER.DOUBLE=C*D.NUMBER.DOUBLE; } }
+                if(typeof(D)!='undefined'){
+		DURATION = {'DURATION_REL':{'DURATION_ABS':D}};
+                if(M!="?"){ DURATION.DURATION_REL.MODIFIER=M; }
+	}]]></tag>
+    </item>
+</rule>
+
+
+<rule id="fuzzy">
+    <one-of>
+        <item>sekitar</item>
+        <item>hampir</item>
+        <item>mengenai</item>
+    </one-of>
+</rule>
+
+<rule id="duration_keyword">
+    <one-of>
+        <item>semasa</item>
+        <item>sewaktu</item>
+    </one-of>    
+</rule>
+
+<rule id="Number">
+    <one-of>
+       <item><ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[MEANING = parseInt(Number_external.C_NUMBER);]]></tag></item>
+       <item><ruleref uri="double.grxml#Double"/><tag><![CDATA[MEANING = Double.DOUBLE; if(typeof(Double.DOUBLE)=='string' && Double.DOUBLE.indexOf('\/')==-1)MEANING=Number(Double.DOUBLE);]]></tag>
+         <item repeat="0-1">
+              dari
+               <item repeat="0-1"> satu </item>
+         </item>
+       </item>
+    </one-of>
+</rule>
+
+<rule id="years">
+    <tag><![CDATA[YEAR = "?"; M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <!--<item>the<tag><![CDATA[NUMBER = 1;]]></tag></item>-->
+        <item> <item><ruleref uri="#duration_keyword"/> </item> yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <item>pasang<tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item>beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>tahun</item>
+    </one-of>
+    <tag><![CDATA[YEAR = NUMBER;]]></tag>
+</rule>
+
+<rule id="months">
+    <tag><![CDATA[MONTH = "?"; M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+       </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <!--<item>the<tag><![CDATA[NUMBER = 1;]]></tag></item>-->
+       <item> <ruleref uri="#duration_keyword"/> yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa<tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>bulan</item>
+    </one-of>
+    <tag><![CDATA[MONTH = NUMBER;]]></tag>
+</rule>
+
+<rule id="weeks">
+    <tag><![CDATA[WEEK = "?"; M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+       <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <!--<item>the<tag><![CDATA[NUMBER = 1;]]></tag></item>-->
+       <item> <ruleref uri="#duration_keyword"/> yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+       <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+       <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>minggu</item>
+    </one-of>
+    <tag><![CDATA[WEEK = NUMBER;]]></tag>
+</rule>
+
+<rule id="days">
+    <tag><![CDATA[DAY = "?"; M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <!--<item>the<tag><![CDATA[NUMBER = 1;]]></tag></item> -->
+        <item> <ruleref uri="#duration_keyword"/> yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>    
+        <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>hari</item>
+    </one-of>
+    <tag><![CDATA[DAY = NUMBER;]]></tag>
+</rule>
+
+<rule id="parts" scope="public">
+    <tag><![CDATA[HOUR = "?"; DAY = "?"; MONTH = "?"; YEAR = "?"]]></tag>
+<one-of>
+<item>seluruh hari<tag><![CDATA[HOUR = 24; delete DAY; delete MONTH; delete YEAR;]]></tag></item>
+<item>sepanjang hari<tag><![CDATA[HOUR = 24; delete DAY; delete MONTH; delete YEAR;]]></tag></item>
+<item>seharian<tag><![CDATA[HOUR = 24; delete DAY; delete MONTH; delete YEAR;]]></tag></item>
+<item>separuh hari<tag><![CDATA[HOUR = 12; delete DAY; delete MONTH; delete YEAR;]]></tag></item>
+<item>setengah hari<tag><![CDATA[HOUR = 12; delete DAY; delete MONTH; delete YEAR;]]></tag></item>
+<item>seminggu<tag><![CDATA[DAY = 7; delete HOUR; delete MONTH; delete YEAR;]]></tag></item>
+<item>seluruh bulan<tag><![CDATA[MONTH = 1; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>sepanjang bulan<tag><![CDATA[MONTH = 1; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>sebulan<tag><![CDATA[MONTH = 1; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>separuh bulan<tag><![CDATA[MONTH = 0.5; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>setengah bulan<tag><![CDATA[MONTH = 0.5; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>seluruh tahun<tag><![CDATA[YEAR = 1; delete HOUR; delete DAY; delete MONTH;]]></tag></item>
+<item>sepanjang tahun<tag><![CDATA[YEAR = 1;  delete HOUR; delete DAY; delete MONTH;]]></tag></item> 
+<item>setahun<tag><![CDATA[YEAR = 1;  delete HOUR; delete DAY; delete MONTH;]]></tag></item>
+<item>separuh tahun<tag><![CDATA[MONTH = 6; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+<item>setengah tahun<tag><![CDATA[MONTH = 6; delete HOUR; delete DAY; delete YEAR;]]></tag></item>
+</one-of>
+    <!--m repeat="0-1">über</item>-->
+<!--    <tag><![CDATA[if(HOURHOUR = String(HOUR); DAY = String(DAY); MONTH = String(MONTH); YEAR = String(YEAR);]]></tag> -->
+</rule>
+
+<rule id="time">
+    <tag><![CDATA[MSECOND = '?'; SECOND = "?"; MINUTE = "?"; HOUR = "?"; M = "?"]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#hours"/>
+            <tag><![CDATA[HOUR =hours.DURATION; M = hours.M;]]></tag>
+            <item repeat="0-1">
+                <item repeat="0-1">dan</item>
+                <one-of>
+                    <item>
+                        <ruleref uri="#minutes"/>
+                        <tag><![CDATA[MINUTE = minutes.DURATION; M = minutes.M;]]></tag>
+                    </item>
+                    <item>
+                        <ruleref uri="#halves_and_quarters" />
+                        <tag><![CDATA[MINUTE = halves_and_quarters.DURATION;]]></tag>
+                    </item>
+                </one-of>
+            </item>
+            <item repeat="0-1">
+               <item repeat="0-1">dan</item>
+               <ruleref uri="#seconds"/>
+               <tag><![CDATA[SECOND = seconds.DURATION; M = seconds.M;]]></tag>
+            </item>
+            <item repeat="0-1">
+               <item repeat="0-1">dan</item>
+               <ruleref uri="#milliseconds"/>
+               <tag><![CDATA[MSECOND = milliseconds.DURATION; M = milliseconds.M;]]></tag>
+            </item>
+        </item>
+        <item>
+            <ruleref uri="#hours_with_halves_and_quarters"/>
+            <tag><![CDATA[MINUTE = hours_with_halves_and_quarters.MINUTE;]]></tag>
+        </item>
+        <item>
+		 <ruleref uri="#halves_and_quarters" />
+		 <item repeat="0-1"> dari satu jam </item>
+		 <tag><![CDATA[MINUTE = halves_and_quarters.DURATION;]]></tag>
+	</item>	 
+
+        <item>
+            <ruleref uri="#minutes"/>
+            <tag><![CDATA[MINUTE = minutes.DURATION; M = minutes.M;]]></tag>
+            <item repeat="0-1">
+                <item repeat="0-1"> dan </item>
+                <ruleref uri="#seconds"/>
+                <tag><![CDATA[SECOND = seconds.DURATION; M = seconds.M]]></tag>
+            </item>
+            <item repeat="0-1">
+               <ruleref uri="#milliseconds"/>
+               <item repeat="0-1"> dan </item>
+               <tag><![CDATA[MSECOND = milliseconds.DURATION; M = milliseconds.M]]></tag>
+            </item>
+        </item>
+        <item>
+             <ruleref uri="#seconds"/>
+            <tag><![CDATA[SECOND = seconds.DURATION; M = seconds.M]]></tag>
+            <item repeat="0-1">
+               <item repeat="0-1"> dan </item>
+               <ruleref uri="#milliseconds"/>
+               <tag><![CDATA[MSECOND = milliseconds.DURATION; M = milliseconds.M]]></tag>
+            </item>
+        </item>
+          <item>
+             <ruleref uri="#milliseconds"/>
+            <tag><![CDATA[MSECOND = milliseconds.DURATION; M = milliseconds.M]]></tag>
+        </item>
+        <item>
+            <ruleref uri="#halves_and_quarters"/>
+            <tag><![CDATA[MINUTE = halves_and_quarters.DURATION;]]></tag>
+        </item>
+    </one-of>
+</rule>
+
+<rule id="always">
+    <one-of>
+        <item>sepanjang tahun</item>
+        <item>dua puluh empat jam tujuh hari seminggu</item>
+        <item>dua puluh empat tujuh</item>
+        <item>sepanjang masa tiga ratus enam puluh lima hari setahun</item>
+        <item>sentiasa</item>
+    </one-of>
+</rule>
+
+<rule id="hours" scope="public">
+    <tag><![CDATA[M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>dan<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+
+    </one-of>
+    <one-of>
+        <item>j</item>
+        <item>jam</item>
+    </one-of>
+    <tag><![CDATA[DURATION = NUMBER;]]></tag>
+</rule>
+
+<rule id="hours_with_halves_and_quarters">
+    <one-of>
+        <item>
+            <ruleref uri="cardinal_number.grxml#Number_external"/>
+            dan <item repeat="0-1"> satu </item>
+            setengah
+            <tag><![CDATA[MINUTE = 30+parseInt(Number_external.C_NUMBER)*60; ]]></tag>
+        </item>
+        <item>
+            <ruleref uri="cardinal_number.grxml#Number_external"/>
+            suku
+            <tag><![CDATA[MINUTE = 15+parseInt(Number_external.C_NUMBER)*60;]]></tag>
+        </item>
+        <item>
+            <ruleref uri="cardinal_number.grxml#Number_external"/>
+            <one-of>
+	            <item>tiga suku</item>
+	        </one-of>         
+            <tag><![CDATA[MINUTE = 45+parseInt(Number.C_NUMBER)*60;]]></tag>
+        </item>
+        <!--item>
+            <ruleref uri="#hours_with_halves_and_quarters_as_compounds"/>
+            <tag><![CDATA[HOUR = hours_with_halves_and_quarters_as_compounds.HOUR; MINUTE = hours_with_halves_and_quarters_as_compounds.MINUTE;]]></tag>
+        </item-->
+    </one-of>
+    <item repeat="0-1">
+        <one-of>
+		<item>dari satu</item>
+		<item>dari</item>
+ 	</one-of>
+    </item>	
+    <one-of>
+        <item>j</item>
+        <item>jam</item>
+    </one-of>
+</rule>
+
+<rule id="minutes">
+    <tag><![CDATA[M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <!--<item>the<tag><![CDATA[NUMBER = 1;]]></tag></item>-->
+        <item> <ruleref uri="#duration_keyword"/> yang seterusnya<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>m</item>
+        <item>min</item>
+        <item>minit</item>
+    </one-of>
+    <tag><![CDATA[DURATION = NUMBER;]]></tag>
+</rule>
+
+<rule id="seconds">
+    <tag><![CDATA[M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>s</item>
+        <item>saat</item>
+    </one-of>
+    <tag><![CDATA[DURATION = NUMBER;]]></tag>
+</rule>
+
+<rule id="milliseconds">
+    <tag><![CDATA[M = "?";]]></tag>
+    <one-of>
+        <item>
+            <ruleref uri="#Number"/>
+            <tag><![CDATA[NUMBER = Number.MEANING;]]></tag>
+        </item>
+        <item>satu<tag><![CDATA[NUMBER = 1;]]></tag></item>
+        <item> pasang <tag><![CDATA[NUMBER = 2; M = "fuzzy";]]></tag></item>
+        <item> beberapa <tag><![CDATA[NUMBER = 3; M= "fuzzy"]]></tag></item>
+    </one-of>
+    <one-of>
+        <item>ms</item>
+        <item>msaat</item>
+        <item>milisaat</item>
+    </one-of>
+    <tag><![CDATA[DURATION = NUMBER;]]></tag>
+</rule>
+
+
+<rule id="halves_and_quarters">
+    <item repeat="0-1">
+        <one-of>
+            <item>satu</item>
+        </one-of>        
+    </item>
+    <one-of>
+        <item>
+            <one-of>
+                <item>setengah jam</item>
+                <item>separuh jam</item>
+                <item>setengah</item>
+                <item>separuh</item>
+            </one-of>
+            <tag><![CDATA[NUMBER = 30;]]></tag>
+        </item>
+        <item>
+            <item>suku</item>
+            <tag><![CDATA[NUMBER = 15;]]></tag>
+        </item>
+        <item>
+        	<one-of>
+	           <item>tiga suku</item>
+	        </one-of>   
+           <tag><![CDATA[NUMBER = 45;]]></tag>
+        </item>
+    </one-of>
+    <tag><![CDATA[DURATION = NUMBER;]]></tag>
+</rule>
+
+</grammar>

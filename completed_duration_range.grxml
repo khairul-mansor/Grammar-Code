@@ -1,0 +1,118 @@
+<?xml version='1.0'?>
+<grammar xml:lang="ms-MY" version="1.0" root="Duration_range" xmlns="http://www.w3.org/2001/06/grammar">
+         <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+	<rule id="Duration_range" scope="public">
+		<one-of>
+		<item>
+		<ruleref uri="functions.grxml#functions"/>
+		<ruleref uri="meaning.grxml#meaning"/>
+<tag><![CDATA[E5="?"; S5 = "?"]]>  </tag>
+
+		<tag><![CDATA[E="?";S="?";M="?";NUMBER="?"]]></tag>
+		<one-of>
+			<item> <tag><![CDATA[NUMBER="?";]]></tag>
+				antara
+				<one-of>
+					<item> <ruleref uri="duration.grxml#Duration"/> <tag><![CDATA[S={'DURATION':Duration.DURATION_slots};S5={'DURATION_ABS':Duration.DURATION5};;]]></tag> </item>
+					<item> <ruleref uri="cardinal_number.grxml#Number_external"/> <tag><![CDATA[NUMBER=parseInt(Number_external.C_NUMBER);]]></tag></item> 
+				</one-of>
+				hingga
+				<item> <ruleref uri="duration.grxml#Duration"/> <tag><![CDATA[E={'DURATION':Duration.DURATION_slots};E5={'DURATION_ABS':Duration.DURATION5};;
+				   if(NUMBER!="?"){
+                                        S={DURATION:{DURATION_ABS:{NUMBER:{CARDINAL_NUMBER:NUMBER}}}};
+				        if(typeof(E)!='undefined' && typeof(E.DURATION)!='undefined' && typeof(E.DURATION.DURATION_ABS)!='undefined'){
+					  if(typeof(E.DURATION.DURATION_ABS.UNIT)!='undefined'){S.DURATION.DURATION_ABS.UNIT=E.DURATION.DURATION_ABS.UNIT; }
+                                        } 
+                                   }
+			            if(NUMBER!="?"){
+ if(typeof(E5)!='undefined' && typeof(E5.DURATION_ABS)!='undefined'){
+ if(typeof(E5.DURATION_ABS.HOUR)!='undefined'){S5={DURATION_ABS:{HOUR:NUMBER}}; } 
+             if(typeof(E5.DURATION_ABS.MINUTE)!='undefined'){S5={DURATION_ABS:{MINUTE:NUMBER}};} 
+                        if(typeof(E5.DURATION_ABS.SECOND)!='undefined'){S5={DURATION_ABS:{SECOND:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.DAY)!='undefined'){S5={DURATION_ABS:{DAY:NUMBER}};} 
+                         if(typeof(E5.DURATION_ABS.MONTH)!='undefined'){S5={DURATION_ABS:{MONTH:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.YEAR)!='undefined'){S5={DURATION_ABS:{YEAR:NUMBER}};} }} 
+ delete NUMBER;]]></tag>
+			        </item>	
+			</item>	
+
+			<item><tag><![CDATA[NUMBER="?";]]></tag>
+				dari
+				<one-of>
+					<item> <ruleref uri="duration.grxml#Duration"/> <tag><![CDATA[S={'DURATION':Duration.DURATION_slots};S5={'DURATION_ABS':Duration.DURATION5};;]]></tag> </item>
+                                        <item> <ruleref uri="cardinal_number.grxml#Number_external"/> <tag><![CDATA[NUMBER=parseInt(Number_external.C_NUMBER);]]></tag></item>
+				</one-of>
+				sampai
+                                <item> <ruleref uri="duration.grxml#Duration"/> <tag><![CDATA[E={'DURATION':Duration.DURATION_slots};E5={'DURATION_ABS':Duration.DURATION5};;
+                                       if(NUMBER!="?"){
+                                       S={DURATION:{DURATION_ABS:{NUMBER:{CARDINAL_NUMBER:NUMBER}}}};
+                                          if(typeof(E)!='undefined' && typeof(E.DURATION)!='undefined' && typeof(E.DURATION.DURATION_ABS)!='undefined'){
+                                             if(typeof(E.DURATION.DURATION_ABS.UNIT)!='undefined'){S.DURATION.DURATION_ABS.UNIT=E.DURATION.DURATION_ABS.UNIT; }
+                                          } 
+                                       }
+                                        if(NUMBER!="?"){
+ if(typeof(E5)!='undefined' && typeof(E5.DURATION_ABS)!='undefined'){
+ if(typeof(E5.DURATION_ABS.HOUR)!='undefined'){S5={DURATION_ABS:{HOUR:NUMBER}}; } 
+             if(typeof(E5.DURATION_ABS.MINUTE)!='undefined'){S5={DURATION_ABS:{MINUTE:NUMBER}};} 
+                        if(typeof(E5.DURATION_ABS.SECOND)!='undefined'){S5={DURATION_ABS:{SECOND:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.DAY)!='undefined'){S5={DURATION_ABS:{DAY:NUMBER}};} 
+                         if(typeof(E5.DURATION_ABS.MONTH)!='undefined'){S5={DURATION_ABS:{MONTH:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.YEAR)!='undefined'){S5={DURATION_ABS:{YEAR:NUMBER}};} }} 
+ delete NUMBER;]]></tag>
+				</item>									
+			</item>	
+
+               <!--<item><tag><![CDATA[C=1;]]></tag>
+               <one-of>
+                 <item>
+                    <one-of>
+                      <item> more <tag><![CDATA[C=1;]]></tag></item>
+                      <item> longer <tag><![CDATA[C=1;]]></tag></item>
+                      <item> a little more <tag><![CDATA[C=1;]]></tag></item>
+                      <item> less <tag><![CDATA[C=-1;]]></tag></item>
+                      <item> a little less <tag><![CDATA[C=-1;]]></tag></item>
+                      <item> shorter <tag><![CDATA[C=-1;]]></tag></item>
+                      <item> no more <tag><![CDATA[C=-1;]]></tag></item>
+                    </one-of>
+                    than
+                  </item>
+                  <item>
+                    <one-of>
+                       <item> at least <tag><![CDATA[C=1;]]></tag></item>
+                       <item> minimum <tag><![CDATA[C=1;]]></tag></item>
+                       <item> maximum <tag><![CDATA[C=-1;]]></tag></item>
+                       <item> at most <tag><![CDATA[C=-1;]]></tag></item>
+                    </one-of>
+                  </item>
+                 </one-of> 
+                 <item> <ruleref uri="duration.grxml#Duration"/> <tag><![CDATA[
+                    if(C==1 && typeof(Duration.DURATION_slots)!='undefined' && typeof(Duration.DURATION_slots.DURATION_ABS)!='undefined'){ S= Duration.DURATION_slots; S.DURATION_ABS.MODIFIER="fuzzy"; delete E; }
+                    else if(C==-1 && typeof(Duration.DURATION_slots)!='undefined' && typeof(Duration.DURATION_slots.DURATION_ABS)!='undefined'){ E= Duration.DURATION_slots; E.DURATION_ABS.MODIFIER="fuzzy";delete S; }
+                    delete C; if(NUMBER!="?"){
+ if(typeof(E5)!='undefined' && typeof(E5.DURATION_ABS)!='undefined'){
+ if(typeof(E5.DURATION_ABS.HOUR)!='undefined'){S5={DURATION_ABS:{HOUR:NUMBER}}; } 
+             if(typeof(E5.DURATION_ABS.MINUTE)!='undefined'){S5={DURATION_ABS:{MINUTE:NUMBER}};} 
+                        if(typeof(E5.DURATION_ABS.SECOND)!='undefined'){S5={DURATION_ABS:{SECOND:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.DAY)!='undefined'){S5={DURATION_ABS:{DAY:NUMBER}};} 
+                         if(typeof(E5.DURATION_ABS.MONTH)!='undefined'){S5={DURATION_ABS:{MONTH:NUMBER}};} 
+ if(typeof(E5.DURATION_ABS.YEAR)!='undefined'){S5={DURATION_ABS:{YEAR:NUMBER}};} }} 
+ delete NUMBER;
+                    ]]></tag>
+                  </item>
+              </item>-->
+
+			</one-of>
+			<tag><![CDATA[
+			if(typeof(E)!='undefined' && E != "?" && typeof(S)!='undefined' && S != "?"){DURATION_RANGE = {DURATION_RANGE_START:S, DURATION_RANGE_END:E};} 
+			else if(typeof(S)!='undefined' && S != "?"){DURATION_RANGE = {DURATION_RANGE_START:S}; } 
+			else if(typeof(E)!='undefined' && E != "?"){DURATION_RANGE = {DURATION_RANGE_END:E}; } 
+			if(typeof(E5)!='undefined' && E5 != "?" && typeof(S5)!='undefined' && S5 != "?"){DURATION_RANGE5 = {DURATION_RANGE_START:S5, DURATION_RANGE_END:E5};} else if(typeof(S5)!='undefined' && S5 != "?"){DURATION_RANGE5 = {DURATION_RANGE_START:S5}; }else if(typeof(E5)!='undefined' && E5 != "?"){DURATION_RANGE5 = {DURATION_RANGE_END:E5}; };delete E; delete S; delete M;
+			DURATION_RANGE=meaning.duration_rangeMeaning(DURATION_RANGE5, DURATION_RANGE);DURATION_RANGE=functions.js2json(DURATION_RANGE);]]></tag> 
+			</item>
+		</one-of>
+	</rule>
+
+</grammar>

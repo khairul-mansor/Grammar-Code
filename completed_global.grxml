@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<grammar root="Global" version="1.0" xml:lang="ms-MY" tag-format="swi-semantics/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/06/grammar">
+<!-- Copyright 2006. Nuance Communications Inc. All Rights Reserved.
+Use of the this software is subject to certain restrictions and
+limitations set forth in a license agreement entered into between
+Nuance Communications, Inc. and Licensee. Refer to the Nuance
+License Agreement for license use rights and restrictions.-->
+<meta name='swirec_optimization' content='12'/>
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_max_parses_per_literal' content='10'/>
+<meta name="swirec_compile_parser_with_weights" content="1"/>
+
+<rule id="Global" scope="public">
+ <one-of>
+   <item> 
+     <one-of>
+       <item> bantu </item>
+       <item> apa yang saya boleh katakan </item>
+     </one-of>
+     <tag><![CDATA[GLOBAL="help"]]></tag>
+   </item>
+   <item> 
+     <one-of>
+       <item> selamat tinggal </item>
+       <item> 
+         <one-of>
+           <item> daftar </item>
+           <item> log </item>
+         </one-of>
+       keluar 
+       </item>
+     </one-of>
+     <tag><![CDATA[GLOBAL="goodbye"]]></tag>
+   </item>
+   <item> 
+     <one-of>
+       <item> daftar </item>
+       <item> log </item>
+     </one-of>
+   
+     <one-of>
+       <item> masuk </item>
+       <item> dalam </item>
+     </one-of>
+     <tag><![CDATA[GLOBAL="login"]]></tag>
+   </item>
+
+   <item>
+      <one-of>
+         <item>
+             ulang
+             <item repeat="0-1"><one-of> <item> ini </item> <item> itu </item> </one-of></item>
+             <item repeat="0-1"> semula </item>
+         </item>
+         <item> apa itu </item>
+         <item> apa yang kamu katakan </item>
+         <item> katakan itu semula </item>
+         <item> katakan ini semula </item>
+         <item> maaf </item>
+      </one-of>
+      <tag><![CDATA[GLOBAL="repeat"]]></tag>
+   </item>
+
+
+   <item>      
+      <item repeat="0-1"> 
+         <one-of>
+            <item> pergi </item>
+            <item> tukar </item>
+         </one-of>
+      </item>
+      balik 
+      <tag><![CDATA[GLOBAL="back"]]></tag>
+   </item>
+
+   <item> 
+     batal
+     <item repeat="0-1">
+         <one-of>
+           <item> semua </item>
+           <item> kesemuanya </item>
+         </one-of>
+     </item>
+     <tag><![CDATA[GLOBAL="cancel"]]></tag>
+   </item>
+
+   <item>
+      set semula
+     <tag><![CDATA[GLOBAL="reset"]]></tag>
+   </item>
+ </one-of>
+</rule>
+
+</grammar>

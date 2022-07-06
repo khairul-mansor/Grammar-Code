@@ -1,0 +1,78 @@
+<?xml version='1.0' ?>
+<grammar xml:lang="ms-MY" version="1.0" root="AllUnits" xmlns="http://www.w3.org/2001/06/grammar">	
+        <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+	<rule id="AllUnits" scope="public">
+	    <one-of>
+                <item>
+            	  <ruleref uri="#Temperature_units"/>
+            	  <tag><![CDATA[UNIT=Temperature_units.UNIT;]]></tag>
+                </item>
+                <item>
+                  <ruleref uri="#Length_units"/>
+                  <tag><![CDATA[UNIT=Length_units.UNIT;]]></tag>
+                </item>
+                <item>
+                   <ruleref uri="#Weight_units"/>
+                   <tag><![CDATA[UNIT=Weight_units.UNIT;]]></tag>
+                </item>
+      </one-of>
+  </rule>
+
+  <rule id="Temperature_units" scope="public">
+	       <one-of>
+	         <item> celsius <tag><![CDATA[UNIT="C";]]></tag></item>
+	         <item> centigrade <tag><![CDATA[UNIT="C";]]></tag></item>
+	         <item> c <tag><![CDATA[UNIT="C";]]></tag></item>
+	         <item> fahrenheit <tag><![CDATA[UNIT="F";]]></tag></item>
+	         <item> f <tag><![CDATA[UNIT="F";]]></tag></item>
+	         <item> kelvin <tag><![CDATA[UNIT="K";]]></tag></item>
+	         <item> k <tag><![CDATA[UNIT="K";]]></tag></item>
+	       </one-of>    
+	</rule>
+
+        <rule id="Length_units" scope="public">
+               <one-of>
+                 <item> meter <tag><![CDATA[UNIT="m";]]></tag></item>
+                 <item> m <tag><![CDATA[UNIT="m";]]></tag></item>
+                 <item> sentimeter <tag><![CDATA[UNIT="cm";]]></tag></item>
+                 <item> cm <tag><![CDATA[UNIT="cm";]]></tag></item>
+                 <item> kilometer <tag><![CDATA[UNIT="km";]]></tag></item>
+                 <item> km <tag><![CDATA[UNIT="km";]]></tag></item>
+                 <item> batu <tag><![CDATA[UNIT="mile";]]></tag></item>
+                 <item> mi <tag><![CDATA[UNIT="mile";]]></tag></item>
+                 <item> kaki <tag><![CDATA[UNIT="foot";]]></tag></item>
+                 <item> ft <tag><![CDATA[UNIT="foot";]]></tag></item>
+                 <item> inci <tag><![CDATA[UNIT="inch";]]></tag></item>
+                 <item> in <tag><![CDATA[UNIT="inch";]]></tag></item>
+                 <item> yard <tag><![CDATA[UNIT="yard";]]></tag></item>
+                 <item> yd <tag><![CDATA[UNIT="yard";]]></tag></item>
+               </one-of>    
+        </rule>
+
+        <rule id="Weight_units" scope="public">
+               <one-of>
+                 <item> kilogram <tag><![CDATA[UNIT="kg";]]></tag></item>
+                 <item> kg <tag><![CDATA[UNIT="kg";]]></tag></item>
+                 <item> kilo <tag><![CDATA[UNIT="kg";]]></tag></item>
+                 <item> gram <tag><![CDATA[UNIT="gr";]]></tag></item>
+                 <item> gr <tag><![CDATA[UNIT="gr";]]></tag></item>
+                 <item> g <tag><![CDATA[UNIT="gr";]]></tag></item>
+                 <item> paun <tag><![CDATA[UNIT="lb";]]></tag></item>
+                 <item> lb <tag><![CDATA[UNIT="lb";]]></tag></item>
+               </one-of>    
+        </rule>
+        
+        <rule id="Volume_units" scope="public">
+            <one-of>
+                <item>liter<tag><![CDATA[UNIT="l";]]></tag></item>
+                <item>mililiter<tag><![CDATA[UNIT="ml";]]></tag></item>
+                <item>cecair auns<tag><![CDATA[UNIT="fl_oz";]]></tag></item>
+                <item>pain<tag><![CDATA[UNIT="pt";]]></tag></item>
+                <item>kuart<tag><![CDATA[UNIT="qt";]]></tag></item>
+                <item>galon<tag><![CDATA[UNIT="gal";]]></tag></item>
+            </one-of>
+        </rule>
+</grammar>

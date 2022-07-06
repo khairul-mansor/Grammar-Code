@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<grammar xml:lang="ms-MY" version="1.0" root="QuantityRel" xmlns="http://www.w3.org/2001/06/grammar">
+        <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+    <rule id="QuantityRel" scope="public">
+	<ruleref uri="functions.grxml#functions"/>
+	<ruleref uri="meaning.grxml#meaning"/>
+	<tag><![CDATA[QUANTITY_REL={}; M="?";A="?";]]></tag>
+	<one-of>
+		<item>
+	     <one-of>
+       		<item>
+	         <one-of>
+        	   <item>tiada</item>
+        	   <item>tak ada</item>
+        	   <item>tidak ada</item>			   			   
+	         </one-of>
+        	 <tag><![CDATA[QUANTITY_REL={'MODIFIER':'NONE'};]]></tag>
+	       	</item>
+       		<item>
+	         <one-of>
+        	   <item>sedikit</item>
+        	   <item>sikit</item>			   
+			   <item>min</item>
+	    	   <item>minimum</item>
+	    	   <item>minima</item>			   
+        	 </one-of>
+	         <tag><![CDATA[QUANTITY_REL={'MODIFIER':'GE'};]]></tag>
+       		</item>
+	       	<item>
+        	 <one-of>
+	           <item>beberapa</item>
+	           <item>sesetengah</item>
+        	 </one-of>
+	         <tag><![CDATA[QUANTITY_REL={'MODIFIER':'SOME'};]]></tag>
+       		</item>
+	       	<item>
+	         <one-of>	
+        	  <item>banyak</item>
+		  	  <item>kebanyakan</item>
+        	  <item>kebanyakan besar</item>
+        	  <item>sebilangan besar</item>
+        	  <item>sejumlah besar</item>
+	         </one-of>
+        	 <tag><![CDATA[QUANTITY_REL={'MODIFIER':'LOTS'};]]></tag> 
+	       	</item>
+			<item>
+	         <one-of>
+        	   <item> maksimum </item>
+	           <item> maksima </item>
+        	 </one-of>
+	         <tag><![CDATA[ QUANTITY_REL={'MODIFIER':'LE'};]]></tag>
+       		</item>
+                <item>
+                   <one-of>
+                       <item> lagi <tag><![CDATA[M='GT';]]></tag></item>
+                       <item> lebih <tag><![CDATA[M='GT';]]></tag></item>					   
+                       <item> kurang <tag><![CDATA[M='LT';]]></tag></item>
+                   </one-of>
+                   <tag><![CDATA[ QUANTITY_REL={'MODIFIER':M};]]></tag>
+                </item>
+				<item>
+                	<one-of>
+                           <item>
+                             <one-of>
+                                <item> lagi <tag><![CDATA[M='GT';]]></tag></item>
+                                <item> lebih <tag><![CDATA[M='GT';]]></tag></item>								
+                                <item> kurang <tag><![CDATA[M='LT';]]></tag></item>
+                             </one-of>
+                             daripada
+                           </item>
+                           <item> paling banyak <tag><![CDATA[M='LE';]]></tag></item>
+                           <item> paling lebih <tag><![CDATA[M='LE';]]></tag></item>						   
+                           <item> dengan maksimum <tag><![CDATA[M='LE';]]></tag></item>
+                           <item> dengan maksima <tag><![CDATA[M='LE';]]></tag></item>						   
+                           <item> sekurang-kurangnya <tag><![CDATA[M='GE';]]></tag></item>
+                           <item> paling kurang <tag><![CDATA[M='GE';]]></tag></item>						   
+                           <item> dengan minimum <tag><![CDATA[M='GE';]]></tag></item>
+                           <item> dengan minima <tag><![CDATA[M='GE';]]></tag></item>						   
+	                </one-of>
+                    <one-of>
+                              <item><ruleref uri="cardinal_number.grxml#Number_external"/> <tag><![CDATA[A= {'CARDINAL_NUMBER': parseInt(Number_external.C_NUMBER)}; ]]></tag></item>
+                              <item><ruleref uri="double.grxml#Double"/> <tag><![CDATA[A= {'DOUBLE': Double.DOUBLE }; ]]></tag></item>
+                    </one-of>
+                    <tag><![CDATA[QUANTITY_REL={'MODIFIER':M}; if(typeof(A)!=undefined && A!="?"){QUANTITY_REL={'MODIFIER':M, 'QUANTITY_ABS':{'NUMBER':A}};}]]></tag>
+                </item>
+				<item>
+                    <one-of>
+                              <item><ruleref uri="cardinal_number.grxml#Number_external"/> <tag><![CDATA[A= {'CARDINAL_NUMBER': parseInt(Number_external.C_NUMBER)}; ]]></tag></item>
+                              <item><ruleref uri="double.grxml#Double"/> <tag><![CDATA[A= {'DOUBLE': Double.DOUBLE }; ]]></tag></item>
+                    </one-of>
+                	<one-of>
+                           <item> paling banyak <tag><![CDATA[M='LE';]]></tag></item>
+                           <item> maksimum <tag><![CDATA[M='LE';]]></tag></item>
+                           <item> maksima <tag><![CDATA[M='LE';]]></tag></item>						   
+                           <item> sekurang-kurangnya <tag><![CDATA[M='GE';]]></tag></item>
+                           <item> paling kurang <tag><![CDATA[M='GE';]]></tag></item>
+                           <item> minimum <tag><![CDATA[M='GE';]]></tag></item>
+                           <item> minima <tag><![CDATA[M='GE';]]></tag></item>						   
+	                </one-of>
+                    <tag><![CDATA[QUANTITY_REL={'MODIFIER':M}; if(typeof(A)!=undefined && A!="?"){QUANTITY_REL={'MODIFIER':M, 'QUANTITY_ABS':{'NUMBER':A}};}]]></tag>
+                </item>
+         </one-of>    
+        </item>       
+    </one-of>
+    <tag><![CDATA[QUANTITY_REL=meaning.quantity_relMeaning(QUANTITY_REL);QUANTITY_REL=functions.js2json(QUANTITY_REL); QUANTITY_REL_obj=QUANTITY_REL; delete A; delete M;]]></tag>
+    </rule>
+</grammar>
+

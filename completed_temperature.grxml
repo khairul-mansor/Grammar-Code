@@ -1,0 +1,108 @@
+<?xml version='1.0' ?>
+<grammar xml:lang="ms-MY" version="1.0" root="Temperature" xmlns="http://www.w3.org/2001/06/grammar">	
+        <meta name='swirec_enable_robust_compile' content='1'/>
+	<meta name="swirec_normalize_to_probabilities" content="1"/>
+	<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+	<rule id="Temperature" scope="public">
+	<ruleref uri="functions.grxml#functions"/>
+	<ruleref uri="meaning.grxml#meaning"/>        
+	<one-of>
+            <item>
+            	<ruleref uri="#Temperature_inner"/>
+            	<tag><![CDATA[TEMPERATURE=Temperature_inner.TEMP; TEMPERATURE=meaning.temperatureMeaning(TEMPERATURE);TEMPERATURE=functions.js2json(TEMPERATURE)]]></tag>
+            </item>
+   </one-of>
+   </rule>
+
+	<rule id="Temperature_inner">
+	    <tag><![CDATA[D=0;U="UNK";C=1;]]></tag>
+	    <one-of>
+	       <item>
+	         <item repeat="0-1"> 
+	             <one-of>
+	               <item> tolak <tag><![CDATA[C=-1;]]></tag></item>
+	               <item> tambah </item>
+	             </one-of>
+	         </item>      
+	         <one-of>
+	            <item><ruleref uri="cardinal_number.grxml#Number_external"/><tag><![CDATA[D=parseInt(Number_external.C_NUMBER)]]></tag></item>
+	            <item><ruleref uri="double.grxml#Double"/><tag><![CDATA[D=Number(Double.DOUBLE)*C;]]></tag></item>
+	         </one-of>
+	         <one-of>
+	           <item> darjah </item>
+	         </one-of>
+	         <!-- scale may be omitted -->
+	         <item repeat="0-1">       
+	            <ruleref uri="units.grxml#Temperature_units"/>
+	            <tag><![CDATA[U=Temperature_units.UNIT;]]></tag>
+	         </item>
+                 <item repeat="0-1"> 
+                     <one-of>
+                        <item> di bawah beku <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di bawah sifar <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di atas sifar </item>
+                     </one-of>
+                 </item>
+
+	       </item>
+
+               <!-- twenty celsius / twenty below zero -->
+               <item>
+                 <item repeat="0-1">
+                     <one-of>
+                       <item> tolak <tag><![CDATA[C=-1;]]></tag></item>
+                       <item> tambah </item>
+                     </one-of>
+                 </item>
+                 <one-of>
+                    <item><ruleref uri="cardinal_number.grxml#OneToFourDigitNumber"/><tag><![CDATA[D=parseInt(OneToFourDigitNumber.NUMBER)]]></tag></item>
+                    <item><ruleref uri="double.grxml#Double"/><tag><![CDATA[D=Number(Double.DOUBLE)*C;]]></tag></item>
+                 </one-of>
+                 <item>
+                    <ruleref uri="units.grxml#Temperature_units"/>
+                    <tag><![CDATA[U=Temperature_units.UNIT;]]></tag>
+                 </item>
+                 <item repeat="0-1">
+                     <one-of>
+                        <item> di bawah beku <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di bawah sifar <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di atas sifar </item>
+                     </one-of>
+                 </item>
+               </item>
+
+              <item>
+                <one-of>
+                    <item><ruleref uri="cardinal_number.grxml#OneToFourDigitNumber"/><tag><![CDATA[D=parseInt(OneToFourDigitNumber.NUMBER)]]></tag></item>
+                    <item><ruleref uri="double.grxml#Double"/><tag><![CDATA[D=Number(Double.DOUBLE)*C;]]></tag></item>
+                </one-of>
+                <one-of>
+                        <item> di bawah beku <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di bawah sifar <tag><![CDATA[if(D>0)D=-1*D;]]></tag></item>
+                        <item> di atas sifar </item>
+                </one-of>
+              </item>
+
+
+	       <item>
+	          <ruleref uri="units.grxml#Temperature_units"/>
+	          <tag><![CDATA[U=Temperature_units.UNIT;]]></tag>
+                  <one-of>
+                     <item><ruleref uri="cardinal_number.grxml#OneToFourDigitNumber"/><tag><![CDATA[D=parseInt(OneToFourDigitNumber.NUMBER)]]></tag></item>
+                     <item><ruleref uri="double.grxml#Double"/><tag><![CDATA[D=Number(Double.DOUBLE)]]></tag></item>
+                  </one-of>
+          </item>
+       </one-of>
+    <tag><![CDATA[
+           if(typeof(D)!='undefined'){
+               var numStr = String(D);
+               if(numStr.indexOf('\.')>0 || numStr.indexOf('\/')>0){ D={DOUBLE:D}; }
+               else{ D={CARDINAL_NUMBER:parseInt(D)}; }  
+            }
+            TEMP = {NUMBER:D};           
+            if(U!="UNK"){ TEMP.UNIT=U;} ]]></tag>
+
+	</rule>       
+
+</grammar>

@@ -1,0 +1,1254 @@
+<?xml version="1.0"?>
+<grammar root="DateAndTimeOptGerLead" version="1.0" xml:lang="ms-MY" tag-format="swi-semantics/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/2001/06/grammar">
+<!-- Copyright 2006. Nuance Communications Inc. All Rights Reserved.
+Use of the this software is subject to certain restrictions and
+limitations set forth in a license agreement entered into between
+Nuance Communications, Inc. and Licensee. Refer to the Nuance
+License Agreement for license use rights and restrictions.-->
+
+<meta name='swirec_enable_robust_compile' content='1'/>
+<meta name='swirec_compile_parser_with_weights' content='1'/>
+
+<!-- the rule name is misleading: these are not really ranges -->
+<rule id="RelativeTimeRange" scope="public">    
+   <one-of>
+     <item> sekarang <tag><![CDATA[XY = {'TIME' : {'TIME_REL': {'STEP':'hour','INCREMENT':0}}}]]></tag></item>	
+     <item> <ruleref uri="calendar_commons.grxml#RelativeTime"/> <tag><![CDATA[XY= {'TIME':RelativeTime.XY}]]></tag>dari sekarang </item>
+     <!-- in two hours ; in three minutes after that -->
+     <item> dalam  <!--  <item repeat="0-1"> the next </item> -->
+	 <ruleref uri="calendar_commons.grxml#RelativeTime"/> <tag><![CDATA[XY= {'TIME':RelativeTime.XY}]]></tag></item>
+
+        
+	<item> <!-- since two hours ; two hours from now -->
+	<tag><![CDATA[INC=0;XY="";]]></tag>
+  	  <item repeat="0-1">
+             <one-of>
+               <item> dari </item>
+               <item> selepas </item>
+               <item> sejak </item>
+             </one-of>
+           </item>
+	   <item>
+              <ruleref uri="calendar_commons.grxml#RelativeTime"/> 
+	      <tag><![CDATA[if(RelativeTime.XY!=undefined){XY=RelativeTime.XY;} 
+	                 if(RelativeTime.XY.TIME_REL != undefined && RelativeTime.XY.TIME_REL.INCREMENT!=undefined){
+	                   INC = RelativeTime.XY.TIME_REL.INCREMENT;
+	      }]]></tag>
+            </item>
+
+	    <item> 
+                  <one-of>
+			<item> kemudian </item>
+			<item> dari sekarang </item>
+			<item> sejak itu </item>
+                        <item> selepas <item repeat="0-1"> itu </item> </item>
+			<item> sebelum <tag><![CDATA[INC=-INC;]]></tag>
+                           <item repeat="0-1"> itu </item>
+                        </item>
+			<item> lebih awal <tag><![CDATA[INC=-INC;]]></tag> </item>
+                        <item> lalu <tag><![CDATA[INC=-INC;]]></tag></item>
+		     </one-of>		
+           </item>
+	</item>
+   </one-of>
+    <tag><![CDATA[
+        if(typeof(INC)!='undefined' && typeof(XY.TIME_REL)!='undefined'){XY.TIME_REL.INCREMENT=INC ; XY = {'TIME': XY} ; }
+  ]]></tag>
+
+</rule>
+
+
+<rule id="RelativeTimeWithAnchor" scope="public">
+      <item>
+              <ruleref uri="calendar_commons.grxml#RelativeTime"/>
+              <tag><![CDATA[if(RelativeTime.XY!=undefined){XY=RelativeTime.XY;} 
+                         if(RelativeTime.XY.TIME_REL != undefined && RelativeTime.XY.TIME_REL.INCREMENT!=undefined){
+                           INC = RelativeTime.XY.TIME_REL.INCREMENT;
+              }]]></tag>
+      </item>
+      <one-of>
+          <item> selepas </item>
+          <item> sebelum <tag><![CDATA[INC=-INC;]]></tag></item>
+      </one-of>
+            <ruleref uri="#TimeAbs"/><tag><![CDATA[R=TimeAbs.XY;]]></tag>
+                            <tag><![CDATA[
+                   if(typeof(R)!='undefined' && R!="XY"){ 
+                       H="?"; M="?"; AP="?";
+                       if(typeof(R.TIME_ABS)!='undefined'){
+                         if(typeof(R.TIME_ABS.AMPM)!='undefined'){ AP=R.TIME_ABS.AMPM; }
+                         if(typeof(R.TIME_ABS.HOUR)!='undefined'){ H=R.TIME_ABS.HOUR; }
+                         if(typeof(R.TIME_ABS.MINUTE)!='undefined'){ M=R.TIME_ABS.MINUTE; }
+                       }
+                       if(XY.TIME_REL.STEP=='hour'){ 
+                         H=H+INC;
+                         if(H>12){ 
+                            H=H-12;
+                            if(typeof(AP)!='undefined' && AP!="?"){ if(AP=='am'){ AP='pm'; }else if(AP=='pm'){ AP='am'; } } else {AP='pm';} 
+                         }
+                         else if(H<0){ H=H+12; 
+                            if(typeof(AP)!='undefined' && AP!="?"){ if(AP=='am'){ AP='pm'; }else if(AP=='pm'){ AP='am'; } } else {AP='pm';} 
+                         }  
+                         if(typeof(AP)!='undefined' && AP!="?" && H==12){ if(AP=='am'){ AP='pm'; } else if(AP='pm'){ AP='am'; } }
+                         if(typeof(M)!='undefined' && M!="?"){ XY={'TIME':{'TIME_ABS':{'HOUR':H, 'MINUTE':M}}}; }
+                         else{ XY={'TIME':{'TIME_ABS':{'HOUR':H}}}; }
+                         if(typeof(AP)!='undefined' && AP!="?"){ XY.TIME.TIME_ABS.AMPM=AP; }
+                      }
+                      else if(XY.TIME_REL.STEP=='minute'){
+                            COEF=INC;
+                            C=1;
+                            if(INC<0){ COEF=COEF*-1; C=-1; }
+                            HC=parseInt(COEF/60);
+                            MC=COEF-HC*60;
+                            if(typeof(M)=='undefined' || M=="?"){ M=0; }
+                            if(INC<0){ COEF=COEF*-1; C=-1; HC=HC*C; }                            
+                            if(typeof(M)!='undefined' && M!="?"){
+                                  H=H+HC;
+                                  if(MC<M){ 
+                                    if(C==-1){ M=M-MC; if(M<0){M=M+60;H=H-1; } }
+                                     else {M=M+MC; if(M>60){M=M-60; H=H+1;} }
+                                   }
+                                   else{
+                                    if(C==-1){ M=M-MC; if(M<0){M=M+60;H=H-1;} }else {M=M+MC; if(M>60){M=M-60; H=H+1;} } 
+                                   }
+                                   if(H<0){ 
+                                      H=H*-1; 
+                                      if(typeof(AP)!='undefined' && AP!="?"){ if(AP=='am'){ AP='pm'; }else if(AP=='pm'){ AP='am'; } }
+                                   }
+                                   if(H>12){ 
+                                    H=H-12;
+                                    if(typeof(AP)!='undefined' && AP!="?"){ 
+                                      if(AP=='am'){ AP='pm'; }else if(AP=='pm'){ AP='am'; } } else {AP='pm';} 
+                                   }
+                                   else if(H<0){ H=H+12; 
+                                      if(typeof(AP)!='undefined' && AP!="?"){ if(AP=='am'){ AP='pm'; }else if(AP=='pm'){ AP='am'; } } else {AP='pm';} 
+                                  }
+                                  if(typeof(AP)!='undefined' && AP!="?" && H==12){ if(AP=='am'){ AP='pm'; } else if(AP='pm'){ AP='am'; } }
+                                  if(typeof(M)!='undefined' && M!="?" && M!='0'){
+                                         XY={'TIME':{'TIME_ABS':{'HOUR':H, 'MINUTE':M}}};
+                                  } else { XY={'TIME':{'TIME_ABS':{'HOUR':H}}}; }
+                                  if(typeof(AP)!='undefined' && AP!="?"){ XY.TIME.TIME_ABS.AMPM=AP; }
+                                  } 
+                                }
+                             }
+                         }
+                      }
+                   }
+                   else if (typeof(INC)!='undefined' && typeof(XY.TIME_REL)!='undefined'){
+                       XY.TIME_REL.INCREMENT=INC ; XY = {'TIME': XY} ; 
+                   }
+                ]]></tag>
+   </rule>
+
+<rule id="TimeRange" scope="public"><tag><![CDATA[XY=new Object()]]></tag><ruleref uri="functions.grxml"/>
+   <one-of>
+     <item> <ruleref uri="#RelativeTimeRange"/> <tag><![CDATA[XY=RelativeTimeRange.XY;]]></tag></item>
+     <item> <ruleref uri="#VagueTime"/> <tag><![CDATA[XY=VagueTime.XY; ]]></tag></item>
+   </one-of>
+  <tag><![CDATA[if(typeof(XY)!='undefined'){if(typeof(XY.TIME)!='undefined'){TIME=functions.js2json(XY.TIME );}}]]></tag> </rule>
+
+<rule id="LaterRelativeDate" scope="public"><tag><![CDATA[R="?"; P="?"; D="?"; C="?"; M="?"]]></tag>
+   <one-of>
+     <item> 
+       <!-- the next monday; the coming week -->
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY;]]></tag></item>
+         <item>
+           <one-of>
+             <item> hari <tag><![CDATA[P='day';]]></tag></item>
+             <item> minggu <tag><![CDATA[P='week';]]></tag></item>
+             <item> bulan <tag><![CDATA[P='month';]]></tag></item>
+             <item> tahun <tag><![CDATA[P='year';]]></tag></item>
+           </one-of>
+           <tag><![CDATA[C=1]]></tag>
+         </item>
+       </one-of>
+       <one-of>
+         <item> berikutnya <tag><![CDATA[C=1;]]></tag></item>
+         <item> depan <tag><![CDATA[C=1;]]></tag></item>
+	       <item> akan datang <tag><![CDATA[C=1;]]></tag></item>	
+         <item> seterusnya <tag><![CDATA[C=1;]]></tag></item>
+       </one-of>
+      <tag><![CDATA[R='XY']]></tag>
+     </item>
+
+     <item> <!-- the day one week from now ; monday three weeks from tomorrow ; the tuesday two weeks after -->
+       <one-of>
+         <item>
+           <one-of>
+             <!--<item> <ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag></item>-->
+             <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY]]></tag></item>
+             <!--<item> <one-of> <item> weekend </item> <item> week-end </item> </one-of>  <tag><![CDATA[P='weekend']]></tag></item>-->
+           </one-of>
+          <tag><![CDATA[C=0]]></tag>
+         </item>
+         <item> 
+	    <item repeat="0-1"> sekitar <tag><![CDATA[M="fuzzy"]]></tag></item>
+            <one-of>
+             <item> satu </item>
+            </one-of>
+          <tag><![CDATA[C=1]]></tag><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag>
+           <tag><![CDATA[if(C==1){ if(P=='week'){C=7;P='day';M='fuzzy';}else if(P=='month'){C=30;P='day';M='fuzzy';}else if(P=='year'){C=12;P='month';M='fuzzy';}}]]></tag>
+	  </item>
+          <item> 
+           <one-of>
+             <item> satu 
+               <one-of>
+                 <item> pasang
+	 	 <tag><![CDATA[C=2]]></tag></item>
+                 <item> beberapa  <tag><![CDATA[C=3]]></tag></item>
+               </one-of>
+             </item>
+             <item> <one-of>
+         <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+         <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+        </one-of>
+	</item>
+       </one-of>
+           <one-of>
+               <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[P=LargerTimeUnitP.XY]]></tag></item>
+               <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag></item>
+           </one-of>
+		</item>
+       </one-of>
+       <tag><![CDATA[COEF=1;]]></tag>     
+       <tag><![CDATA[if(C==1){ if(P=='week'){C=7;P='day';M='fuzzy';}else if(P=='month'){C=30;P='day';M='fuzzy';}else if(P=='year'){C=12;P='month';M='fuzzy';}}]]></tag>
+    <one-of>
+     <item>            
+	<item repeat="0-1"> 
+             <one-of>
+               <item> dari </item>
+               <item> selepas </item>
+               <item> sejak </item>
+               <item> bermula <item repeat="0-1"> <one-of> <item> pada </item> <item> dari </item> </one-of> </item></item> <!-- for meeting dates -->
+             </one-of>
+        </item>
+	<ruleref uri="#RelativeDate"/> <tag><![CDATA[R=RelativeDate.XY;
+	         if(typeof(RelativeDate.XY)!='undefined' && typeof(RelativeDate.XY.DATE_REL)!='undefined'){
+	            if(typeof(RelativeDate.XY.DATE_REL.STEP)!='undefined' && typeof(RelativeDate.XY.DATE_REL.INCREMENT)!='undefined'){
+                          if(typeof(P)!='undefined' && P!="?" && P==RelativeDate.XY.DATE_REL.STEP){ R="XY"; C=(RelativeDate.XY.DATE_REL.INCREMENT+C) * COEF;}
+                          else if(typeof(D)!='undefined' && D!="?" && RelativeDate.XY.DATE_REL.STEP=='week'){
+                            C = (RelativeDate.XY.DATE_REL.INCREMENT+C) * COEF; R="?";
+                          }
+                       }
+                   }
+	  ]]></tag>
+
+	</item> 
+
+         <item> 
+           <one-of>
+             <item> kemudian </item>
+             <item> sejak itu </item>
+  	     <item> dari sekarang </item>
+             <item> selepas <item> itu </item> </item>
+           </one-of>
+          <tag><![CDATA[R="XY"; if(C==0)C=1;]]></tag>
+          <tag><![CDATA[if(C==1 || C==-1){ if(P=='week'){P='day';C=C*7; M='fuzzy';} else if(P=='month'){ P='day'; C=C*30; M='fuzzy';} else if (P=='year'){ P='month'; C=C*12; M='fuzzy';}}]]></tag>
+         </item>
+       </one-of>
+     </item>
+   </one-of>
+  <tag><![CDATA[XY= {'INCREMENT':C} ; 
+	if(P!="?")XY.STEP=P; 
+	if(D!="?")XY.DAY_OF_WEEK=D; 
+	if(typeof(M)!='undefined' && M!="?")XY.MODIFIER=M;
+	if(XY.CALENDAR!=undefined){ 
+		if(XY.CALENDAR.DATE!=undefined){
+			XY= {'CALENDAR': {'DATE': {'DATE_REL': XY.CALENDAR.DATE}}};
+		}else{
+			XY={'CALENDAR': {'DATE': {'DATE_REL': XY.CALENDAR}}};
+		}
+	}else{ 
+		XY = {'CALENDAR': {'DATE': {'DATE_REL': XY}}};
+	} 
+	if(R!="?" && R!="XY" && XY.CALENDAR!=undefined && XY.CALENDAR.DATE!=undefined && XY.CALENDAR.DATE.DATE_REL!=undefined)
+	{XY = {'CALENDAR' : {'DATE' : {'DATE_REL' : XY.CALENDAR.DATE.DATE_REL}}};
+	  XY.CALENDAR.DATE.DATE_REL.DATE_ANCHOR={'DATE':R}; 
+	}]]></tag> 
+</rule>
+
+<rule id="TimeAtOrNear" >
+   <one-of>
+     <item> pada  <tag><![CDATA[XY="="]]></tag></item>
+     <item> 
+       <one-of>
+         <item> di 
+           <one-of>
+             <item> sekitar </item>
+             <item> kejiranan </item>
+           </one-of>
+         </item>
+         <item> dekat dengan </item>
+         <item> sekitar </item>
+	 <item> mengenai </item>
+       </one-of>
+      <tag><![CDATA[XY="~"]]></tag></item>
+     <item> betul-betul sebelum  <tag><![CDATA[XY="<<"]]></tag></item>
+     <item> betul-betul selepas  <tag><![CDATA[XY=">>"]]></tag></item>
+   </one-of>
+</rule>
+
+<rule id="DateOrTime" scope="public"><tag><![CDATA[DT="?"; TM="?"]]></tag>
+   <one-of>
+     <item> <!-- at five o'clock on june second ; at seven this evening -->
+         <item repeat="0-1"> pada </item>
+         <one-of> 
+             <item><ruleref uri="#TimeAbs"/> <tag><![CDATA[TM=TimeAbs.XY]]></tag></item>
+             <item><ruleref uri="#RelativeTimeWithAnchor"/> <tag><![CDATA[TM=RelativeTimeWithAnchor.XY.TIME]]></tag></item>
+         </one-of>       
+	 <item repeat="0-1">
+          <item repeat="0-1"> pada </item>
+           <one-of>
+           	<item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag></item>
+	           <item> <ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[DT=RelativeDateExtra.XY]]></tag></item>
+                   <item> pada <ruleref uri="calendar_commons.grxml#NamedDay"/> <tag><![CDATA[DT= {'DATE_REL': {'NAMED_DAY':NamedDay.XY,'INCREMENT':0}}]]></tag></item>
+		   <!--<item> tonight <tag><![CDATA[DT={'DATE_REL':{'INCREMENT':0,'STEP':'day'}};AP="pm"]]></tag></item>-->
+		   <one-of>
+	             <item> pagi  <tag><![CDATA[AP="am"]]></tag></item>
+        	     <item> tengah hari  <tag><![CDATA[AP="pm"]]></tag></item>
+	             <item> petang  <tag><![CDATA[AP="pm"]]></tag></item>
+        	   </one-of>
+		   <item> ini <tag><![CDATA[DT={'DATE_REL':{'INCREMENT':0,'STEP':'day'}}]]></tag>
+	   </item>
+         </one-of>
+         <item repeat="0-1"> <!-- for corner cases like 'at 5 am tomorrow morning-->
+           <one-of>
+                     <item> pagi  <tag><![CDATA[AP="am"]]></tag></item>
+                     <item> tengah hari  <tag><![CDATA[AP="pm"]]></tag></item>
+                     <item> petang  <tag><![CDATA[AP="pm"]]></tag></item>
+                   </one-of>
+        </item>
+       </item>
+	<tag><![CDATA[if(typeof(TM)!='undefined' && TM!="?" && TM.TIME_ABS != 'undefined' && typeof(AP)!='undefined'){TM.TIME_ABS.AMPM = AP;}]]></tag>
+</item>
+
+<item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag>       
+	<item repeat="0-1">          
+            <one-of>
+               <item>
+	  	  <item repeat="0-1"> pada </item>
+		  <ruleref uri="#TimeAbs"/> <tag><![CDATA[TM=TimeAbs.XY]]></tag>
+               </item>
+               <item><ruleref uri="#RelativeTimeWithAnchor"/> <tag><![CDATA[TM=RelativeTimeWithAnchor.XY.TIME]]></tag></item>
+             </one-of>
+	</item>
+</item>
+
+<item> <!-- june first around five pm; tomorrow around seven am ; monday around five o'clock -->
+	<one-of>
+		<item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag> </item>
+		<item> esok  <tag><![CDATA[CC=1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+                <item> hari ini  <tag><![CDATA[CC=0; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+                <item> semalam  <tag><![CDATA[CC=-1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+                <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[CC=0; DT= {'INCREMENT':CC} ; DT.DAY_OF_WEEK=DayOfWeek.XY; DT= {'DATE_REL':DT}]]></tag></item>
+		 <item> <ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[DT=RelativeDateExtra.XY]]></tag></item>
+	</one-of>
+	sekitar
+	<one-of>
+	    <item> <ruleref uri="#TimeAbs"/>  <tag><![CDATA[if(typeof(TimeAbs.XY.TIME_ABS) != 'undefined'){TM= {'TIME_ABS': TimeAbs.XY.TIME_ABS}; TM.TIME_ABS.MODIFIER='fuzzy'}]]></tag></item>
+		<item><ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[TM={'TIME_ABS' : { 'HOUR' : Hour.XY, 'MODIFIER':'fuzzy'}}]]></tag> </item>
+	</one-of>
+</item>
+
+<item> <!-- monday morning at seven am; tomorrow afternoon at five fifteen -->
+	<item repeat="0-1"> <one-of>
+		<item> depan <tag><![CDATA[C=1;]]></tag></item>
+		<item> ini <tag><![CDATA[C=0;]]></tag></item>
+		<item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+	</one-of></item>
+	<one-of>
+		<item> esok  <tag><![CDATA[CC=1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+		<item> hari ini  <tag><![CDATA[CC=0; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+		<item> semalam  <tag><![CDATA[CC=-1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+		<item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[if(typeof(C)!='undefined'){CC=C;}else{CC=0;} DT= {'INCREMENT':CC} ; DT.DAY_OF_WEEK=DayOfWeek.XY; DT= {'DATE_REL':DT}]]></tag></item>
+		<item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag></item>
+	</one-of>
+		<ruleref uri="calendar_commons.grxml#StandardTimeRanges"/> <tag><![CDATA[AP=StandardTimeRanges.XY.AMPM]]></tag>
+                <item repeat="0-1"> pada </item>
+                <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[
+                	if(typeof(TimeAbs.XY.TIME_ABS.HOUR) != 'undefined' && typeof(TimeAbs.XY.TIME_ABS.MINUTE) != 'undefined'){
+                		TM= {'TIME_ABS':{'HOUR':TimeAbs.XY.TIME_ABS.HOUR,'MINUTE':TimeAbs.XY.TIME_ABS.MINUTE,'AMPM':AP}};} 
+                	else if (typeof(TimeAbs.XY.TIME_ABS.HOUR) != 'undefined'){ 
+                	TM= {'TIME_ABS':{'HOUR':TimeAbs.XY.TIME_ABS.HOUR,'AMPM':AP}}};]]></tag>
+               </item>
+</item>
+
+
+<item> <!-- today around five pm; monday around seven fifteen ; june first around five o'clock -->
+   <item repeat="0-1"> <one-of>
+	   <item> depan <tag><![CDATA[C=1;]]></tag></item>
+           <item> ini <tag><![CDATA[C=0;]]></tag></item>
+           <item> lepas <tag><![CDATA[C=-1;]]></tag></item>
+   </one-of></item>
+   <one-of>
+           <item> esok  <tag><![CDATA[CC=1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+           <item> hari ini  <tag><![CDATA[CC=0; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+           <item> semalam  <tag><![CDATA[CC=-1; DT= {'INCREMENT':CC} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag></item>
+           <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[if(typeof(C)!='undefined'){CC=C;}else{CC=0;} DT= {'INCREMENT':CC} ; DT.DAY_OF_WEEK=DayOfWeek.XY; DT= {'DATE_REL':DT}]]></tag></item>
+           <item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag></item>
+   </one-of>
+   <ruleref uri="calendar_commons.grxml#StandardTimeRanges"/> <tag><![CDATA[AP=StandardTimeRanges.XY.AMPM]]></tag>
+   sekitar
+   <one-of>
+	  <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[
+	  if(typeof(TimeAbs.XY.TIME_ABS.HOUR) != 'undefined' && typeof(TimeAbs.XY.TIME_ABS.MINUTE) != 'undefined' && TimeAbs.XY.TIME_ABS.MINUTE!=0 && TimeAbs.XY.TIME_ABS.MINUTE!="0"){
+	  TM= {'TIME_ABS': {'HOUR':TimeAbs.XY.TIME_ABS.HOUR,'MINUTE':TimeAbs.XY.TIME_ABS.MINUTE,'AMPM':AP, 'MODIFIER':'fuzzy'}} } 
+	  else if (typeof(TimeAbs.XY.TIME_ABS.HOUR) != 'undefined'){ 
+	  TM= {'TIME_ABS' : {'HOUR':TimeAbs.XY.TIME_ABS.HOUR,'AMPM':AP, 'MODIFIER':'fuzzy'}}}
+	  ]]></tag></item>
+	  <item><ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[TM={'TIME_ABS' : { 'HOUR' : Hour.XY, 'MODIFIER':'fuzzy'}}]]></tag> </item>
+</one-of>
+  </item>
+
+<item> <ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[DT=RelativeDateExtra.XY]]></tag>      
+	 <item repeat="0-1">          
+              <one-of>
+                <item>
+		   <item repeat="0-1"> pada </item>
+		   <ruleref uri="#TimeAbs"/> <tag><![CDATA[TM=TimeAbs.XY]]></tag>
+                </item>
+                <item><ruleref uri="#RelativeTimeWithAnchor"/> <tag><![CDATA[TM=RelativeTimeWithAnchor.XY.TIME]]></tag></item>
+             </one-of>
+	</item>
+</item>
+
+<item> 	
+	<one-of> <item> malam ini  <tag><![CDATA[AP="pm"]]></tag></item> 
+		<one-of>
+	             <item> pagi  <tag><![CDATA[AP="am"]]></tag></item>
+        	     <item> tengah hari  <tag><![CDATA[AP="pm"]]></tag></item>
+	             <item> petang  <tag><![CDATA[AP="pm"]]></tag></item>
+        	</one-of>
+		<item> ini 
+	</item> 
+	</one-of> 
+	<tag><![CDATA[DT={'DATE_REL':{'INCREMENT':0,'STEP':'day'}}]]></tag>
+        <item repeat="0-1"> pada </item>
+        <ruleref uri="#TimeAbs"/> <tag><![CDATA[TM=TimeAbs.XY;TM.TIME_ABS.AMPM=AP;]]></tag>
+</item>
+
+
+<item> <!-- five in the morning of june first -->
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#TimeCore"/> <tag><![CDATA[H=TimeCore.H; M=TimeCore.M]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[H=Hour.XY;]]></tag></item>
+       </one-of>
+     
+       <one-of>
+         <item> 
+           <one-of>
+             <item> pada </item>
+             <item> di </item>
+           </one-of>
+           <one-of>
+             <item> pagi  <tag><![CDATA[AP="am"]]></tag></item>
+             <item> 
+               <one-of>
+                 <item> tengah hari </item>
+                 <item> petang </item>
+               </one-of>
+              <tag><![CDATA[AP="pm"]]></tag></item>
+           </one-of>
+           <one-of>
+             <item> <ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[DT=RelativeDateExtra.XY]]></tag></item>
+             <item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[DT=Date.XY]]></tag></item>
+           </one-of>
+         </item>
+       </one-of>
+      <tag><![CDATA[if(typeof(M)!='undefined' && M!='undefined' && M!=0){TM={'TIME_ABS':{'HOUR':H,'MINUTE':M,'AMPM':AP}};}else{TM={'TIME_ABS':{'HOUR':H,'AMPM':AP}};}]]></tag>
+      </item>
+
+     <item> <!-- five fifteen on monday ; five this morning -->
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#TimeCore"/> <tag><![CDATA[H=TimeCore.H; M=TimeCore.M]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[H=Hour.XY;M=0;]]></tag></item>
+       </one-of>
+     
+       <one-of>
+	<item>
+         <item repeat="0-1"> 
+           <one-of>
+             <item> pada </item>
+             <item> di </item>
+           </one-of>
+	</item>
+	<one-of>	
+         <item><ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[DT=RelativeDateExtra.XY]]></tag></item>
+	<item> 
+		<one-of> 
+			<item> malam ini  <tag><![CDATA[AP="pm"]]></tag></item> 
+		</one-of>
+           <one-of>
+             <item> 
+		<one-of>
+			<item> pagi </item>
+			<item> a m </item>
+			<item> am </item>
+			<item> a_m </item>
+		</one-of>
+		 <tag><![CDATA[AP="am"]]></tag></item>
+	     	
+             <item> 
+               <one-of>
+                 <item> tengah hari </item>
+                 <item> petang </item>
+               </one-of>
+              <tag><![CDATA[AP="pm"]]></tag></item>
+			<item> ini </item> </one-of> <tag><![CDATA[DT={'DATE_REL':{'INCREMENT':0,'STEP':'day'}}]]></tag></item>
+           </one-of>
+         </item>
+       </one-of>
+      <tag><![CDATA[if(M!=undefined && M!=0){TM= {'TIME_ABS':{'HOUR':H,'MINUTE':M,'AMPM':AP}};}else{TM={'TIME_ABS':{'HOUR':H,'AMPM':AP}};}]]></tag></item>
+      <item>
+          <item repeat="0-1"> pada </item>
+          <ruleref uri="#TimeAbs"/>
+          malam ini
+          <tag><![CDATA[TM=TimeAbs.XY; C=0;
+                if(TM.TIME_ABS.HOUR==12){ AP="am";}
+                else if(TM.TIME_ABS.HOUR<=4){AP="am";C=1;}
+                else{AP="pm";C=0;}
+
+               TM.TIME_ABS.AMPM=AP; DT= {'INCREMENT':C} ; DT.STEP="day"; DT= {'DATE_REL':DT}]]></tag>
+        </item>
+
+      <item><ruleref uri="#RelativeTimeWithAnchor"/> <tag><![CDATA[TM=RelativeTimeWithAnchor.XY.TIME]]></tag></item>
+      <item> <ruleref uri="calendar_commons.grxml#MixedAbsRelDate"/> <tag><![CDATA[DT=MixedAbsRelDate.DATE;]]></tag> </item>
+   </one-of>
+  <tag><![CDATA[XY=new Object() ; 
+	if(typeof(DT)!='undefined' && typeof(TM)!='undefined' && DT!="?" && TM!="?"){
+		if(TM.TIME!=undefined && DT.DATE!=undefined){ XY={'DATE':DT.DATE,'TIME':TM.TIME}; }
+                else{
+			if(DT.DATE!=undefined){ XY={'DATE':DT.DATE,'TIME':TM}; }
+			if(TM.TIME!=undefined){ XY={'DATE':DT,'TIME':TM.TIME}; }
+			else{ XY = {'DATE':DT,'TIME':TM}; }
+		}
+	}
+	else{
+		if(typeof(DT)!='undefined' && DT!="?"){if(DT.DATE!=undefined){XY={'DATE':DT.DATE};}else{if(DT.CALENDAR!=undefined && DT.CALENDAR.DATE!=undefined){XY={'DATE':DT.CALENDAR.DATE};}else{  XY={'DATE':DT}; }} } 
+		if(typeof(TM)!='undefined' && TM!="?"){if(TM.TIME!=undefined){XY={'TIME':TM.TIME};}else{XY={'TIME':TM}; }}
+	}
+]]></tag> </rule>
+
+<rule id="VagueTime" scope="public"><tag><![CDATA[M="?"]]></tag>
+   <one-of>
+     <item> 
+         <item>
+       <one-of>
+         <item> di
+           <one-of>
+             <item> sekitar </item>
+             <item> kejiranan </item>
+           </one-of>
+         </item>
+         <item> dekat dengan </item>
+         <item> sekitar </item>
+         <item> mengenai </item>
+       </one-of>
+      <tag><![CDATA[M="~"]]></tag></item>
+	<ruleref uri="#TimeAbs"/><tag><![CDATA[ XY= {'TIME':TimeAbs.XY}; if(M=="~"){XY.TIME.TIME_ABS.MODIFIER='fuzzy';} ]]></tag>
+     </item>
+
+     <item> <ruleref uri="#TimeAtOrNear"/> <tag><![CDATA[M=TimeAtOrNear.XY]]></tag><ruleref uri="calendar_commons.grxml#HourAsTime"/> <tag><![CDATA[if(M=="="){XY= {'TIME': {'TIME_ABS':HourAsTime.XY.TIME_ABS}}} else if(M=="~"){XY= {'TIME': {'TIME_ABS': {'HOUR':HourAsTime.XY.TIME_ABS.HOUR,'MODIFIER':'fuzzy'}}}} else { delete XY; } ]]></tag></item>
+     <item>
+	<item repeat="0-1"> 
+         <one-of>
+           <item> sekitar </item>
+           <item> berdekatan </item>
+           <item> mengenai </item>
+         </one-of>
+       </item>
+	<ruleref uri="#TimeAbs"/> <tag><![CDATA[XY= {'TIME':TimeAbs.XY} ; XY.TIME.TIME_ABS.MODIFIER='fuzzy';]]></tag>
+       <one-of>
+         <item> atau lebih </item>
+         <item> lebih kurang </item>
+       </one-of>
+     </item>
+        <!-- really vague time -->
+        <item>
+        bila-bila masa <tag><![CDATA[XY= {'TIME': {'TIME_ABS' :{ 'MODIFIER' : 'fuzzy'}}}]]></tag>
+        </item>
+   </one-of>
+  <tag><![CDATA[delete M]]></tag> 
+</rule>
+
+<!-- not used -->
+<!--<rule id="WithTimeRange" scope="public"><tag><![CDATA[M="?"]]></tag>
+   <one-of>
+     <item> 
+	<item repeat="0-1"> 
+         <one-of>
+           <item> early  <tag><![CDATA[M="<"]]></tag></item>
+           <item> late  <tag><![CDATA[M=">"]]></tag></item>
+         </one-of>
+       </item>
+       <item repeat="0-1"> on </item>
+
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[D=Date.XY;]]></tag></item>
+         <item> <ruleref uri="#RelativeDateExtra"/> <tag><![CDATA[D=RelativeDateExtra.XY]]></tag></item>
+       </one-of>
+     <ruleref uri="#TimeRange"/> <tag><![CDATA[T=TimeRange.XY; if(typeof(T.TIME)!='undefined'){CALENDAR= {'DATE':D,'TIME':T.TIME};} delete D; delete T]]></tag></item>
+   </one-of>
+  <tag><![CDATA[delete M; XY=new Object() ; if(typeof(CALENDAR)!='undefined')XY.CALENDAR=CALENDAR;]]></tag> </rule>
+-->
+<rule id="VagueDate" ><tag><![CDATA[Q=""]]></tag>   
+	<one-of>
+	<item>
+		<item repeat="0-1"> 
+		     <one-of>
+       			<item> <ruleref uri="calendar_commons.grxml#DateOnOrNear"/> <tag><![CDATA[Q=DateOnOrNear.XY]]></tag></item>
+			       <!-- <item> before  <tag><![CDATA[Q=">"]]></tag></item>
+			       <item> after  <tag><![CDATA[Q="<"]]></tag></item> -->
+		     </one-of>
+		</item>
+		<ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[XY= {} ; XY.CALENDAR= {'DATE':Date.XY}; if(Q=="~" && typeof(XY.CALENDAR)!='undefined' && typeof(XY.CALENDAR.DATE)!='undefined' && typeof(XY.CALENDAR.DATE.DATE_ABS)!='undefined'){ XY.CALENDAR.DATE.DATE_ABS.MODIFIER="fuzzy";}]]></tag>
+	</item>
+        <!-- really vague date -->
+        <item>
+        sebarang hari <tag><![CDATA[XY= {} ; XY.CALENDAR = {'DATE': {'DATE_ABS' :{ 'MODIFIER' : 'fuzzy'}}}]]></tag>
+        </item>
+        <item>
+        sebarang tarikh <tag><![CDATA[XY= {} ; XY.CALENDAR= {'DATE': {'DATE_ABS' :{ 'MODIFIER' : 'fuzzy'}}}]]></tag>
+        </item>
+
+	</one-of>
+</rule>
+
+<rule id="MilitaryHour">
+   <tag><![CDATA[XY="?";AMPM="pm";]]></tag>	
+   <one-of>
+   	<item>
+                <one-of>
+                   <item> sifar </item>
+                   <item> oh </item>
+                </one-of>
+   		<one-of>
+		     <item> satu <tag><![CDATA[XY=1]]></tag></item>
+     		 <item> dua  <tag><![CDATA[XY=2]]></tag></item>
+		     <item> tiga  <tag><![CDATA[XY=3]]></tag></item>
+		     <item> empat  <tag><![CDATA[XY=4]]></tag></item>
+		     <item> lima <tag><![CDATA[XY=5]]></tag></item>
+		     <item> enam  <tag><![CDATA[XY=6]]></tag></item>
+		     <item> tujuh  <tag><![CDATA[XY=7]]></tag></item>
+		     <item> lapan  <tag><![CDATA[XY=8]]></tag></item>
+		     <item> sembilan <tag><![CDATA[XY=9]]></tag></item>
+		 </one-of>
+		 <tag><![CDATA[AMPM="am";]]></tag>
+	</item>	     
+	<item> sepuluh <tag><![CDATA[XY=10;AMPM="am";]]></tag></item>
+	<item> sebelas <tag><![CDATA[XY=11;AMPM="am";]]></tag></item>
+	<item> dua belas <tag><![CDATA[XY=12;AMPM="pm";]]></tag></item>
+
+     <item> tiga belas <tag><![CDATA[XY=1;AMPM="pm";]]></tag></item>
+     <item> empat belas  <tag><![CDATA[XY=2;AMPM="pm";]]></tag></item>
+     <item> lima belas  <tag><![CDATA[XY=3;AMPM="pm";]]></tag></item>
+     <item> enam belas  <tag><![CDATA[XY=4;AMPM="pm";]]></tag></item>
+     <item> tujuh belas <tag><![CDATA[XY=5;AMPM="pm";]]></tag></item>
+     <item> lapan belas  <tag><![CDATA[XY=6;AMPM="pm";]]></tag></item>
+     <item> sembilan belas  <tag><![CDATA[XY=7;AMPM="pm";]]></tag></item>
+     <item> dua puluh  <tag><![CDATA[XY=8;AMPM="pm";]]></tag></item>
+     <item> dua puluh satu <tag><![CDATA[XY=9;AMPM="pm";]]></tag></item>
+     <item> dua puluh dua <tag><![CDATA[XY=10;AMPM="pm";]]></tag></item>
+     <item> dua puluh tiga <tag><![CDATA[XY=11;AMPM="pm";]]></tag></item>
+     <item> dua puluh empat <tag><![CDATA[XY=12;AMPM="am";]]></tag></item>
+   </one-of>
+	ratus
+</rule>
+
+<!-- not used -->
+<!--<rule id="AbsoluteTimeRange" scope="public">
+   <one-of>
+     <item> between 
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#HourAsTime"/> <tag><![CDATA[XY=HourAsTime.XY]]></tag></item>
+         <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[XY=TimeAbs.XY]]></tag></item>
+       </one-of>
+     and 
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#HourAsTime"/> <tag><![CDATA[Y=HourAsTime.XY]]></tag></item>
+         <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[Y=TimeAbs.XY]]></tag></item>
+       </one-of>
+     </item>
+     <item>        <item repeat="0-1"> from </item>
+
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#HourAsTime"/> <tag><![CDATA[XY=HourAsTime.XY]]></tag></item>
+         <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[XY=TimeAbs.XY]]></tag></item>
+       </one-of>
+     
+       <one-of>
+         <item> to </item>
+         <item> until </item>
+         <item> til </item>
+         <item> till </item>
+       </one-of>
+     
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#HourAsTime"/> <tag><![CDATA[Y=HourAsTime.XY]]></tag></item>
+         <item> <ruleref uri="#TimeAbs"/> <tag><![CDATA[Y=TimeAbs.XY]]></tag></item>
+       </one-of>
+     </item>
+   </one-of>
+  <tag><![CDATA[XY= {'TR_START': {'TIME':XY} ,'TR_END': {'TIME':Y}}]]></tag> 
+</rule>
+  -->
+<rule id="TimeAbs" scope="public"><tag><![CDATA[AP="?"; M="?"; H=0;]]></tag><ruleref uri="functions.grxml"/>
+   <one-of>
+     <item> <!-- five pm ; seven o'clock sharp -->
+     	<ruleref uri="calendar_commons.grxml#TimeCore"/> <tag><![CDATA[H=TimeCore.H; M=TimeCore.M]]></tag>       
+     	<item repeat="0-1"> 
+          <one-of>
+	     <item><ruleref uri="calendar_commons.grxml#AMPM"/> <tag><![CDATA[AP=AMPM.XY]]></tag></item>
+	     <item> am <tag><![CDATA[AP="am"]]></tag></item>
+	  </one-of>
+	</item>     		
+	<item repeat="0-1"> tepat </item>
+	 </item>
+	 <item> <ruleref uri="#MilitaryHour"/> <tag><![CDATA[H=MilitaryHour.XY;AP=MilitaryHour.AMPM]]></tag> <one-of> <item> jam </item> <item> jm </item> </one-of> </item>
+     <item> <!-- eight in the morning -->
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#TimeCore"/> <tag><![CDATA[H=TimeCore.H; M=TimeCore.M]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag></item>
+       </one-of>
+       <one-of>
+         <item>          
+           <one-of>
+             <item> pagi  <tag><![CDATA[AP="am"]]></tag></item>
+             <item> tengah hari  <tag><![CDATA[AP="pm"]]></tag></item>
+             <item> petang  <tag><![CDATA[AP="pm"]]></tag></item>
+           </one-of>
+         </item>
+         <item> 
+           <one-of>
+             <!--<item> tonight </item>-->
+             <item> malam </item>
+           </one-of>
+          <tag><![CDATA[AP="am"; if(H>6)AP="pm"]]></tag></item>
+       </one-of>
+     </item>
+     <!--<item> 
+       <one-of>
+         <item> this 
+           <one-of>
+             <item> morning  <tag><![CDATA[AP="am"]]></tag></item>
+             <item> afternoon  <tag><![CDATA[AP="pm"]]></tag></item>
+             <item> evening  <tag><![CDATA[AP="pm"]]></tag></item>
+           </one-of>
+         </item>
+       </one-of>
+     at 
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#TimeCore"/> <tag><![CDATA[H=TimeCore.H; M=TimeCore.M]]></tag>           
+                <item repeat="0-1"> 
+             	   <one-of>
+         		<item><ruleref uri="calendar_commons.grxml#AMPM"/> <tag><![CDATA[AP=AMPM.XY]]></tag></item>
+         		<item> am <tag><![CDATA[AP="am"]]></tag></item>
+         	   </one-of>	
+                </item>	
+	 </item>
+       </one-of>
+     </item>-->
+     <!-- five am ; five fifteen am ; five o'clock in the evening -->
+     <item> <ruleref uri="calendar_commons.grxml#Hour"/> <tag><![CDATA[H=Hour.XY]]></tag>       
+     	<item repeat="0-1"> 
+         <one-of>
+           <item> <ruleref uri="calendar_commons.grxml#Minute"/> <tag><![CDATA[M=Minute.XY]]></tag></item>
+           <item> <one-of> <item> pukul </item> <item> jam </item> </one-of> </item>
+         </one-of>
+       	</item>
+       	<one-of>
+	   <item><ruleref uri="calendar_commons.grxml#AMPM"/> <tag><![CDATA[AP=AMPM.XY]]></tag></item>
+	   <item> am <tag><![CDATA[AP="am"]]></tag></item>
+	</one-of>
+	</item>       	
+
+	<item>  <!-- quarter past noon ; fifteen to midnight -->
+	<item repeat="0-1"> 
+         <one-of>
+           <item> 
+             <one-of>
+               <item> suku  <tag><![CDATA[M=15]]></tag></item>
+               <item> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[M=parseInt(CardinalDigit.XY )]]></tag></item>
+               <item> <ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[M=parseInt(CardinalTeen.XY )]]></tag></item>
+               <item> <ruleref uri="calendar_commons.grxml#CardinalTenLt6"/> <tag><![CDATA[M=parseInt(CardinalTenLt6.XY )]]></tag>                 <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[M=M + parseInt(CardinalDigit.XY )]]></tag></item>
+		</item>
+             </one-of>
+           
+             <one-of>
+               <item> lepas </item>
+               <item> selepas </item>
+               <item> ke  <tag><![CDATA[M=60-M; H=-1]]></tag></item>
+             </one-of>
+           </item>
+           <item> setengah lepas  <tag><![CDATA[M=30]]></tag></item>
+         </one-of>
+       </item>
+
+       <one-of>
+          <item> <item repeat="0-1"> dua belas </item> tengah hari  <tag><![CDATA[if(H==-1)AP="am"; else AP="pm"; if(H!=12)H=H + 12;]]></tag></item>
+         <item> tengah malam  <tag><![CDATA[AP="am"; if(H<0){H=11; AP="pm"}if(H==0){H=12;}]]></tag></item>
+       </one-of>
+     </item>
+   </one-of>
+  <tag><![CDATA[XY=new Object() ; XY.HOUR=H; if(M!="?" && M!=0)XY.MINUTE=M; if(AP!="?")XY.AMPM=AP; if(XY.TIME_ABS!=undefined){TIME_ABS=XY.TIME_ABS; XY=XY; }else{TIME_ABS=XY; XY= {'TIME_ABS':XY} ;}  delete H; delete M; delete AP;  TIME_ABS=functions.js2json(TIME_ABS )]]></tag> 
+</rule>
+  
+<rule id="DateAndTimeOptGerLead" scope="public"><tag><![CDATA[M="?"]]></tag><ruleref uri="functions.grxml"/>
+ <one-of>
+	<item>
+   <one-of>
+     <item> <!-- june second around noon -->
+       <one-of>
+		<item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[CALENDAR = {}; if(typeof(Date.XY)!='undefined')CALENDAR= {'DATE': Date.XY}]]></tag></item>
+         <item> <ruleref uri="#VagueDate"/> <tag><![CDATA[if(typeof(VagueDate.XY.CALENDAR)!='undefined')CALENDAR=VagueDate.XY.CALENDAR;]]></tag></item>
+       </one-of>
+       <item repeat="0-1"> <ruleref uri="#VagueTime"/> 
+		<tag><![CDATA[if(typeof(VagueTime.XY)!='undefined'){if(typeof(VagueTime.XY.TIME)!='undefined'){
+          if(typeof(CALENDAR) != 'undefined'){
+          CALENDAR.TIME=VagueTime.XY.TIME} else {delete CALENDAR_RANGE; }}} ]]></tag> 
+
+		</item>
+	</item>
+
+      <item> <!-- june second at five pm -->
+       <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#Date"/> <tag><![CDATA[CALENDAR = {}; if(typeof(Date.XY)!='undefined')CALENDAR= {'DATE': Date.XY}]]></tag></item>
+         <item> <ruleref uri="#VagueDate"/> <tag><![CDATA[if(typeof(VagueDate.XY.CALENDAR)!='undefined')CALENDAR=VagueDate.XY.CALENDAR;]]></tag></item>
+       </one-of>
+       <item> <ruleref uri="#TimeAbs"/>
+                <tag><![CDATA[if(typeof(TimeAbs.XY)!='undefined'){
+                    if(typeof(TimeAbs.XY)!='undefined'){
+                       if(typeof(CALENDAR) != 'undefined'){
+                          CALENDAR.TIME=TimeAbs.XY;
+                       } else {delete CALENDAR_RANGE; }}} ]]></tag>
+
+                </item>
+        </item>
+	
+          <item> <ruleref uri="#TimeRange"/> <tag><![CDATA[if(typeof(TimeRange.XY)!='undefined'){if(typeof(TimeRange.XY.TIME)!='undefined'){CALENDAR= {'TIME':TimeRange.XY.TIME};}} ]]></tag></item>
+     <item> <ruleref uri="#DateOrTime"/> <tag><![CDATA[CALENDAR=DateOrTime.XY; ]]></tag></item>
+
+     <item> <!-- two weeks after Easter; a couple of days before Christmas; the days before june fist -->
+       <one-of>
+         <item>
+           <one-of>
+             <item> satu </item>
+           </one-of>
+          <tag><![CDATA[INC=1]]></tag>
+          <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[STP=LargerTimeUnitS.XY]]></tag></item>
+        </item>
+
+         <item>
+           <one-of>
+             <item> satu
+               <one-of>
+                 <item> pasang  <tag><![CDATA[INC=2]]></tag></item>
+                 <item> beberapa  <tag><![CDATA[INC=3]]></tag></item>
+               </one-of>
+             </item>
+             <item> <one-of>
+         <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[INC=CardinalDigitGt1.XY]]></tag></item>
+         <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[INC=parseInt(CardinalTeen.XY)]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[INC=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[INC=INC + parseInt(CardinalDigit.XY )]]></tag></item></item>
+          <item><ruleref uri="calendar_commons.grxml#Cardinal1_120"/> <tag><![CDATA[INC=Cardinal1_120.XY]]></tag></item>
+        </one-of>
+         </item>
+   </one-of>
+       <one-of>
+               <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[STP=LargerTimeUnitP.XY]]></tag></item>
+               <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[STP=LargerTimeUnitS.XY]]></tag></item>
+           </one-of>
+    </item>
+  </one-of>
+
+  <one-of>
+    <item> sebelum  <tag><![CDATA[INC=-INC]]></tag></item>
+    <item> selepas </item>
+    <item> dari </item>
+  </one-of>
+        <one-of>
+          <item><ruleref uri="calendar_commons.grxml#SpecialDate"/> <tag><![CDATA[CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC,'DATE_ANCHOR': {'DATE':{'DATE_ABS': SpecialDate.XY}}}}} ; delete STP; delete INC;]]></tag></item>
+          <item><ruleref uri="calendar_commons.grxml#NamedDay"/><tag><![CDATA[CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC,'DATE_ANCHOR': {'DATE':{'DATE_ABS':{'NAMED_DAY':NamedDay.XY}}}}}} ; delete STP; delete INC;]]></tag></item>
+          <item><ruleref uri="calendar_commons.grxml#DateCore"/><tag><![CDATA[CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC,'DATE_ANCHOR': {'DATE':{'DATE_ABS':{'DAY':DateCore.D, 'MONTH':DateCore.M}}}}}} ; delete STP; delete INC;]]></tag></item>
+          <item><ruleref uri="#RelativeDate"/><tag><![CDATA[REF_STP=RelativeDate.XY.DATE_REL.STEP;  if(STP=='day' && REF_STP=='day'){ INC=REF_INC=RelativeDate.XY.DATE_REL.INCREMENT+INC; CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC}}}; } else { 
+CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC,'DATE_ANCHOR': {'DATE':RelativeDate.XY}}}} ; } delete STP; delete INC; delete REF_STP;]]></tag></item>
+          <item> sekarang <tag><![CDATA[CALENDAR= {'DATE': {'DATE_REL': {'STEP':STP,'INCREMENT':INC}}};]]></tag></item>
+         </one-of>
+     </item>
+   
+    <item><ruleref uri="calendar_commons.grxml#NamedDay"/><tag><![CDATA[CALENDAR= {'DATE': {'DATE_REL': {'NAMED_DAY':NamedDay.XY,'INCREMENT':0}}} ; delete STP;]]></tag></item>
+
+  </one-of>
+  <tag><![CDATA[delete M;  X_C=new Object(); if(typeof(CALENDAR)!='undefined'){ if(typeof(CALENDAR.CALENDAR) != 'undefined'){ X_C.CALENDAR = CALENDAR.CALENDAR; } else{X_C.CALENDAR = CALENDAR;} C = functions.js2json(X_C); delete CALENDAR; } if(typeof(CALENDAR_RANGE)!='undefined'){  delete X_C; delete CALENDAR_RANGE; } ]]></tag> 
+</item>
+</one-of>
+</rule> 
+
+<rule id="RelativeDate" scope="public"><tag><![CDATA[D="?"; P="?"; C=0; M="?"]]></tag>
+   <one-of>
+     <item> 
+       <one-of>
+         <item> hari ini </item>
+         <!-- <item> tonight </item> -->
+       </one-of>
+      <tag><![CDATA[P="day"]]></tag></item>
+     <item> semalam  <tag><![CDATA[P="day"; C=-1]]></tag></item>
+     <item>
+        <item repeat="0-1">           hari selepas  <tag><![CDATA[C=C + 1]]></tag></item>
+	esok  <tag><![CDATA[C=C + 1; P="day"]]></tag>
+     </item>
+	<item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY;]]></tag>
+  <item repeat="0-1"> akan datang <tag><![CDATA[C=0]]></tag></item> ini    <tag><![CDATA[C=0]]></tag>     
+	</item>
+     <item> <!--on--> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=0]]></tag></item>
+       <!-- one week monday; a week tomorrow -->
+    <!--<item>
+       <one-of> <item> a </item> <item> one </item> </one-of> week 
+       <one-of>
+        <item>
+            <item repeat="0-1"> this </item>
+	    <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=1]]></tag></item>
+        <item> tomorrow  <tag><![CDATA[P="day"; C=8]]></tag></item>
+       </one-of>
+     </item>-->
+     <!-- two weeks this monday -->
+     <!-- <item>
+	<one-of>
+	<item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+	<item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+	</one-of>
+            <one-of> <item> weeks </item> <item> week </item> </one-of>
+	    <item repeat="0-1"> this </item>
+	    <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY]]></tag>
+      </item> -->
+
+     <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=1]]></tag> minggu <one-of> <item> depan </item> <item> akan datang </item> </one-of> </item>
+
+     <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=0]]></tag> minggu <one-of> <item> ini </item> </one-of> </item>
+
+     <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=-1]]></tag> minggu <one-of> <item> lepas </item> <item> sebelumnya </item> </one-of> </item>
+
+     <item>       
+	 <item repeat="0-1"> <one-of> <item> depan </item> <item> akan datang </item> </one-of>  <tag><![CDATA[C=1]]></tag></item>
+	 <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY]]></tag></item>
+
+         <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/>selepas seterusnya  <tag><![CDATA[D=DayOfWeek.XY; C=2]]></tag></item>
+
+     <item> <!-- after one day -->
+       <one-of>
+         <item> dalam </item>
+         <item> selepas </item>
+       </one-of>
+     <item repeat="0-1"> sekitar <tag><![CDATA[M="fuzzy"]]> </tag> </item>
+       <one-of>
+         <item> satu </item>
+       </one-of>
+      <!-- old version: <ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY; C=1]]></tag> -->
+     <!-- new verison for QNLU-701 -->
+      <one-of>
+         <item> hari <tag><![CDATA[P='day';C=1;]]></tag> </item>
+         <item> minggu <tag><![CDATA[P='day';C=7;M='fuzzy';]]></tag> </item>
+         <item> bulan <tag><![CDATA[P='day';C=30;M='fuzzy';]]></tag> </item>    
+         <item> tahun <tag><![CDATA[P='month';C=12;M='fuzzy';]]></tag> </item>
+      </one-of>
+    </item>
+
+
+     <item> <!-- after two days -->
+       <one-of>
+         <item> dalam </item>
+         <item> selepas </item>
+       </one-of>
+	<one-of>           
+           <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+	   <!--<item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+	   <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>-->
+           <item><ruleref uri="calendar_commons.grxml#Cardinal1_120"/> <tag><![CDATA[C=parseInt(Cardinal1_120.XY);]]></tag></item>
+	</one-of>
+        <one-of>
+	   <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[P=LargerTimeUnitP.XY;]]></tag></item>
+           <item><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY;if(C==1){ if(P=='week'){P='day';C=7; M='fuzzy';} else if(P=='month'){ P='day'; C=30; M='fuzzy';} else if (P=='year'){ P='month'; C=12; M='fuzzy';}}]]></tag></item>
+         </one-of>
+     </item>
+ <!-- three weeks later -->
+   <item>
+    <tag><![CDATA[P='week']]></tag>
+     <one-of>
+      <item> satu <tag><![CDATA[C=1;]]></tag></item>
+      <item> se <tag><![CDATA[C=1;]]></tag></item>
+        <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+        <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+        <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+       </one-of>
+        <item repeat="0-1"> dan setengah <tag><![CDATA[C=7*C+3;P='day']]></tag> </item>
+        <one-of>
+         <item> minggu </item>
+      </one-of>
+      <item repeat="0-1"> dan setengah <tag><![CDATA[C=7*C+3;P='day']]></tag> </item>
+      <one-of>
+	 <item> kemudian</item>
+	 <item>lalu <tag><![CDATA[C=-C]]></tag></item>
+	</one-of> 
+      <tag><![CDATA[if(C==1 || C==-1){P='day';C=C*7;M='fuzzy';}]]></tag>
+   </item>
+
+   <item> <!-- two months later -->
+   <tag><![CDATA[P='month';]]></tag>	
+    <one-of>
+      <item> satu <tag><![CDATA[C=1;]]></tag></item>
+      <item> se <tag><![CDATA[C=1;]]></tag></item>
+      <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+      <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+      <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+    </one-of>
+    <item repeat="0-1"> dan setengah <tag><![CDATA[C=C*30+15;P='day']]></tag> </item>
+    <one-of>
+        <item> bulan </item>
+    </one-of>
+    <one-of>
+	    <item>kemudian</item>
+	    <item>lalu <tag><![CDATA[C=-C]]></tag></item>
+	</one-of>    
+     <tag><![CDATA[if(C==1 || C==-1){P='day';C=C*30;M='fuzzy';}]]></tag>
+    </item>
+
+   <item>
+      <tag><![CDATA[P='month';]]></tag>
+          <one-of>
+		<item> satu <tag><![CDATA[C=1;]]></tag></item>
+		<item> se <tag><![CDATA[C=1;]]></tag></item>
+		<item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+		<item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+                <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>		
+	</one-of>
+	 <one-of>
+         <item> bulan </item>
+        </one-of>
+        <item repeat="0-1"> dan setengah <tag><![CDATA[C=12*C+6;P='month';]]></tag> </item>
+        <one-of>
+        	<item>kemudian</item>
+        	<item>lalu <tag><![CDATA[C=-C]]></tag></item>
+        </one-of>	
+        <tag><![CDATA[if(C==1 || C==-1){P='day';C=C*30;M='fuzzy';}]]></tag>
+   </item>
+
+   <item> 
+	<tag><![CDATA[P='year';]]></tag>
+	<one-of>
+	 <item> satu <tag><![CDATA[C=1;]]></tag></item>
+	 <item> se <tag><![CDATA[C=1;]]></tag></item>
+         <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+         <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+		</one-of>
+		<item repeat="0-1"> dan setengah <tag><![CDATA[C=12*C+6;P='month';]]></tag> </item>
+        <one-of>
+            <item> tahun </item>
+	</one-of>
+	<one-of>
+		<item>kemudian</item>
+		<item>lalu <tag><![CDATA[C=-C]]></tag></item>
+	</one-of>	
+        <tag><![CDATA[if(C==1 || C==-1){P='month';C=C*12;M='fuzzy';}]]></tag>
+	</item>
+
+	<item>
+		<tag><![CDATA[P='year';]]></tag>
+		<one-of>
+			<item> satu <tag><![CDATA[C=1]]></tag></item>
+			<item> se <tag><![CDATA[C=1]]></tag></item>
+
+			<item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+		         <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+	                  <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+	        </one-of>
+	        <one-of>
+	           <item> tahun </item>
+	        </one-of>
+		<item repeat="0-1"> dan setengah <tag><![CDATA[C=12*C+6;P='month';]]></tag> </item>
+	<one-of>	
+		<item>kemudian</item>
+		<item>lalu <tag><![CDATA[C=-C]]></tag></item>
+	</one-of>	
+        <tag><![CDATA[if(C==1 || C==-1){P='month';C=C*12;M='fuzzy';}]]></tag>
+	</item>	
+
+       <item>
+        <one-of>
+         <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+         <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+         <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+        </one-of>
+        <ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[P=LargerTimeUnitP.XY]]></tag>
+        sebelum <tag><![CDATA[C=-C]]></tag>
+        </item>
+   </one-of>
+  <tag><![CDATA[XY= {'INCREMENT':C} ; if(P!="?")XY.STEP=P; if(D!="?")XY.DAY_OF_WEEK=D; if(M!="?")XY.MODIFIER=M; XY= {'DATE_REL':XY}]]></tag> 
+</rule>
+
+<rule id="RelativeDateExtra" scope="public"><tag><![CDATA[C=0;]]></tag>
+   <one-of>
+     <item> <ruleref uri="#RelativeDate"/> <tag><![CDATA[XY=RelativeDate.XY]]></tag></item>
+     <item> <ruleref uri="#LaterRelativeDate"/> <tag><![CDATA[if(typeof(LaterRelativeDate.XY)!='undefined' && typeof(LaterRelativeDate.XY.CALENDAR)!='undefined'  && typeof(LaterRelativeDate.XY.CALENDAR.DATE)!='undefined'){XY=LaterRelativeDate.XY.CALENDAR.DATE;}]]></tag></item>
+     <item> <ruleref uri="#EarlierRelativeDate"/> <tag><![CDATA[if(typeof(EarlierRelativeDate.XY)!='undefined' && typeof(EarlierRelativeDate.XY.CALENDAR)!='undefined' && typeof(EarlierRelativeDate.XY.CALENDAR.DATE)!='undefined'){XY=EarlierRelativeDate.XY.CALENDAR.DATE;}]]></tag></item>
+     <item>       
+		<item>
+			<one-of> 
+				<item> 
+				   <one-of> <item> depan </item> <item> akan datang </item> </one-of>  
+				   <tag><![CDATA[C=1]]></tag>
+			        </item>
+				<item> lepas  <tag><![CDATA[C=-1]]></tag></item>
+				<item> sebelumnya  <tag><![CDATA[C=-1]]></tag></item>		
+				<item> ini <tag><![CDATA[C=0]]></tag></item>
+				<!--<item> on <tag><![CDATA[C=0]]></tag></item>-->
+			</one-of>
+		</item>
+		<item>
+        	       <one-of>
+                	   <item> <ruleref uri="calendar_commons.grxml#NamedDay"/> <tag><![CDATA[XY= {'DATE_REL': {'NAMED_DAY':NamedDay.XY,'INCREMENT':C}}]]></tag></item>
+	                  <!-- <item> <ruleref uri="calendar_commons.grxml#SpecialDate"/> <tag><![CDATA[XY= {'DATE_ABS': SpecialDate.XY}]]></tag></item> -->
+               </one-of>
+       </item>
+</item>
+      <item> 
+           <one-of>
+             <item> <ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag></item>
+           </one-of>
+           <tag><![CDATA[C=0]]></tag>
+       <one-of>
+            <item> sebelum <tag><![CDATA[if(C>0)C=C*-1; if(C==0)C=-1;]]></tag></item>
+            <item> selepas <tag><![CDATA[if(C==0)C=1;]]></tag></item>
+       </one-of>
+       <tag><![CDATA[XY= {'DATE_REL': {'STEP':P,'INCREMENT':C}}]]></tag>
+     </item>
+     <item>
+        <one-of>
+           <item> satu
+                 <one-of>
+                   <item> pasang
+                      <tag><![CDATA[C=2]]></tag></item>
+                   <item> beberapa  <tag><![CDATA[C=3]]></tag></item>
+                   <item> satu <tag><![CDATA[C=1;]]></tag></item>
+                 </one-of>
+           </item>
+           <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+           <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+           <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+         </one-of>
+         <ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[P=LargerTimeUnitP.XY]]></tag>
+         <one-of>
+            <item> sebelum <tag><![CDATA[if(C>0)C=C*-1; if(C==0)C=-1;]]></tag></item>
+            <item> selepas <tag><![CDATA[if(C==0)C=1;]]></tag></item>
+         </one-of>
+         <tag><![CDATA[XY= {'DATE_REL': {'STEP':P,'INCREMENT':C}}]]></tag>
+     </item>
+     <item>
+       <one-of>
+         <item> ini <tag><![CDATA[C=0;]]></tag></item>
+         <item> itu <tag><![CDATA[C=0]]></tag></item>
+       </one-of>
+      <tag><![CDATA[R='XY']]></tag>
+      <item> <ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY; ]]></tag></item>
+      <tag><![CDATA[XY= {'DATE_REL': {'STEP':P,'INCREMENT':C}}]]></tag>
+     </item>
+   </one-of>
+</rule>
+
+<!-- added for the past dates -->
+<rule id="EarlierRelativeDate" scope="public"><tag><![CDATA[R="?"; P="?"; D="?"; C=0;]]></tag>
+   <one-of>
+     <item>  <!-- last monday ; previous month -->
+       <one-of>
+         <item> lepas </item>
+         <item> sebelumnya </item>
+	 <item> sebelum ini </item>
+ 	 <item> itu </item>
+       </one-of>
+      <tag><![CDATA[R='XY']]></tag>
+      <one-of>
+         <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY; C=-1]]></tag></item>
+         <item> 
+           <one-of>
+             <item> minggu <tag><![CDATA[P='week';]]></tag></item>
+             <item> bulan <tag><![CDATA[P='month';]]></tag></item>
+             <item> tahun <tag><![CDATA[P='year';]]></tag></item>
+           </one-of>
+           <tag><![CDATA[C=-1]]></tag>
+         </item>
+       </one-of>
+     </item>
+
+     <item> <!-- the monday a week ago ; the day two weeks before next Easter -->
+       <one-of>
+         <item>
+           <one-of>
+             <!--<item> <ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag></item>-->
+             <item> <ruleref uri="calendar_commons.grxml#DayOfWeek"/> <tag><![CDATA[D=DayOfWeek.XY]]></tag></item>
+           </one-of>
+         <tag><![CDATA[C=0]]></tag></item>
+         <item> 
+           <one-of>
+             <item> satu </item>
+             <item> se </item>
+           </one-of>
+          <tag><![CDATA[C=-1]]></tag><ruleref uri="calendar_commons.grxml#LargerTimeUnitS"/> <tag><![CDATA[P=LargerTimeUnitS.XY]]></tag></item>
+         <item> 
+
+           <one-of>
+             <item> satu 
+               <one-of>
+                 <item> pasang
+		    <tag><![CDATA[C=-2]]></tag></item>
+                 <item> beberapa  <tag><![CDATA[C=-3]]></tag></item>
+               </one-of>
+             </item>
+         <item> 
+           <one-of>
+             <item><ruleref uri="calendar_commons.grxml#CardinalDigitGt1"/> <tag><![CDATA[C=CardinalDigitGt1.XY]]></tag></item>
+             <item><ruleref uri="calendar_commons.grxml#CardinalTeen"/> <tag><![CDATA[C=parseInt(CardinalTeen.XY)]]></tag></item>
+             <item> <ruleref uri="calendar_commons.grxml#CardinalTen"/> <tag><![CDATA[C=parseInt(CardinalTen.XY )]]></tag>       <item repeat="0-1"> <ruleref uri="calendar_commons.grxml#CardinalDigit"/> <tag><![CDATA[C=C + parseInt(CardinalDigit.XY )]]></tag></item></item>
+        </one-of>
+        </item>
+        </one-of>
+        <ruleref uri="calendar_commons.grxml#LargerTimeUnitP"/> <tag><![CDATA[P=LargerTimeUnitP.XY]]></tag></item>
+       </one-of>
+       <tag><![CDATA[COEF=1;]]></tag> 
+       <one-of>
+         <item>           
+	     <item> 
+             <one-of>
+               <item> sebelum <tag><![CDATA[COEF=-1;]]></tag></item>
+              </one-of>
+             </item>
+	    <ruleref uri="#RelativeDate"/> <tag><![CDATA[R=RelativeDate.XY;
+	            if(typeof(RelativeDate.XY)!='undefined' && typeof(RelativeDate.XY.DATE_REL)!='undefined'){
+	                if(typeof(RelativeDate.XY.DATE_REL.STEP)!='undefined' && typeof(RelativeDate.XY.DATE_REL.INCREMENT)!='undefined'){
+	                  if(typeof(P)!='undefined' && P!="?" && P==RelativeDate.XY.DATE_REL.STEP){ R="XY"; C=(RelativeDate.XY.DATE_REL.INCREMENT+C) * COEF;}
+                          else if(typeof(D)!='undefined' && D!="?" && RelativeDate.XY.DATE_REL.STEP=='week'){
+                            C = (RelativeDate.XY.DATE_REL.INCREMENT+C) * COEF; R="?";
+                          }
+                       }
+                    }
+	]]></tag>
+	</item>
+        <item> 
+           <one-of>	
+  		<item> lalu </item>
+		<item> lebih awal </item>
+                <item> sebelum itu</item>
+           </one-of>
+          <tag><![CDATA[R="XY";if(C>0)C=-C; if(C==0)C=-1;]]></tag>
+          <tag><![CDATA[if(C==1 || C==-1){ if(P=='week'){P='day';C=C*7; M='fuzzy';} else if(P=='month'){ P='day'; C=C*30; M='fuzzy';} else if (P=='year'){ P='month'; C=C*12; M='fuzzy';}}]]></tag>
+         </item>
+       </one-of>
+     </item>
+   </one-of>
+
+  <tag><![CDATA[XY= {'INCREMENT':C} ; if(P!="?")XY.STEP=P; if(D!="?")XY.DAY_OF_WEEK=D; if(typeof(M)!='undefined' && M=='fuzzy')XY.MODIFIER=M; XY= {'CALENDAR': {'DATE': {'DATE_REL':XY}}}; if(R!="?" && R!="XY" && typeof(XY.CALENDAR)!='undefined' && typeof(XY.CALENDAR.DATE)!='undefined' && typeof(XY.CALENDAR.DATE.DATE_REL)!='undefined')XY.CALENDAR.DATE.DATE_REL.DATE_ANCHOR={'DATE':R}; delete R;]]></tag>
+</rule>
+
+</grammar>
+		
