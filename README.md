@@ -4,13 +4,12 @@
 
 In this project, I created grammar codes in GRXML file format for English and Malay language. The goal is to create grammar codes that would parse the user expressions for use in Speech Recognition technology.
 
-I created various components of grammar codes:
+I created grammar codes for 21 components:
 
 	expire_date
 	calendar_range
 	calendar
 	calendar_commons
-	logical operators 
 	anaphora
 	duration range
 	duration
